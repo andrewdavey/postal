@@ -47,7 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Email.cs" />
+    <Compile Include="EmailHttpContext.cs" />
+    <Compile Include="EmailHttpRequest.cs" />
+    <Compile Include="EmailHttpResponse.cs" />
+    <Compile Include="EmailParser.cs" />
     <Compile Include="EmailSender.cs" />
+    <Compile Include="EmailViewRender.cs" />
+    <Compile Include="IEmailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\..\wraps\openwrap\build\OpenWrap.CSharp.targets" />

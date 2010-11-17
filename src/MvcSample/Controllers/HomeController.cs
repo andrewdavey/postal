@@ -7,7 +7,7 @@ namespace MvcSample.Controllers
     public class HomeController : Controller
     {
         // In real code this should be injected by an IoC container.
-        IEmailSender sender = new EmailSender(ViewEngines.Engines, "test.com");
+        IEmailSender sender = new EmailSender(ViewEngines.Engines);
 
         public ActionResult Index()
         {
