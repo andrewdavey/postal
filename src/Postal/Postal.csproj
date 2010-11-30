@@ -51,9 +51,9 @@
     <Compile Include="EmailHttpRequest.cs" />
     <Compile Include="EmailHttpResponse.cs" />
     <Compile Include="EmailParser.cs" />
-    <Compile Include="EmailSender.cs" />
+    <Compile Include="EmailService.cs" />
     <Compile Include="EmailViewRender.cs" />
-    <Compile Include="IEmailSender.cs" />
+    <Compile Include="IEmailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\..\wraps\openwrap\build\OpenWrap.CSharp.targets" />

@@ -5,6 +5,8 @@ using System.Web.Caching;
 namespace Postal
 {
     // Implement just enough HttpContext junk to allow the view engine and views to work.
+    // This allows the email rendering to occur on a non-web request thread, 
+    // e.g. a background task.
 
     class EmailHttpContext : HttpContextBase
     {
