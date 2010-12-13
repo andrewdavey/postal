@@ -32,5 +32,13 @@ namespace Postal
         {
             get { return url; }
         }
+
+        public override bool IsLocal
+        {
+            get
+            {
+                return !url.IsAbsoluteUri;
+            }
+        }
     }
 }

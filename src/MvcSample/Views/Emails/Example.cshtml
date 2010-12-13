@@ -1,11 +1,11 @@
-﻿To: @View.To
+﻿To: @ViewBag.To
 From: example@website.com
-Subject: @View.Subject
+Subject: @ViewBag.Subject
 
 @* NOTE: There MUST be a blank like after the headers and before the content. *@
 Hello,
-This email was generated using Postal for asp.net mvc on @View.Date.ToShortDateString()
+This email was generated using Postal for asp.net mvc on @ViewBag.Date.ToShortDateString()
 Message follows:
-@View.Message
+@ViewBag.Message
 
 Thanks!
