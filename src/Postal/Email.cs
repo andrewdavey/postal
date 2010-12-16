@@ -18,6 +18,17 @@ namespace Postal
 
             ViewName = viewName;
             ViewData = new ViewDataDictionary();
+            if (IsStronglyTypedEmail())
+                ViewData.Model = this;
+        }
+
+        protected Email()
+        {
+            ViewName = GetType().Name;
+            if (ViewName.EndsWith("Email")) ViewName = ViewName.Substring(0, ViewName.Length - "Email".Length);
+            ViewData = new ViewDataDictionary();
+            if (IsStronglyTypedEmail())
+                ViewData.Model = this;
         }
 
         /// <summary>
@@ -42,6 +53,11 @@ namespace Postal
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return ViewData.TryGetValue(binder.Name, out result);
+        }
+
+        bool IsStronglyTypedEmail()
+        {
+            return GetType() != typeof(Email);
         }
     }
 }

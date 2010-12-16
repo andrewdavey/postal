@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Mail;
 
 namespace Postal
@@ -32,15 +33,20 @@ namespace Postal
         void ParseHeaders(MailMessage message, TextReader reader)
         {
             string line;
-            while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()))
+            while (string.IsNullOrWhiteSpace(line = reader.ReadLine()))
+            {
+                // Skip over any empty lines before the headers.
+            }
+
+            do
             {
                 var index = line.IndexOf(':');
-                if (index <= 0) continue;
+                if (index <= 0) throw new Exception("Invalid email header. Headers must be of the form 'To: hello@world.com'. Also, there must be a blank line between headers and the email body.");
 
                 var key = line.Substring(0, index).ToLowerInvariant().Trim();
                 var value = line.Substring(index + 1).Trim();
                 AssignEmailHeaderToMailMessage(key, value, message);
-            }
+            } while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()));
         }
 
         void AssignEmailHeaderToMailMessage(string key, string value, MailMessage message)
@@ -61,6 +67,9 @@ namespace Postal
                     break;
                 case "bcc":
                     message.Bcc.Add(value);
+                    break;
+                case "reply-to":
+                    message.ReplyToList.Add(value);
                     break;
                 default:
                     message.Headers[key] = value;

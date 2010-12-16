@@ -1,0 +1,12 @@
+﻿@model MvcSample.Controllers.ImportantEmail
+To: @Model.To
+From: example@website.com
+Subject: Important message
+
+@* NOTE: There MUST be a blank like after the headers and before the content. *@
+Hello,
+This email was generated using Postal for asp.net mvc.
+Message follows:
+@Model.Message
+
+Thanks!
