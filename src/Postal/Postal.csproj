@@ -55,7 +55,8 @@
     <Compile Include="EmailService.cs" />
     <Compile Include="EmailViewRender.cs" />
     <Compile Include="IEmailService.cs" />
-    <Compile Include="MultipartHelper.cs" />
+    <Compile Include="EmailBody.cs" />
+    <Compile Include="ParserUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\..\wraps\openwrap\build\OpenWrap.CSharp.targets" />

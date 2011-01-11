@@ -21,7 +21,7 @@ namespace Postal
         {
             using (var reader = new StringReader(emailViewOutput.Item1))
             {
-                ParseHeaders(message, reader);
+                ParserUtils.ParseHeaders(reader, (key, value) => AssignEmailHeaderToMailMessage(key, value, message));
                 if (emailViewOutput.Item2 == null)
                 {
                     message.Body = reader.ReadToEnd();
@@ -48,29 +48,6 @@ namespace Postal
                 
                 // I assume AlternativeView will Dispose the stream for us!
             }
-        }
-
-        /// <summary>
-        /// Headers are of the form "(key): (value)" e.g. "Subject: Hello, world".
-        /// The headers block is terminated by an empty line.
-        /// </summary>
-        void ParseHeaders(MailMessage message, TextReader reader)
-        {
-            string line;
-            while (string.IsNullOrWhiteSpace(line = reader.ReadLine()))
-            {
-                // Skip over any empty lines before the headers.
-            }
-
-            do
-            {
-                var index = line.IndexOf(':');
-                if (index <= 0) throw new Exception("Invalid email header. Headers must be of the form 'To: hello@world.com'. Also, there must be a blank line between headers and the email body.");
-
-                var key = line.Substring(0, index).ToLowerInvariant().Trim();
-                var value = line.Substring(index + 1).Trim();
-                AssignEmailHeaderToMailMessage(key, value, message);
-            } while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()));
         }
 
         void AssignEmailHeaderToMailMessage(string key, string value, MailMessage message)

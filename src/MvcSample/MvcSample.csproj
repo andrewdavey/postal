@@ -110,10 +110,10 @@
     <Content Include="Views\Emails\Multipart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Emails\Multipart_Text.cshtml" />
+    <Content Include="Views\Emails\Multipart.Text.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Emails\Multipart_Html.cshtml" />
+    <Content Include="Views\Emails\Multipart.Html.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

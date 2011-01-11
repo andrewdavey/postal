@@ -34,9 +34,9 @@ namespace Postal
             var viewOutput = RenderView(view, email.ViewData, controllerContext);
 
             var items = controllerContext.HttpContext.Items;
-            if (items.Contains("__Postal__parts"))
+            if (items.Contains(EmailBody.EmailBodiesKey))
             {
-                return Tuple.Create(viewOutput, (Dictionary<string, string>)items["__Postal__parts"]);
+                return Tuple.Create(viewOutput, (Dictionary<string, string>)items[EmailBody.EmailBodiesKey]);
             }
             else
             {
