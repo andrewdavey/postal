@@ -30,8 +30,8 @@ namespace Postal
 
         public MailMessage CreateMailMessage(Email email)
         {
-            var emailString = emailViewRender.Render(email);
-            var mailMessage = parser.Parse(emailString);
+            var emailData = emailViewRender.Render(email);
+            var mailMessage = parser.Parse(emailData);
             return mailMessage;
         }
     }

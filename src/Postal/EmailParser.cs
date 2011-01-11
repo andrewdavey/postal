@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Mail;
+using System.Collections.Generic;
 
 namespace Postal
 {
@@ -9,20 +10,43 @@ namespace Postal
     /// </summary>
     class EmailParser
     {
-        public MailMessage Parse(string emailViewOutput)
+        public MailMessage Parse(Tuple<string, Dictionary<string, string>> emailViewOutput)
         {
             var message = new MailMessage();
             InitializeMailMessage(message, emailViewOutput);
             return message;
         }
 
-        void InitializeMailMessage(MailMessage message, string emailViewOutput)
+        void InitializeMailMessage(MailMessage message, Tuple<string, Dictionary<string, string>> emailViewOutput)
         {
-            using (var reader = new StringReader(emailViewOutput))
+            using (var reader = new StringReader(emailViewOutput.Item1))
             {
                 ParseHeaders(message, reader);
-                message.Body = reader.ReadToEnd();
-                if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
+                if (emailViewOutput.Item2 == null)
+                {
+                    message.Body = reader.ReadToEnd();
+                    if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
+                }
+                else
+                {
+                    InitializeMailMessageWithAlternativeViews(message, emailViewOutput.Item2);
+                }
+            }
+        }
+
+        void InitializeMailMessageWithAlternativeViews(MailMessage message, Dictionary<string, string> parts)
+        {
+            foreach (var part in parts)
+            {
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
+                
+                writer.Write(part.Value);
+                writer.Flush();
+                stream.Position = 0;
+                message.AlternateViews.Add(new AlternateView(stream, part.Key));
+                
+                // I assume AlternativeView will Dispose the stream for us!
             }
         }
 

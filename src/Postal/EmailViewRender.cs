@@ -3,6 +3,7 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Collections.Generic;
 
 namespace Postal
 {
@@ -26,12 +27,21 @@ namespace Postal
         /// </summary>
         const string EmailsControllerName = "Emails";
 
-        public string Render(Email email)
+        public Tuple<string, Dictionary<string, string>> Render(Email email)
         {
             var controllerContext = CreateControllerContext();
             var view = CreateView(email.ViewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext);
-            return viewOutput;
+
+            var items = controllerContext.HttpContext.Items;
+            if (items.Contains("__Postal__parts"))
+            {
+                return Tuple.Create(viewOutput, (Dictionary<string, string>)items["__Postal__parts"]);
+            }
+            else
+            {
+                return Tuple.Create(viewOutput, (Dictionary<string, string>)null);
+            }
         }
 
         ControllerContext CreateControllerContext()
