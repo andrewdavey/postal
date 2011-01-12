@@ -17,16 +17,24 @@ namespace Postal
         /// <param name="viewSubNames">e.g. "Html" in an email view called "Example" will look for another view called "Example_Html".</param>
         public static IHtmlString EmailBodyAlternatives(this HtmlHelper html, params string[] viewSubNames)
         {
-            var prefix = GetWebFormViewName(html.ViewContext.View) + ".";
-            var bodies = CreateBodies(html, viewSubNames, prefix);
+            var bodies = CreateBodies(html, viewSubNames);
+            // We only have to store the bodies for now.
+            // The EmailParser will assemble put the bodies into the MailMessage.
             html.ViewContext.HttpContext.Items[EmailBodiesKey] = bodies;
+
+            // I prefer the syntax:
+            //   @Html.EmailBodyAlternatives("Text", "Html")
+            // over
+            //   @{ Html.EmailBodyAlternatives("Text", "Html"); }
+            // So this function returns an empty string, instead of being void.
             return MvcHtmlString.Empty;
         }
 
         internal static readonly string EmailBodiesKey = "__Postal__email_bodies";
 
-        static Dictionary<string, string> CreateBodies(HtmlHelper html, string[] viewSubNames, string prefix)
+        static Dictionary<string, string> CreateBodies(HtmlHelper html, string[] viewSubNames)
         {
+            var prefix = html.ViewData["__Postal__view_name"] + ".";
             return viewSubNames.Select(name =>
             {
                 var partName = prefix + name;
@@ -55,24 +63,6 @@ namespace Postal
                 }
             });
             return contentType;
-        }
-
-        public static string GetWebFormViewName(this IView view)
-        {
-            var view2 = view as BuildManagerCompiledView;
-            if (view2 != null)
-            {
-                string viewUrl = view2.ViewPath;
-                string viewFileName = viewUrl.Substring(viewUrl.LastIndexOf('/'));
-                string viewFileNameWithoutExtension = Path.GetFileNameWithoutExtension(viewFileName);
-                return viewFileNameWithoutExtension;
-            }
-            else
-            {
-                // HACK: I'm really sorry about this...
-                // Is there another way to get the view name for the convention based part view finding magic?
-                throw new InvalidOperationException("This view is not a BuildManagerCompiledView.");
-            }
         }
     }
 }
