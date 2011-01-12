@@ -19,11 +19,6 @@ namespace Postal
 
             ViewName = viewName;
             ViewData = new ViewDataDictionary();
-            // When creating emails with multiple alternative views
-            // we need the base view name to derive the alternative view names.
-            // There isn't a good way to extract the view name within a view,
-            // so we'll store it now.
-            ViewData["__Postal__view_name"] = viewName;
             if (IsStronglyTypedEmail())
                 ViewData.Model = this;
         }

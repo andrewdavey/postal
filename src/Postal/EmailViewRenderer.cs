@@ -10,9 +10,9 @@ namespace Postal
     /// <summary>
     /// Renders <see cref="Email"/> view's into raw strings using the MVC ViewEngine infrastructure.
     /// </summary>
-    class EmailViewRender
+    class EmailViewRenderer
     {
-        public EmailViewRender(ViewEngineCollection viewEngines, string urlHostName)
+        public EmailViewRenderer(ViewEngineCollection viewEngines, string urlHostName)
         {
             this.viewEngines = viewEngines;
             this.urlHostName = urlHostName ?? GetHostNameFromHttpContext();
@@ -27,21 +27,17 @@ namespace Postal
         /// </summary>
         const string EmailsControllerName = "Emails";
 
-        public Tuple<string, Dictionary<string, string>> Render(Email email)
+        public string Render(Email email)
+        {
+            return Render(email, email.ViewName);
+        }
+
+        public string Render(Email email, string viewName)
         {
             var controllerContext = CreateControllerContext();
-            var view = CreateView(email.ViewName, controllerContext);
+            var view = CreateView(viewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext);
-
-            var items = controllerContext.HttpContext.Items;
-            if (items.Contains(EmailBody.EmailBodiesKey))
-            {
-                return Tuple.Create(viewOutput, (Dictionary<string, string>)items[EmailBody.EmailBodiesKey]);
-            }
-            else
-            {
-                return Tuple.Create(viewOutput, (Dictionary<string, string>)null);
-            }
+            return viewOutput;
         }
 
         ControllerContext CreateControllerContext()

@@ -1,12 +1,11 @@
 ﻿From: test@test.com
 To: test@test.com
-Subject: A complex email with alternative views
+Subject: Oh hai! @ViewBag.Title
+Views: Text, Html
 
-@* This is how to create an email with multiple alternative bodies. 
+@* See that last "header" just above? That is how to create an email with multiple alternative views. 
    This view is called "Multipart.cshtml", so the alternative views will be called
    "Multipart.Text.cshtml" and "Multipart.Html.cshtml".
 
-   See ~\Views\Web.config for the added references to Postal,
-   meaning we can remove the noisy '@using Postal' from the top of this file.
+   So we have no actual body defined here - it's all in the alternative views.
 *@
-@Html.EmailBodyAlternatives("Text", "Html")

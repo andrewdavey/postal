@@ -21,6 +21,7 @@ namespace MvcSample.Controllers
         {
             // This will look for a view in "~/Views/Emails/Complex.cshtml".
             dynamic email = new Email("Multipart");
+            email.Title = "A complex email with alternative views";
             // Send the email - this uses a default System.Net.Mail.SmtpClient
             // and web.config settings to send the email.
             emailService.Send(email);

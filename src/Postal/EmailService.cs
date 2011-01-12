@@ -12,11 +12,11 @@ namespace Postal
         /// <param name="urlHostName">The host name of the website. This is for the UrlHelper used when generating Urls in a view. When null, this is determined from the current HttpContext instead.</param>
         public EmailService(ViewEngineCollection viewEngines, string urlHostName = null)
         {
-            emailViewRender = new EmailViewRender(viewEngines, urlHostName);
-            parser = new EmailParser();
+            emailViewRenderer = new EmailViewRenderer(viewEngines, urlHostName);
+            parser = new EmailParser(emailViewRenderer);
         }
 
-        readonly EmailViewRender emailViewRender;
+        readonly EmailViewRenderer emailViewRenderer;
         readonly EmailParser parser;
 
         public void Send(Email email)
@@ -30,8 +30,8 @@ namespace Postal
 
         public MailMessage CreateMailMessage(Email email)
         {
-            var emailData = emailViewRender.Render(email);
-            var mailMessage = parser.Parse(emailData);
+            var rawEmailString = emailViewRenderer.Render(email);
+            var mailMessage = parser.Parse(rawEmailString, email);
             return mailMessage;
         }
     }
