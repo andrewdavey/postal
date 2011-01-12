@@ -15,6 +15,7 @@ namespace Postal
         public Email(string viewName)
         {
             if (viewName == null) throw new ArgumentNullException("viewName");
+            if (string.IsNullOrWhiteSpace(viewName)) throw new ArgumentException("View name cannot be empty.", "viewName");
 
             ViewName = viewName;
             ViewData = new ViewDataDictionary();
@@ -27,10 +28,11 @@ namespace Postal
                 ViewData.Model = this;
         }
 
+        /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
+        /// <remarks>Used when defining strongly typed Email classes.</remarks>
         protected Email()
         {
-            ViewName = GetType().Name;
-            if (ViewName.EndsWith("Email")) ViewName = ViewName.Substring(0, ViewName.Length - "Email".Length);
+            ViewName = DeriveViewNameFromClassName();
             ViewData = new ViewDataDictionary();
             if (IsStronglyTypedEmail())
                 ViewData.Model = this;
@@ -58,6 +60,13 @@ namespace Postal
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return ViewData.TryGetValue(binder.Name, out result);
+        }
+
+        string DeriveViewNameFromClassName()
+        {
+            var viewName = GetType().Name;
+            if (viewName.EndsWith("Email")) viewName = viewName.Substring(0, viewName.Length - "Email".Length);
+            return viewName;
         }
 
         bool IsStronglyTypedEmail()
