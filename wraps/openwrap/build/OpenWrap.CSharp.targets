@@ -3,8 +3,6 @@
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="_Initialize">
 
   <!-- Default folder locations -->
-
-
   <PropertyGroup>
     <OpenWrap-EnableVisualStudioIntegration Condition="'$(OpenWrap-EnableVisualStudioIntegration)' == '' and '$(BuildingInsideVisualStudio)' == 'true'">true</OpenWrap-EnableVisualStudioIntegration>
 
@@ -13,7 +11,7 @@
 
 
     <OpenWrap-EnableVisualStudioIntegration Condition="'$(OpenWrap-EnableVisualStudioIntegration)' == ''">false</OpenWrap-EnableVisualStudioIntegration>
-    <!-- We detect the root path based on the existence of a .wraps folder -->
+    <!-- We detect the root path based on the existence of a /wraps folder -->
     <OpenWrap-ProjectRepositoryPath Condition="'$(OpenWrap-ProjectRepositoryPath)' == ''">$(MSBuildProjectDirectory)\..\wraps</OpenWrap-ProjectRepositoryPath>
     <OpenWrap-ProjectRepositoryPath Condition="!Exists('$(OpenWrap-ProjectRepositoryPath)')">$(MSBuildProjectDirectory)\..\..\wraps</OpenWrap-ProjectRepositoryPath>
     <OpenWrap-ProjectRepositoryPath Condition="!Exists('$(OpenWrap-ProjectRepositoryPath)')">$(MSBuildProjectDirectory)\..\..\..\wraps</OpenWrap-ProjectRepositoryPath>
@@ -22,16 +20,18 @@
 
     <RootSolutionDirectory>$(OpenWrap-ProjectRepositoryPath)\..</RootSolutionDirectory>
 
+    <!-- These properties are defined so we can default the build when ran outside of the msbuild runner (ie within VS). -->
     <OpenWrap-TargetProfile Condition="'$(OpenWrap-TargetProfile)' == '' and '$(TargetFrameworkVersion)' == 'v2.0'">net20</OpenWrap-TargetProfile>
     <OpenWrap-TargetProfile Condition="'$(OpenWrap-TargetProfile)' == '' and '$(TargetFrameworkVersion)' == 'v3.0'">net30</OpenWrap-TargetProfile>
     <OpenWrap-TargetProfile Condition="'$(OpenWrap-TargetProfile)' == '' and '$(TargetFrameworkVersion)' == 'v3.5'">net35</OpenWrap-TargetProfile>
     <OpenWrap-TargetProfile Condition="'$(OpenWrap-TargetProfile)' == '' and '$(TargetFrameworkVersion)' == 'v4.0'">net40</OpenWrap-TargetProfile>
+    
     <OpenWrap-TargetPlatform Condition="'$(OpenWrap-TargetPlatform)' == ''">$(Platform)</OpenWrap-TargetPlatform>
     <OpenWrap-TargetPlatform Condition="'$(OpenWrap-TargetPlatform)' == ''">AnyCPU</OpenWrap-TargetPlatform>
     <OpenWrap-ExportName Condition="'$(OpenWrap-ExportName)' == ''">bin-$(OpenWrap-TargetProfile)</OpenWrap-ExportName>
-
-     <DefineConstants>$(DefineConstants);__OW_PLATFORM_$(OpenWrap-TargetPlatform)__;__OW_PROFILE_$(OpenWrap-TargetProfile)__;</DefineConstants>
-
+    <DefineConstants>$(DefineConstants);__OW_PLATFORM_$(OpenWrap-TargetPlatform)__;__OW_PROFILE_$(OpenWrap-TargetProfile)__;</DefineConstants>
+    <OpenWrap-AllowBinDuplicates Condition="'$(OpenWrap-AllowBinDuplicates)' == ''">false</OpenWrap-AllowBinDuplicates>
+    <OpenWrap-CopyLocal Condition="'$(OpenWrap-CopyLocal)' == ''">false</OpenWrap-CopyLocal>
   </PropertyGroup>
 
 
@@ -40,9 +40,12 @@
     <_WrapFile Include="$(MSBuildProjectDirectory)\*.wrapdesc" />
     <_WrapFile Include="$(MSBuildProjectDirectory)\..\*.wrapdesc" Condition="!Exists(@(_WrapFile->'%(FullPath)'))" />
     <_WrapFile Include="$(MSBuildProjectDirectory)\..\..\*.wrapdesc" Condition="!Exists(@(_WrapFile->'%(FullPath)'))" />
+    <_WrapFile Include="$(MSBuildProjectDirectory)\..\..\..\*.wrapdesc" Condition="!Exists(@(_WrapFile->'%(FullPath)'))" />
   </ItemGroup>
   <Target Name="_Initialize">
-    <InitializeOpenWrap StartDebug="$(OpenWrap-StartDebug)" />
+    <InitializeOpenWrap StartDebug="$(OpenWrap-StartDebug)" >
+      <Output TaskParameter="Name" PropertyName="OpenWrap-PackageName" />
+    </InitializeOpenWrap>
 
     <InitializeVisualStudioIntegration
       WrapDescriptor="@(_WrapFile)"
@@ -75,7 +78,7 @@
       ProjectFilePath="$(MSBuildProjectFullPath)"
       ExcludeAssemblies="$(AssemblyName);$(OpenWrap-ExcludeAssemblies)"
       InputReferences="@(Reference)"
-      CopyLocal="true">
+      CopyLocal="$(OpenWrap-CopyLocal)">
       <Output TaskParameter="OutputReferences" ItemName="Reference" />
 
     </ResolveWrapReferences>
@@ -87,7 +90,7 @@
   </Target>
 
   <Target Name="OpenWrap-BeforeBuild" DependsOnTargets="_Initialize">
-    
+
   </Target>
 
   <Target Name="OpenWrap-AfterBuild"
@@ -96,30 +99,42 @@
     <!-- Referenced projects -->
     <ItemGroup>
       <_OpenWrap-AssemblyReferences Include="@(Reference->'%(HintPath)')" Condition="'%(Reference.FromOpenWrap)' == 'True'" />
-
-      <_OpenWrap-CopyLocal Include="@(ReferenceCopyLocalPaths)" Exclude="@(_OpenWrap-AssemblyReferences)" />
+      <_OpenWrap-PdbFiles
+        Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).pdb')"
+        />
+      <_OpenWrap-PdbFiles
+        Include="@(IntermediateAssembly->'%(RootDir)%(Directory)%(Filename).pdb')"
+        />
+      <_OpenWrap-SerializationFiles Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).resources.dll')" />
+      <_OpenWrap-AllAssemblyReferenceFiles Include="@(ReferenceCopyLocalPaths->'%(FullPath)')" />
+      <_OpenWrap-DeleteAnnoyingVsOptimizationFiles Include="$(IntermediateOutputPath)*.cache" />
     </ItemGroup>
+    <PropertyGroup>
 
-    <Message Text="[built($(OpenWrap-ExportName),'%(_OpenWrap-CopyLocal.FullPath)')]" Condition="'@(_OpenWrap-CopyLocal)' != ''" />
+      <_OpenWrap-IsEntryPointProject Condition="'$(OpenWrap-CurrentProjectFile)' == '' or '$(OpenWrap-CurrentProjectFile)' == '$(MSBuildProjectDirectory)\$(MSBuildProjectFile)'">true</_OpenWrap-IsEntryPointProject>
 
-    <!-- Content -->
-    <Message Text="[built($(OpenWrap-ExportName),'%(Content.FullPath)')]" Condition="Exists('@(Content)')" />
+    </PropertyGroup>
+    <PublishPackageContent
+      Condition="'$(_OpenWrap-IsEntryPointProject)' == 'true'"
+      IncludePdbs="$(OpenWrap-IncludePdbs)"
+      IncludeDocumentation="true"
+      BasePath="$(MSBuildProjectDirectory)"
+      ExportName="$(OpenWrap-ExportName)"
+      AllowBinDuplicates="$(OpenWrap-AllowBinDuplicates)"
 
-    <!-- Assembly output -->
-    <Message Text="[built($(OpenWrap-ExportName),'%(IntermediateAssembly.FullPath)')]" />
-    <!-- Module outputs -->
-    <Message Text="[built($(OpenWrap-ExportName),'%(AddModules.FullPath)')]" Condition="Exists('@(AddModules)')" />
-    <!-- Serialization assemblies -->
-    <Message Text="[built($(OpenWrap-ExportName),'$(OutDir)$(_SGenDllName)')]" Condition="'$(_SGenDllCreated)'=='true'" />
-    <!-- Xml documentation -->
-    <Message Text="[built($(OpenWrap-ExportName),'%(DocFileItem.FullPath)')]" Condition="'$(_DocumentationFileProduced)'=='true'" />
-    <!-- Satellite assemblies-->
-    <Message Text="[built($(OpenWrap-ExportName),@(IntermediateSatelliteAssembliesWithTargetPath->'$(OutDir)%(Culture)\$(TargetName).resources.dll;'))]"
-             Condition="Exists('@(IntermediateSatelliteAssembliesWithTargetPath)')"/>
+      OutputAssemblyFiles="@(IntermediateAssembly->'%(FullPath)')"
+      ContentFiles="@(Content->'%(FullPath)')"
+      AllAssemblyReferenceFiles="@(_OpenWrap-AllAssemblyReferenceFiles)"
+      OpenWrapReferenceFiles="@(_OpenWrap-AssemblyReferences)"
+      PdbFiles="@(_OpenWrap-PdbFiles)"
+      DocumentationFiles="@(DocFileItem->'%(FullPath)')"
+      SatelliteAssemblies="@(IntermediateSatelliteAssembliesWithTargetPath->'$(OutDir)%(Culture)\$(TargetName).resources.dll')"
+      SerializationAssemblies="@(_OpenWrap-SerializationFiles)"
+      />
 
     <!-- delete assembly reference cache to prevent VS from not calling the initialize task on next opening -->
-    <Delete Files="$(ResolveAssemblyReferencesStateFile);$(IntermediateOutputPath)*.cache" ContinueOnError="true" />
-    
+    <Delete Files="$(ResolveAssemblyReferencesStateFile);@(_OpenWrap-DeleteAnnoyingVsOptimizationFiles)" ContinueOnError="true" />
+
   </Target>
 
 

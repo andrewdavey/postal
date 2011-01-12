@@ -24,7 +24,7 @@
       <d:RequireLicenseAcceptance m:type="Edm.Boolean">false</d:RequireLicenseAcceptance>
       <d:LicenseUrl>http://www.opensource.org/licenses/mit-license.php</d:LicenseUrl>
       <d:Keywords></d:Keywords>
-      <d:Created m:type="Edm.DateTime">2010-10-11T07:08:57+00:00</d:Created>
+      <d:Published m:type="Edm.DateTime">2010-10-11T07:08:57+00:00</d:Published>
       <d:Dependencies></d:Dependencies>
     </m:properties>
   </entry>
@@ -48,7 +48,7 @@
       <d:RequireLicenseAcceptance m:type="Edm.Boolean">false</d:RequireLicenseAcceptance>
       <d:LicenseUrl>http://www.opensource.org/licenses/mit-license.php</d:LicenseUrl>
       <d:Keywords></d:Keywords>
-      <d:Created m:type="Edm.DateTime">2010-10-11T07:08:57+00:00</d:Created>
+      <d:Published m:type="Edm.DateTime">2010-10-11T07:08:57+00:00</d:Published>
       <d:Dependencies>Autofac:::2.2.4.900</d:Dependencies>
     </m:properties>
   </entry>
