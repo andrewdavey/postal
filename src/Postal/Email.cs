@@ -43,6 +43,14 @@ namespace Postal
         /// </summary>
         public ViewDataDictionary ViewData { get; set; }
 
+        /// <summary>
+        /// Convenience method that sends this email via a default EmailService. 
+        /// </summary>
+        public void Send()
+        {
+            new EmailService().Send(this);
+        }
+
         // Any dynamic property access is delegated to view data dictionary.
         // This makes for sweet looking syntax - thank you C#4!
 

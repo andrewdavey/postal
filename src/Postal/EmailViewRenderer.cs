@@ -51,7 +51,7 @@ namespace Postal
 
         IView CreateView(string viewName, ControllerContext controllerContext)
         {
-            var result = viewEngines.FindView(controllerContext, viewName, null);
+            var result = viewEngines.FindPartialView(controllerContext, viewName);
             if (result.View != null)
                 return result.View;
 

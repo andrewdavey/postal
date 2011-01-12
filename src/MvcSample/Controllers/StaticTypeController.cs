@@ -8,7 +8,7 @@ namespace MvcSample.Controllers
     public class StaticTypeController : Controller
     {
         // In real code this should be injected by an IoC container.
-        readonly IEmailService emailService = new EmailService(ViewEngines.Engines);
+        readonly IEmailService emailService = new EmailService();
 
         public ActionResult Index()
         {

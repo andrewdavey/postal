@@ -98,9 +98,6 @@
     <Content Include="Views\Emails\Example.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Emails\_ViewStart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\StaticType\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

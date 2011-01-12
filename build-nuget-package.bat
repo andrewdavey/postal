@@ -1,5 +1,3 @@
-echo Build package v%1
-
 pushd .
 cd tools\nuget
 

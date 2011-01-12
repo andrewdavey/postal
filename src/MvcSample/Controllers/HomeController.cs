@@ -6,9 +6,6 @@ namespace MvcSample.Controllers
 {
     public class HomeController : Controller
     {
-        // In real code this should be injected by an IoC container.
-        readonly IEmailService emailService = new EmailService(ViewEngines.Engines);
-
         public ActionResult Index()
         {
             return View();
@@ -25,9 +22,21 @@ namespace MvcSample.Controllers
             email.Message = message;
             email.Date = DateTime.UtcNow;
 
-            // Send the email - this uses a default System.Net.Mail.SmtpClient
-            // and web.config settings to send the email.
-            emailService.Send(email);
+            // Send the email via a default Postal.EmailService object.
+            // This will use the web.config smtp settings.
+            email.Send();
+
+            
+            // In 'real code' you probably want to use the Postal.IEmailService interface
+            // to allow for mocking out the sending of email in tests.
+            // 
+            // The controller's constructor would look like this:
+            //   public HomeController(IEmailService emailService) { 
+            //     this.emailService = emailService;
+            //   }
+            // 
+            // Then actions can send email using:
+            //   emailService.Send(email);
 
             // Alternatively, you can just ask for the MailMessage to be created.
             // It contains the rendered email body and headers (To, From, etc).

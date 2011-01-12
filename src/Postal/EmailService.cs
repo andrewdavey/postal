@@ -8,6 +8,10 @@ namespace Postal
     /// </summary>
     public class EmailService : IEmailService
     {
+        public EmailService() : this(ViewEngines.Engines, null)
+        {
+        }
+
         /// <param name="viewEngines">The view engines to use when creating email views.</param>
         /// <param name="urlHostName">The host name of the website. This is for the UrlHelper used when generating Urls in a view. When null, this is determined from the current HttpContext instead.</param>
         public EmailService(ViewEngineCollection viewEngines, string urlHostName = null)
