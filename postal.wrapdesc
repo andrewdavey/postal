@@ -1,1 +1,4 @@
 ﻿depends: openwrap content
+name: postal
+depends: testdriven.net-framework
+depends: xunit

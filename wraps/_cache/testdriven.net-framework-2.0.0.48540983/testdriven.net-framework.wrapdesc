@@ -1,0 +1,5 @@
+﻿name: testdriven.net-framework
+depends: openwrap anchored content
+use-project-repository: false
+build: files; file=bin-net35->TestDriven.Framework.dll
+version: 2.0.0.48540983

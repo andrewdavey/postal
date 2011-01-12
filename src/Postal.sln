@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal", "Postal\Postal.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSample", "MvcSample\MvcSample.csproj", "{A86D417D-55AA-4FF6-B5BC-CF8925A0FB18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Tests", "Postal.Tests\Postal.Tests.csproj", "{3E361DC3-58A0-4720-BE62-4E62565C2652}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{A86D417D-55AA-4FF6-B5BC-CF8925A0FB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A86D417D-55AA-4FF6-B5BC-CF8925A0FB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A86D417D-55AA-4FF6-B5BC-CF8925A0FB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E361DC3-58A0-4720-BE62-4E62565C2652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E361DC3-58A0-4720-BE62-4E62565C2652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E361DC3-58A0-4720-BE62-4E62565C2652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E361DC3-58A0-4720-BE62-4E62565C2652}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
