@@ -1,80 +1,124 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+﻿<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-	<title>andrewdavey/postal @ GitHub</title>
-	
-	<style type="text/css">
-		body {
-  		margin-top: 1.0em;
-  		background-color: #f1f9f4;
-		  font-family: "Helvetica,Arial,FreeSans";
-  		color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-		h1 { font-size: 3.8em; color: #0e060b; margin-bottom: 3px; }
-		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #0e060b; }
-    h3 { text-align: center; color: #0e060b; }
-    a { color: #0e060b; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-	</style>
-	
+	<title>Postal - Create emails using ASP.NET MVC views</title>
+    <link href="site.css" rel="stylesheet" type="text/css" />
+    <meta name="description" content="Create emails using ASP.NET MVC views"/>
 </head>
-
 <body>
-  <a href="http://github.com/andrewdavey/postal"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-
-  <div id="container">
-
-    <div class="download">
-      <a href="http://github.com/andrewdavey/postal/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/andrewdavey/postal/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+  <div id="wrap">
+    <div id="header">
+        <div class="inner">
+            <h1>Postal</h1>
+            <div id="header-links">
+                <a id="download-link" href="https://github.com/downloads/andrewdavey/postal/postal-0.1.0.zip">Download</a>
+                <a id="github-link" href="http://github.com/andrewdavey/postal">GitHub</a>
+                <div id="social-media">
+                    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aboutcode.net/postal" data-count="vertical" data-via="andrewdavey">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+                </div>
+            </div>
+        </div>
     </div>
+    <div id="main">
+        <div class="inner">
 
-    <h1><a href="http://github.com/andrewdavey/postal">postal</a>
-      <span class="small">by <a href="http://github.com/andrewdavey">andrewdavey</a></span></h1>
+            <div class="section">
+            <h2>Elevator Pitch</h2>
+            <p>Does your web application use Microsoft <a href="http://www.asp.net/mvc">ASP.NET MVC</a>?</p>
+            <p>Do you find generating emails to be a big bag of string concatenation fail?!</p>
+            <p>Postal let's you <strong>create emails using regular MVC views</strong>.</p>
+            </div>
 
-    <div class="description">
-      Email sending for asp.net mvc using the view engine system to render emails.
+            <div class="section">
+            <h2>Simple Example</h2>
+            <p>Here's the simplest way to use Postal:</p>
+            <div class="code-sample code-sample-column">
+            <h3>~\Controllers\HomeController.cs</h3>
+<code>
+<pre>public class HomeController : Controller {
+    public ActionResult Index() {
+        dynamic email = new Email("Example");
+        email.To = "webninja@example.com";
+        email.FunnyLink = DB.GetRandomLolcatLink();
+        email.Send();
+
+        return View();
+    }
+}</pre>
+</code>
+            </div>
+            <div class="code-sample code-sample-column">
+                <h3>~\Views\Email\Example.cshtml</h3>
+<code>
+<pre>To: @ViewBag.To
+From: lolcats@website.com
+Subject: Important Message
+
+Hello,
+You wanted important web links right?
+Check out this: @ViewBag.FunnyLink
+
+<3</pre>
+</code>
+            </div>
+            <div style="clear:left"></div>
+            <p>The name of the view, "Example", is passed to the Email object's constructor.</p>
+            <p>The Email object creates a ViewDataDictionary to pass to the view. The view
+            accesses the view data via the ViewBag dynamic object. 
+            Notice the hip new <em>dynamic</em> Email object that makes the syntax nice
+            in the controller code. (Don't worry you oldies, you can strongly type the email model if you must!)</p>
+            <p>Postal puts the email headers into the actual view. Crazy?! Nope, I think
+            it makes for a better separation of concerns actually.</p>
+            <p>The view is using Razor syntax, but aspx should also work fine.</p>
+            <p>Internally, Postal uses the .NET Framework's <a href="http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.aspx">SmtpClient</a>.
+            You can configure it's behavior in your web.config file.</p>
+            <div class="code-sample">
+                <h3>~\Web.config</h3>
+            <code><pre>&lt;system.net&gt;
+    &lt;mailSettings&gt;
+        &lt;smtp deliveryMethod="SpecifiedPickupDirectory"&gt;
+            &lt;specifiedPickupDirectory pickupDirectoryLocation="c:\email"/&gt;
+            &lt;network host="localhost"/&gt;
+        &lt;/smtp&gt;
+    &lt;/mailSettings&gt;
+&lt;/system.net&gt;</pre></code>
+            </div>
+            <div style="clear:left"></div>
+            </div>
+
+            <div class="section">
+            <h2>Ready to "Go Postal"? ;)</h2>
+            <p>Postal is available via <a href="http://nuget.org/">nuget</a>. 
+            In Visual Studio, either do "Project &gt; Add Library Package Reference" and search for "postal"
+            , or enter the following into the Package Manager Console:</p>
+            <code class="command-line"><pre>Install-Package postal</pre></code>
+            <p>Postal is a free, <a href="http://www.opensource.org/licenses/mit-license.php">open source</a>, library so 
+            please <a href="http://github.com/andrewdavey/postal">fork it on GitHub</a>. Pull requests are welcome.</p>
+            </div>
+
+            <div class="section">
+            <h2>But wait, there's more!</h2>
+            <p>The example above is very basic. You might need to do more.</p>
+            <ul>
+                <li>Strongly type the Email object</li>
+                <li>Mock out email sending code for testing</li>
+                <li>Get the generated System.Net.Mail.MailMessage object</li>
+                <li>Send email in both text and HTML formats</li>
+            </ul>
+            <p>You can do all this, but I've not written the docs yet! So contact me or see the examples
+            in the <a href="https://github.com/andrewdavey/postal/tree/master/src/MvcSample">source code</a> for details.</p>
+            </div>
+        </div>
     </div>
-
-    <h2>License</h2>
-<p>MIT License</p>
-<h2>Authors</h2>
-<p>Andrew Davey (andrew@equin.co.uk)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Andrew Davey (andrew@equin.co.uk)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/andrewdavey/postal/zipball/master">zip</a> or
-      <a href="http://github.com/andrewdavey/postal/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/andrewdavey/postal</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/andrewdavey/postal">andrewdavey/postal</a>
+    <div id="footer">
+        <div class="inner">
+            <h2>Credits</h2>
+            <p>Postal was created by Andrew Davey.</p>
+            <p>Show your support by following <a href="http://twitter.com/andrewdavey">Andrew on Twitter</a>
+            or emailing andrew@equin.co.uk.</p>
+            <p>For more wild theories and open source projects, <a href="http://aboutcode.net/">Read the Blog</a></p>
+        </div>    
     </div>
-
   </div>
 
   <script type="text/javascript">
@@ -86,5 +130,8 @@ try {
 var pageTracker = _gat._getTracker("UA-19461164-1");
 pageTracker._trackPageview();
 } catch(err) {}</script>
+
+<script src="http://localhost:8001/vogue-client.js" type="text/javascript"></script>
+
 </body>
 </html>
