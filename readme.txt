@@ -1,9 +1,9 @@
 Postal - A handy email sending library for ASP.NET MVC.
 
-by Andrew Davey ( http://aboutcode.net )
+by Andrew Davey ( http://aboutcode.net , http://twitter.com/andrewdavey )
 
 Postal uses the MVC view engine infrastructure to render emails.
-See the MvcSample project for a basic overview of usage.
 
-Read an introduction to Postal here:
-http://aboutcode.net/2010/11/17/going-postal-generating-email-with-aspnet-mvc-view-engines.html
+Read the introduction: http://aboutcode.net/postal
+The wiki has documentation: https://github.com/andrewdavey/postal/wiki
+See the MvcSample project for a basic overview of usage.
