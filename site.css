@@ -39,6 +39,7 @@ a {
 
 pre {
     font-family: Consolas, monospace;
+    font-size: 1.5em;
 }
 
 li {
@@ -66,6 +67,7 @@ li {
     right: 0;
     top: 0;
     padding: 1.3em 3em;
+    width: 39em;
 }
 
 #header-links a {
