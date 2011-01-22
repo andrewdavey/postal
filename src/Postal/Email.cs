@@ -48,8 +48,13 @@ namespace Postal
         /// </summary>
         public void Send()
         {
-            new EmailService().Send(this);
+            CreateEmailService().Send(this);
         }
+
+        /// <summary>
+        /// A function that returns an instance of <see cref="IEmailService"/>.
+        /// </summary>
+        public static Func<IEmailService> CreateEmailService = () => new EmailService();
 
         // Any dynamic property access is delegated to view data dictionary.
         // This makes for sweet looking syntax - thank you C#4!
