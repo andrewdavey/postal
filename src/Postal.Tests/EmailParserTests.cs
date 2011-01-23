@@ -4,6 +4,7 @@ using System.Net.Mime;
 using Moq;
 using Should;
 using Xunit;
+using System.Net.Mail;
 
 namespace Postal
 {
@@ -87,6 +88,24 @@ Hello, World!";
                 var htmlContent = new StreamReader(message.AlternateViews[1].ContentStream).ReadToEnd();
                 htmlContent.ShouldEqual("<p>Hello, World!</p>");
             }
+        }
+
+        [Fact]
+        public void Attachments_are_added_to_MailMessage()
+        {
+            var input = @"
+To: test1@test.com
+From: test2@test.com
+Subject: Test Subject
+
+Hello, World!";
+            var email = new Email("Test");
+            email.Attach(new Attachment(new MemoryStream(), "name"));
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            
+            var message = parser.Parse(input, email);
+
+            message.Attachments.Count.ShouldEqual(1);
         }
 
         [Fact]

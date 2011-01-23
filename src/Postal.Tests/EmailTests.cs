@@ -2,6 +2,8 @@
 using Moq;
 using Should;
 using Xunit;
+using System.Net.Mail;
+using System.IO;
 
 namespace Postal
 {
@@ -95,6 +97,15 @@ namespace Postal
             {
 
             }
+        }
+
+        [Fact]
+        public void Attach_adds_attachment()
+        {
+            var email = new Email("Test");
+            var attachment = new Attachment(new MemoryStream(), "name");
+            email.Attach(attachment);
+            email.Attachments.ShouldContain(attachment);
         }
     }
 }

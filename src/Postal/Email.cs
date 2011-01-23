@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Dynamic;
 using System.Web.Mvc;
+using System.Net.Mail;
+using System.Collections.Generic;
 
 namespace Postal
 {
@@ -17,6 +19,7 @@ namespace Postal
             if (viewName == null) throw new ArgumentNullException("viewName");
             if (string.IsNullOrWhiteSpace(viewName)) throw new ArgumentException("View name cannot be empty.", "viewName");
 
+            Attachments = new List<Attachment>();
             ViewName = viewName;
             ViewData = new ViewDataDictionary();
             if (IsStronglyTypedEmail())
@@ -27,6 +30,7 @@ namespace Postal
         /// <remarks>Used when defining strongly typed Email classes.</remarks>
         protected Email()
         {
+            Attachments = new List<Attachment>();
             ViewName = DeriveViewNameFromClassName();
             ViewData = new ViewDataDictionary(this);
         }
@@ -40,6 +44,8 @@ namespace Postal
         /// The view data to pass to the view.
         /// </summary>
         public ViewDataDictionary ViewData { get; set; }
+
+        public List<Attachment> Attachments { get; set; }
 
         /// <summary>
         /// Convenience method that sends this email via a default EmailService. 
@@ -66,6 +72,11 @@ namespace Postal
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return ViewData.TryGetValue(binder.Name, out result);
+        }
+
+        public void Attach(Attachment attachment)
+        {
+            Attachments.Add(attachment);
         }
 
         string DeriveViewNameFromClassName()

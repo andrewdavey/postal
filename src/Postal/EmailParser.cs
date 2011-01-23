@@ -35,6 +35,8 @@ namespace Postal
                     message.Body = reader.ReadToEnd();
                     if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
                 }
+
+                AddAttachments(message, email);
             }
         }
 
@@ -133,6 +135,14 @@ namespace Postal
                 default:
                     message.Headers[key] = value;
                     break;
+            }
+        }
+
+        void AddAttachments(MailMessage message, Email email)
+        {
+            foreach (var attachment in email.Attachments)
+            {
+                message.Attachments.Add(attachment);
             }
         }
     }
