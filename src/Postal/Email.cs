@@ -28,9 +28,7 @@ namespace Postal
         protected Email()
         {
             ViewName = DeriveViewNameFromClassName();
-            ViewData = new ViewDataDictionary();
-            if (IsStronglyTypedEmail())
-                ViewData.Model = this;
+            ViewData = new ViewDataDictionary(this);
         }
 
         /// <summary>

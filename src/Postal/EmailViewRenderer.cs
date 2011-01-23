@@ -10,30 +10,27 @@ namespace Postal
     /// <summary>
     /// Renders <see cref="Email"/> view's into raw strings using the MVC ViewEngine infrastructure.
     /// </summary>
-    class EmailViewRenderer
+    public class EmailViewRenderer : IEmailViewRenderer
     {
         public EmailViewRenderer(ViewEngineCollection viewEngines, string urlHostName)
         {
             this.viewEngines = viewEngines;
             this.urlHostName = urlHostName ?? GetHostNameFromHttpContext();
+            EmailViewDirectoryName = "Emails";
         }
 
         readonly ViewEngineCollection viewEngines;
         readonly string urlHostName;
 
         /// <summary>
-        /// To find a view we have to provide a "Controller" name to the MVC infrastructure.
-        /// Postal's convention is to use Emails. Maybe make this configurable in future?
+        /// The name of the directory in "Views" that contains the email views.
+        /// By default, this is "Emails".
         /// </summary>
-        const string EmailsControllerName = "Emails";
+        public string EmailViewDirectoryName { get; set; }
 
-        public string Render(Email email)
+        public string Render(Email email, string viewName = null)
         {
-            return Render(email, email.ViewName);
-        }
-
-        public string Render(Email email, string viewName)
-        {
+            viewName = viewName ?? email.ViewName;
             var controllerContext = CreateControllerContext();
             var view = CreateView(viewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext);
@@ -44,7 +41,7 @@ namespace Postal
         {
             var httpContext = new EmailHttpContext(urlHostName);
             var routeData = new RouteData();
-            routeData.Values["controller"] = EmailsControllerName;
+            routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
             return new ControllerContext(requestContext, new StubController());
         }

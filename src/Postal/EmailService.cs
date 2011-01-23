@@ -17,11 +17,17 @@ namespace Postal
         public EmailService(ViewEngineCollection viewEngines, string urlHostName = null)
         {
             emailViewRenderer = new EmailViewRenderer(viewEngines, urlHostName);
-            parser = new EmailParser(emailViewRenderer);
+            emailParser = new EmailParser(emailViewRenderer);
         }
 
-        readonly EmailViewRenderer emailViewRenderer;
-        readonly EmailParser parser;
+        public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser)
+        {
+            this.emailViewRenderer = emailViewRenderer;
+            this.emailParser = emailParser;
+        }
+
+        readonly IEmailViewRenderer emailViewRenderer;
+        readonly IEmailParser emailParser;
 
         public void Send(Email email)
         {
@@ -35,7 +41,7 @@ namespace Postal
         public MailMessage CreateMailMessage(Email email)
         {
             var rawEmailString = emailViewRenderer.Render(email);
-            var mailMessage = parser.Parse(rawEmailString, email);
+            var mailMessage = emailParser.Parse(rawEmailString, email);
             return mailMessage;
         }
     }

@@ -9,14 +9,14 @@ namespace Postal
     /// <summary>
     /// Converts the raw string output of a view into a <see cref="MailMessage"/>.
     /// </summary>
-    class EmailParser
+    class EmailParser : IEmailParser
     {
-        public EmailParser(EmailViewRenderer alternativeViewRenderer)
+        public EmailParser(IEmailViewRenderer alternativeViewRenderer)
         {
             this.alternativeViewRenderer = alternativeViewRenderer;
         }
 
-        readonly EmailViewRenderer alternativeViewRenderer;
+        readonly IEmailViewRenderer alternativeViewRenderer;
 
         public MailMessage Parse(string emailViewOutput, Email email)
         {

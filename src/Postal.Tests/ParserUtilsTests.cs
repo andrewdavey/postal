@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
+﻿using System.Collections.Generic;
 using System.IO;
 using Should;
+using Xunit;
 
 namespace Postal
 {
@@ -26,9 +23,17 @@ namespace Postal
             header.Value.ShouldEqual("world");
         }
 
+        [Fact]
+        public void Skips_initial_blank_lines() 
+        {
+            var header = ParseHeader("\n\nfirst: test");
+            header.Key.ShouldEqual("first");
+            header.Value.ShouldEqual("test");
+        }
+
         KeyValuePair<string, string> ParseHeader(string line)
         {
-            KeyValuePair<string, string> header = default(KeyValuePair<string,string>);
+            var header = default(KeyValuePair<string,string>);
             using (var reader = new StringReader(line))
             {
                 ParserUtils.ParseHeaders(reader, (key, value) => header = new KeyValuePair<string, string>(key, value));

@@ -54,7 +54,9 @@
     <Compile Include="EmailParser.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmailViewRenderer.cs" />
+    <Compile Include="IEmailParser.cs" />
     <Compile Include="IEmailService.cs" />
+    <Compile Include="IEmailViewRenderer.cs" />
     <Compile Include="ParserUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
