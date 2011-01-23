@@ -102,10 +102,10 @@ namespace Postal
         [Fact]
         public void Attach_adds_attachment()
         {
-            var email = new Email("Test");
+            dynamic email = new Email("Test");
             var attachment = new Attachment(new MemoryStream(), "name");
             email.Attach(attachment);
-            email.Attachments.ShouldContain(attachment);
+            ((Email)email).Attachments.ShouldContain(attachment);
         }
     }
 }
