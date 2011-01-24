@@ -29,6 +29,7 @@ namespace Postal
         {
             using (var reader = new StringReader(emailViewOutput))
             {
+                AssignCommonHeaders(message, email);
                 ParserUtils.ParseHeaders(reader, (key, value) => ProcessHeader(key, value, message, email));
                 if (message.AlternateViews.Count == 0)
                 {
@@ -37,6 +38,32 @@ namespace Postal
                 }
 
                 AddAttachments(message, email);
+            }
+        }
+
+        void AssignCommonHeaders(MailMessage message, Email email)
+        {
+            AssignCommonHeader<string>(email, "to", to => message.To.Add(to));
+            AssignCommonHeader<MailAddress>(email, "to", to => message.To.Add(to));
+            AssignCommonHeader<string>(email, "from", from => message.From = new MailAddress(from));
+            AssignCommonHeader<MailAddress>(email, "from", from => message.From = from);
+            AssignCommonHeader<string>(email, "cc", cc => message.CC.Add(cc));
+            AssignCommonHeader<MailAddress>(email, "cc", cc => message.CC.Add(cc));
+            AssignCommonHeader<string>(email, "bcc", bcc => message.Bcc.Add(bcc));
+            AssignCommonHeader<MailAddress>(email, "bcc", bcc => message.Bcc.Add(bcc));
+            AssignCommonHeader<string>(email, "reply-to", replyTo => message.ReplyToList.Add(replyTo));
+            AssignCommonHeader<MailAddress>(email, "reply-to", replyTo => message.ReplyToList.Add(replyTo));
+            AssignCommonHeader<string>(email, "subject", subject => message.Subject = subject);
+        }
+
+        void AssignCommonHeader<T>(Email email, string header, Action<T> assign)
+            where T : class
+        {
+            object value;
+            if (email.ViewData.TryGetValue(header, out value))
+            {
+                var typedValue = value as T;
+                if (typedValue != null) assign(typedValue);
             }
         }
 

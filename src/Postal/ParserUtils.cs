@@ -23,7 +23,7 @@ namespace Postal
             do
             {
                 var index = line.IndexOf(':');
-                if (index <= 0) throw new Exception("Invalid email header. Headers must be of the form 'To: hello@world.com'. Also, there must be a blank line between headers and the email body.");
+                if (index <= 0) break;
 
                 var key = line.Substring(0, index).ToLowerInvariant().Trim();
                 var value = line.Substring(index + 1).Trim();

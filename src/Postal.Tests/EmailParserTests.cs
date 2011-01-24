@@ -134,5 +134,53 @@ Hello, World!";
                 parser.Parse(input, email);
             });
         }
+
+        [Fact]
+        public void To_header_can_be_set_automatically()
+        {
+            dynamic email = new Email("Test");
+            email.To = "test@test.com";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.To[0].Address.ShouldEqual("test@test.com");
+            }
+        }
+
+        [Fact]
+        public void Subject_header_can_be_set_automatically()
+        {
+            dynamic email = new Email("Test");
+            email.Subject = "test";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.Subject.ShouldEqual("test");
+            }
+        }
+
+        [Fact]
+        public void From_header_can_be_set_automatically()
+        {
+            dynamic email = new Email("Test");
+            email.From = "test@test.com";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.From.Address.ShouldEqual("test@test.com");
+            }
+        }
+
+        [Fact]
+        public void From_header_can_be_set_automatically_as_MailAddress()
+        {
+            dynamic email = new Email("Test");
+            email.From = new MailAddress("test@test.com");
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.From.ShouldEqual(new MailAddress("test@test.com"));
+            }
+        }
     }
 }
