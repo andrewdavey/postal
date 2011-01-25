@@ -1,4 +1,6 @@
-﻿using System.Net.Mail;
+﻿using System;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Postal
@@ -18,23 +20,73 @@ namespace Postal
         {
             emailViewRenderer = new EmailViewRenderer(viewEngines, urlHostName);
             emailParser = new EmailParser(emailViewRenderer);
+            createSmtpClient = () => new SmtpClient();
         }
 
-        public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser)
+        public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser, Func<SmtpClient> createSmtpClient)
         {
             this.emailViewRenderer = emailViewRenderer;
             this.emailParser = emailParser;
+            this.createSmtpClient = createSmtpClient;
         }
 
         readonly IEmailViewRenderer emailViewRenderer;
         readonly IEmailParser emailParser;
+        readonly Func<SmtpClient> createSmtpClient;
 
         public void Send(Email email)
         {
             using (var mailMessage = CreateMailMessage(email))
-            using (var smtp = new SmtpClient())
+            using (var smtp = createSmtpClient())
             {
                 smtp.Send(mailMessage);
+            }
+        }
+
+        public Task SendAsync(Email email)
+        {
+            // Wrap the SmtpClient's awkward async API in the much nicer Task pattern.
+            // However, we must be careful to dispose of the resources we create correctly.
+            var mailMessage = CreateMailMessage(email);
+            try
+            {
+                var smtp = createSmtpClient();
+                try
+                {
+                    var taskCompletionSource = new TaskCompletionSource<object>();
+
+                    smtp.SendCompleted += (o, e) =>
+                    {
+                        smtp.Dispose();
+                        mailMessage.Dispose();
+
+                        if (e.Error != null)
+                        {
+                            taskCompletionSource.TrySetException(e.Error);
+                        }
+                        else if (e.Cancelled)
+                        {
+                            taskCompletionSource.TrySetCanceled();
+                        }
+                        else // Success
+                        {
+                            taskCompletionSource.TrySetResult(null);
+                        }
+                    };
+
+                    smtp.SendAsync(mailMessage, null);
+                    return taskCompletionSource.Task;
+                }
+                catch
+                {
+                    smtp.Dispose();
+                    throw;
+                }
+            }
+            catch
+            {
+                mailMessage.Dispose();
+                throw;
             }
         }
 
