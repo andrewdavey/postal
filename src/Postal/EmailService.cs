@@ -10,17 +10,18 @@ namespace Postal
     /// </summary>
     public class EmailService : IEmailService
     {
-        public EmailService() : this(ViewEngines.Engines, null)
+        public EmailService() : this(ViewEngines.Engines, null, null)
         {
         }
 
         /// <param name="viewEngines">The view engines to use when creating email views.</param>
         /// <param name="urlHostName">The host name of the website. This is for the UrlHelper used when generating Urls in a view. When null, this is determined from the current HttpContext instead.</param>
-        public EmailService(ViewEngineCollection viewEngines, string urlHostName = null)
+        /// <param name="createSmtpClient">A function that creates a <see cref="SmtpClient"/>. If null, a default creation function is used.</param>
+        public EmailService(ViewEngineCollection viewEngines, string urlHostName = null, Func<SmtpClient> createSmtpClient = null)
         {
             emailViewRenderer = new EmailViewRenderer(viewEngines, urlHostName);
             emailParser = new EmailParser(emailViewRenderer);
-            createSmtpClient = () => new SmtpClient();
+            this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }
 
         public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser, Func<SmtpClient> createSmtpClient)

@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace Postal
 {
+    /// <summary>
+    /// Creates and send email.
+    /// </summary>
     public interface IEmailService
     {
         /// <summary>
