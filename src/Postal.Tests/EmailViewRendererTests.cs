@@ -35,7 +35,7 @@ namespace Postal
         public void Render_throws_exception_when_email_view_not_found()
         {
             var viewEngines = new Mock<ViewEngineCollection>();
-            viewEngines.Setup(e => e.FindPartialView(It.IsAny<ControllerContext>(), "Test"))
+            viewEngines.Setup(e => e.FindView(It.IsAny<ControllerContext>(), "Test", It.IsAny<string>()))
                        .Returns(new ViewEngineResult(new[] { "Test" }));
             var renderer = new EmailViewRenderer(viewEngines.Object, "test.com");
 

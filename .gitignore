@@ -11,3 +11,4 @@ _ReSharper.*
 *.Cache
 *.user
 tools/nuget/*.nupkg
+tools/nuget/package/lib

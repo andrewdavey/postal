@@ -112,7 +112,9 @@
   <ItemGroup>
     <Content Include="Views\Emails\Multipart.Html.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Emails\_ViewStart.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Multipart\Sent.cshtml" />
   </ItemGroup>
