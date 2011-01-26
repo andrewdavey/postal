@@ -14,7 +14,7 @@ namespace Postal
         {
             var viewEngines = new Mock<ViewEngineCollection>();
             var view = new FakeView();
-            viewEngines.Setup(e => e.FindPartialView(It.IsAny<ControllerContext>(), "Test"))
+            viewEngines.Setup(e => e.FindView(It.IsAny<ControllerContext>(), "Test", null))
                        .Returns(new ViewEngineResult(view, Mock.Of<IViewEngine>()));
             var renderer = new EmailViewRenderer(viewEngines.Object, "test.com");
 
