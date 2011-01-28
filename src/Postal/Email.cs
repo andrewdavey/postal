@@ -44,7 +44,19 @@ namespace Postal
         /// </summary>
         public ViewDataDictionary ViewData { get; set; }
 
+        /// <summary>
+        /// The attachments to send with the email.
+        /// </summary>
         public List<Attachment> Attachments { get; set; }
+
+        /// <summary>
+        /// Adds an attachment to the email.
+        /// </summary>
+        /// <param name="attachment">The attachment to add.</param>
+        public void Attach(Attachment attachment)
+        {
+            Attachments.Add(attachment);
+        }
 
         /// <summary>
         /// Convenience method that sends this email via a default EmailService. 
@@ -54,6 +66,9 @@ namespace Postal
             CreateEmailService().Send(this);
         }
 
+        /// <summary>
+        /// Convenience method that sends this email asynchronously via a default EmailService. 
+        /// </summary>
         public Task SendAsync()
         {
             return CreateEmailService().SendAsync(this);
@@ -76,11 +91,6 @@ namespace Postal
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return ViewData.TryGetValue(binder.Name, out result);
-        }
-
-        public void Attach(Attachment attachment)
-        {
-            Attachments.Add(attachment);
         }
 
         string DeriveViewNameFromClassName()

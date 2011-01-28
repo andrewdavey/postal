@@ -3,7 +3,7 @@
 }
 <h1>Postal</h1>
 
-<form method="post" action="@Url.Action("Send")">
+<form method="post" action="@Url.Action("Send")" enctype="multipart/form-data">
     <div>
         <label>To</label>
         <input type="text" name="To" />
@@ -15,6 +15,10 @@
     <div>
         <label>Message</label>
         <textarea name="Message" rows="5" cols="20"></textarea>
+    </div>
+    <div>
+        <label>Attachment</label>
+        <input type="file" name="file"/>
     </div>
     <div>
         <button type="submit">Send</button>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Mail;
+using System.Web;
 using System.Web.Mvc;
 using Postal;
 
@@ -11,7 +13,7 @@ namespace MvcSample.Controllers
             return View();
         }
 
-        public ActionResult Send(string to, string subject, string message)
+        public ActionResult Send(string to, string subject, string message, HttpPostedFileBase file)
         {
             // This will look for a view in "~/Views/Emails/Example.cshtml".
             dynamic email = new Email("Example");
@@ -21,6 +23,11 @@ namespace MvcSample.Controllers
             email.Subject = subject;
             email.Message = message;
             email.Date = DateTime.UtcNow;
+
+            if (file != null)
+            {
+                email.Attach(new Attachment(file.InputStream, file.FileName));
+            }
 
             // Send the email via a default Postal.EmailService object.
             // This will use the web.config smtp settings.
