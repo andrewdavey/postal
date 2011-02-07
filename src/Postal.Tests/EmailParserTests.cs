@@ -40,6 +40,48 @@ Hello, World!";
         }
 
         [Fact]
+        public void Repeating_CC_adds_each_email_address_to_list()
+        {
+            var input = @"
+To: test1@test.com
+From: test2@test.com
+CC: test3@test.com
+CC: test4@test.com
+CC: test5@test.com
+Subject: Test Subject
+
+Hello, World!";
+            var renderer = new Mock<IEmailViewRenderer>();
+            var parser = new EmailParser(renderer.Object);
+            using (var message = parser.Parse(input, new Email("Test")))
+            {
+                message.CC[0].Address.ShouldEqual("test3@test.com");
+                message.CC[1].Address.ShouldEqual("test4@test.com");
+                message.CC[2].Address.ShouldEqual("test5@test.com");                
+            }
+        }
+
+        [Fact]
+        public void Can_parse_multiple_email_addresses_in_header()
+        {
+            var input = @"
+To: test1@test.com
+From: test2@test.com
+CC: test3@test.com, test4@test.com, test5@test.com
+Subject: Test Subject
+
+Hello, World!";
+            var renderer = new Mock<IEmailViewRenderer>();
+            var parser = new EmailParser(renderer.Object);
+            using (var message = parser.Parse(input, new Email("Test")))
+            {
+                message.CC[0].Address.ShouldEqual("test3@test.com");
+                message.CC[1].Address.ShouldEqual("test4@test.com");
+                message.CC[2].Address.ShouldEqual("test5@test.com");
+            }
+        }
+
+        [Fact]
         public void Can_detect_HTML_body()
         {
             var input = @"
