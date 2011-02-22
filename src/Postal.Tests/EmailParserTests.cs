@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mail;
 using System.Net.Mime;
 using Moq;
 using Should;
 using Xunit;
-using System.Net.Mail;
 
 namespace Postal
 {
@@ -222,6 +222,65 @@ Hello, World!";
             using (var message = parser.Parse("body", (Email)email))
             {
                 message.From.ShouldEqual(new MailAddress("test@test.com"));
+            }
+        }
+
+        [Fact]
+        public void Email_address_can_include_display_name()
+        {
+            var input = @"To: ""John Smith"" <test@test.com>
+From: test2@test.com
+Subject: test
+
+message";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            var email = new Email("Test");
+            using (var message = parser.Parse(input, email))
+            {
+                message.To[0].Address.ShouldEqual("test@test.com");
+                message.To[0].DisplayName.ShouldEqual("John Smith");
+            }
+        }
+
+        [Fact]
+        public void Can_parse_reply_to()
+        {
+            var input = @"To: test@test.com
+From: test2@test.com
+Reply-To: other@test.com
+Subject: test
+
+message";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            var email = new Email("Test");
+            using (var message = parser.Parse(input, email))
+            {
+                message.ReplyToList[0].Address.ShouldEqual("other@test.com");
+                
+                // Check for bug reported here: http://aboutcode.net/2010/11/17/going-postal-generating-email-with-aspnet-mvc-view-engines.html#comment-153486994
+                // Should not add anything extra to the 'To' list.
+                message.To.Count.ShouldEqual(1);
+                message.To[0].Address.ShouldEqual("test@test.com");
+            }
+        }
+
+        [Fact]
+        public void Do_not_implicitly_add_To_from_model_when_set_in_view()
+        {
+            var input = @"To: test@test.com
+From: test2@test.com
+Subject: test
+
+message";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            dynamic email = new Email("Test");
+            email.To = "test@test.com";
+            using (var message = parser.Parse(input, (Email)email))
+            {
+                // Check for bug reported here: http://aboutcode.net/2010/11/17/going-postal-generating-email-with-aspnet-mvc-view-engines.html#comment-153486994
+                // Should not add anything extra to the 'To' list.
+                message.To.Count.ShouldEqual(1);
+                message.To[0].Address.ShouldEqual("test@test.com");
             }
         }
     }

@@ -31,6 +31,14 @@ namespace Postal
             header.Value.ShouldEqual("test");
         }
 
+        [Fact]
+        public void Can_parse_header_with_hyphen()
+        {
+            var header = ParseHeader("reply-to: foo@test.com");
+            header.Key.ShouldEqual("reply-to");
+            header.Value.ShouldEqual("foo@test.com");
+        }
+
         KeyValuePair<string, string> ParseHeader(string line)
         {
             var header = default(KeyValuePair<string,string>);

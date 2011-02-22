@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Postal
 {
@@ -20,13 +21,14 @@ namespace Postal
                 // Skip over any empty lines before the headers.
             }
 
+            var headerStart = new Regex(@"^\s*([A-Za-z\-]+)\s*:\s*(.*)");
             do
             {
-                var index = line.IndexOf(':');
-                if (index <= 0) break;
+                var match = headerStart.Match(line);
+                if (!match.Success) break;
 
-                var key = line.Substring(0, index).ToLowerInvariant().Trim();
-                var value = line.Substring(index + 1).Trim();
+                var key = match.Groups[1].Value.ToLowerInvariant();
+                var value = match.Groups[2].Value.TrimEnd();
                 useKeyAndValue(key, value);
             } while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()));
         }
