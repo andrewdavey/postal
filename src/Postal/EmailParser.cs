@@ -110,6 +110,8 @@ namespace Postal
         AlternateView CreateAlternativeView(Email email, string alternativeViewName)
         {
             var fullViewName = email.ViewName + "." + alternativeViewName;
+            var imageEmbedder = new ImageEmbedder();
+            email.ViewData["Postal.ImageEmbedder"] = imageEmbedder;
             var output = alternativeViewRenderer.Render(email, fullViewName);
 
             string contentType = null;
@@ -124,7 +126,10 @@ namespace Postal
                 throw new Exception("The 'Content-Type' header is missing from the alternative view '" + fullViewName + "'.");
 
             var stream = CreateStreamOfBody(body);
-            return new AlternateView(stream, contentType);
+            var alternativeView = new AlternateView(stream, contentType);
+            imageEmbedder.PutImagesIntoView(alternativeView);
+            email.ViewData.Remove("Postal.ImageEmbedder");
+            return alternativeView;
         }
 
         MemoryStream CreateStreamOfBody(string body)

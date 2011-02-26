@@ -25,5 +25,6 @@ namespace Postal
         public override HttpRequestBase Request { get { return request; } }
         public override HttpResponseBase Response { get { return response; } }
         public override Cache Cache { get { return HttpRuntime.Cache; } }
+        public override HttpServerUtilityBase Server { get { return new HttpServerUtilityWrapper(HttpContext.Current.Server); } }
     }
 }

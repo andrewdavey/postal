@@ -1,3 +1,13 @@
 ﻿Content-Type: text/html
 
 <p>Hello, <strong>world</strong>!</p>
+<p>
+@* You can embed images into your HTML message using the following helper.
+   Make sure you've added the Postal namespace in ~\Views\Web.config:
+     configuration/system.web.webPages.razor/pages/namespaces
+
+   This example uses a filename relative to the web application.
+   You can also use an absolute file path, or an HTTP URL.
+ *@
+@Html.EmbedImage("~/content/postal.jpg")
+</p>
