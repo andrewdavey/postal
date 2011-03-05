@@ -70,50 +70,6 @@ li {
     width: 39em;
 }
 
-#header-links a {
-    display: block;
-    float: left;
-    font-size: 1.75em;
-    margin-left: 1em;
-    border: solid 1px #888;
-    padding: .6em 1em;
-    text-decoration: none;
-    border-radius: .3em;
-}
-a#download-link {
-    padding-left: 2.5em;
-    background: #f2f5f6; /* old browsers */
-    background: url(zip.png), -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 37%, #c8d7dc 100%); /* firefox */
-    background: url(zip.png), -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f5f6), color-stop(37%,#e3eaed), color-stop(100%,#c8d7dc)); /* webkit */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f5f6', endColorstr='#c8d7dc',GradientType=0 ); /* ie */
-    background-repeat: no-repeat;
-    background-position: 1em center, left top;
-}
-a#download-link:hover {
-    background: #fff; /* old browsers */
-    background: url(zip.png), -moz-linear-gradient(top, #fff 0%, #fff 37%, #c8d7dc 100%); /* firefox */
-    background: url(zip.png), -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(37%,#fff), color-stop(100%,#c8d7dc)); /* webkit */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#c8d7dc',GradientType=0 ); /* ie */
-    background-repeat: no-repeat;
-    background-position: 1em center, left top;
-}
-a#github-link {
-    padding-left: 2.5em;
-    background: #f2f5f6; /* old browsers */
-    background: url(github-logo.png), -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 37%, #c8d7dc 100%); /* firefox */
-    background: url(github-logo.png), -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f5f6), color-stop(37%,#e3eaed), color-stop(100%,#c8d7dc)); /* webkit */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f5f6', endColorstr='#c8d7dc',GradientType=0 ); /* ie */
-    background-repeat: no-repeat;
-    background-position: .5em center, left top;
-}
-a#github-link:hover {
-    background: #fff; /* old browsers */
-    background: url(github-logo.png), -moz-linear-gradient(top, #fff 0%, #fff 37%, #c8d7dc 100%); /* firefox */
-    background: url(github-logo.png), -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(37%,#fff), color-stop(100%,#c8d7dc)); /* webkit */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#c8d7dc',GradientType=0 ); /* ie */
-    background-repeat: no-repeat;
-    background-position: .5em center, left top;
-}
 #social-media {
     float: left;
     margin-left: 2em;
