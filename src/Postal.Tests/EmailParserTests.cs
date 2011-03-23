@@ -226,6 +226,18 @@ Hello, World!";
         }
 
         [Fact]
+        public void ReplyTo_header_can_be_set_automatically()
+        {
+            dynamic email = new Email("Test");
+            email.ReplyTo = "test@test.com";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.ReplyToList[0].Address.ShouldEqual("test@test.com");
+            }
+        }
+
+        [Fact]
         public void Email_address_can_include_display_name()
         {
             var input = @"To: ""John Smith"" <test@test.com>

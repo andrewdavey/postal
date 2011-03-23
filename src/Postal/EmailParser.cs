@@ -65,8 +65,8 @@ namespace Postal
             }
             if (message.ReplyToList.Count == 0)
             {
-                AssignCommonHeader<string>(email, "reply-to", replyTo => message.ReplyToList.Add(replyTo));
-                AssignCommonHeader<MailAddress>(email, "reply-to", replyTo => message.ReplyToList.Add(replyTo));
+                AssignCommonHeader<string>(email, "replyto", replyTo => message.ReplyToList.Add(replyTo));
+                AssignCommonHeader<MailAddress>(email, "replyto", replyTo => message.ReplyToList.Add(replyTo));
             }
             if (string.IsNullOrEmpty(message.Subject))
             {
