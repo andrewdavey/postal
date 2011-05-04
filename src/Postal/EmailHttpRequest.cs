@@ -13,9 +13,9 @@ namespace Postal
         readonly Uri url;
         readonly NameValueCollection serverVariables = new NameValueCollection();
 
-        public EmailHttpRequest(string urlHostName)
+        public EmailHttpRequest(Uri url)
         {
-            url = new Uri("http://" + urlHostName);
+            this.url = url;
         }
 
         public override string ApplicationPath

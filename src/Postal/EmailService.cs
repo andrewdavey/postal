@@ -15,11 +15,11 @@ namespace Postal
         }
 
         /// <param name="viewEngines">The view engines to use when creating email views.</param>
-        /// <param name="urlHostName">The host name of the website. This is for the UrlHelper used when generating Urls in a view. When null, this is determined from the current HttpContext instead.</param>
+        /// <param name="url">The URL of the current request. This is for the UrlHelper used when generating Urls in a view. When null, this is determined from the current HttpContext instead.</param>
         /// <param name="createSmtpClient">A function that creates a <see cref="SmtpClient"/>. If null, a default creation function is used.</param>
-        public EmailService(ViewEngineCollection viewEngines, string urlHostName = null, Func<SmtpClient> createSmtpClient = null)
+        public EmailService(ViewEngineCollection viewEngines, Uri url = null, Func<SmtpClient> createSmtpClient = null)
         {
-            emailViewRenderer = new EmailViewRenderer(viewEngines, urlHostName);
+            emailViewRenderer = new EmailViewRenderer(viewEngines, url);
             emailParser = new EmailParser(emailViewRenderer);
             this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }

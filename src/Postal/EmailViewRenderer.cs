@@ -11,15 +11,15 @@ namespace Postal
     /// </summary>
     public class EmailViewRenderer : IEmailViewRenderer
     {
-        public EmailViewRenderer(ViewEngineCollection viewEngines, string urlHostName)
+        public EmailViewRenderer(ViewEngineCollection viewEngines, Uri url)
         {
             this.viewEngines = viewEngines;
-            this.urlHostName = urlHostName ?? GetHostNameFromHttpContext();
+            this.url = url ?? GetUrlFromHttpContext() ?? DefaultUrlRatherThanNull();
             EmailViewDirectoryName = "Emails";
         }
 
         readonly ViewEngineCollection viewEngines;
-        readonly string urlHostName;
+        readonly Uri url;
 
         /// <summary>
         /// The name of the directory in "Views" that contains the email views.
@@ -38,7 +38,7 @@ namespace Postal
 
         ControllerContext CreateControllerContext()
         {
-            var httpContext = new EmailHttpContext(urlHostName);
+            var httpContext = new EmailHttpContext(url);
             var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
@@ -68,11 +68,15 @@ namespace Postal
             }
         }
 
-        string GetHostNameFromHttpContext()
+        Uri GetUrlFromHttpContext()
         {
-            var url = HttpContext.Current.Request.Url;
-            if (url.IsDefaultPort) return url.Host;
-            return url.Host + ":" + url.Port;
+            if (HttpContext.Current == null) return null;
+            return HttpContext.Current.Request.Url;
+        }
+
+        Uri DefaultUrlRatherThanNull()
+        {
+            return new Uri("http://localhost");
         }
 
         // StubController so we can create a ControllerContext.
