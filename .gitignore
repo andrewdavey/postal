@@ -12,3 +12,4 @@ _ReSharper.*
 *.user
 tools/nuget/*.nupkg
 tools/nuget/package/lib
+/*.wrap
