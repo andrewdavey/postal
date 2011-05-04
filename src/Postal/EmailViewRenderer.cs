@@ -14,7 +14,7 @@ namespace Postal
         public EmailViewRenderer(ViewEngineCollection viewEngines, string urlHostName)
         {
             this.viewEngines = viewEngines;
-            this.urlHostName = urlHostName ?? GetHostNameFromHttpContext();
+            this.urlHostName = urlHostName ?? GetHostNameFromHttpContext() ?? "http://localhost";
             EmailViewDirectoryName = "Emails";
         }
 
@@ -70,6 +70,7 @@ namespace Postal
 
         string GetHostNameFromHttpContext()
         {
+            if (HttpContext.Current == null) return null;
             var url = HttpContext.Current.Request.Url;
             if (url.IsDefaultPort) return url.Host;
             return url.Host + ":" + url.Port;

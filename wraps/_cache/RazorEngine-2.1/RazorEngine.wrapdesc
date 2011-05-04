@@ -1,0 +1,3 @@
+﻿name: RazorEngine
+version: 2.1
+description: A templating engine built upon Microsoft's Razor parsing technology. RazorEngine allows you to use Razor syntax to build robust templates.
