@@ -45,8 +45,15 @@
     <Reference Include="xunit">
       <HintPath>..\..\lib\xunit.dll</HintPath>
     </Reference>
+    <Reference Include="xunit.runner.tdnet">
+      <HintPath>..\..\lib\xunit.runner.tdnet.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.runner.utility">
+      <HintPath>..\..\lib\xunit.runner.utility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentEmailViewRendererTests.cs" />
     <Compile Include="EmailParserTests.cs" />
     <Compile Include="EmailServiceTests.cs" />
     <Compile Include="EmailTests.cs" />

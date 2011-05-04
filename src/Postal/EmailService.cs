@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using RazorEngine;
 
 namespace Postal
 {
@@ -20,6 +22,13 @@ namespace Postal
         public EmailService(ViewEngineCollection viewEngines, string urlHostName = null, Func<SmtpClient> createSmtpClient = null)
         {
             emailViewRenderer = new EmailViewRenderer(viewEngines, urlHostName);
+            emailParser = new EmailParser(emailViewRenderer);
+            this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
+        }
+
+        public EmailService(string templatePath, Func<SmtpClient> createSmtpClient = null)
+        {
+            emailViewRenderer = new ContentEmailViewRenderer(templatePath);
             emailParser = new EmailParser(emailViewRenderer);
             this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }
