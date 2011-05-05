@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 
 namespace Postal
 {
@@ -127,6 +128,14 @@ namespace Postal
 
             var stream = CreateStreamOfBody(body);
             var alternativeView = new AlternateView(stream, contentType);
+            if (alternativeView.ContentType.CharSet == null)
+            {
+                // Must set a charset otherwise mail readers seem to guess the wrong one!
+                // Strings are unicode by default in .net.
+                alternativeView.ContentType.CharSet = Encoding.Unicode.WebName;
+                // A different charset can be specified in the Content-Type header.
+                // e.g. Content-Type: text/html; charset=utf-8
+            }
             imageEmbedder.PutImagesIntoView(alternativeView);
             email.ViewData.Remove("Postal.ImageEmbedder");
             return alternativeView;
