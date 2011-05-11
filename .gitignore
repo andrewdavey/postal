@@ -7,6 +7,7 @@ _ReSharper.*
 *.resharper.user
 *.ReSharper.user
 *.suo
+*.sln.docstates
 *.cache
 *.Cache
 *.user
