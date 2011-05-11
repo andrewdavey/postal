@@ -14,12 +14,21 @@ namespace Postal
         public EmailViewRenderer(ViewEngineCollection viewEngines, Uri url)
         {
             this.viewEngines = viewEngines;
-            this.url = url ?? GetUrlFromHttpContext() ?? DefaultUrlRatherThanNull();
+            if (url != null)
+            {
+                this.getUrl = () => url;
+            }
+            else
+            {
+                // Delay asking for Url from HttpContext since EmailViewRenderer may be
+                // created before any HttpContext exists.
+                this.getUrl = () => GetUrlFromHttpContext() ?? DefaultUrlRatherThanNull();
+            }
             EmailViewDirectoryName = "Emails";
         }
 
         readonly ViewEngineCollection viewEngines;
-        readonly Uri url;
+        readonly Func<Uri> getUrl;
 
         /// <summary>
         /// The name of the directory in "Views" that contains the email views.
@@ -38,7 +47,7 @@ namespace Postal
 
         ControllerContext CreateControllerContext()
         {
-            var httpContext = new EmailHttpContext(url);
+            var httpContext = new EmailHttpContext(getUrl());
             var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
