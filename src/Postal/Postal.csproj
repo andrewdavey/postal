@@ -63,6 +63,8 @@
     <Compile Include="ImageEmbedder.cs" />
     <Compile Include="ParserUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceRazorView.cs" />
+    <Compile Include="ResourceRazorViewEngine.cs" />
   </ItemGroup>
   <Import Project="..\..\wraps\openwrap\build\OpenWrap.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
