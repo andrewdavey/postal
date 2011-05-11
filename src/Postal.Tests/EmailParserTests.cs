@@ -122,11 +122,11 @@ Hello, World!";
             var parser = new EmailParser(renderer.Object);
             using (var message = parser.Parse(input, email))
             {
-                message.AlternateViews[0].ContentType.ShouldEqual(new ContentType("text/plain"));
+                message.AlternateViews[0].ContentType.ShouldEqual(new ContentType("text/plain; charset=utf-16"));
                 var textContent = new StreamReader(message.AlternateViews[0].ContentStream).ReadToEnd();
                 textContent.ShouldEqual("Hello, World!");
 
-                message.AlternateViews[1].ContentType.ShouldEqual(new ContentType("text/html"));
+                message.AlternateViews[1].ContentType.ShouldEqual(new ContentType("text/html; charset=utf-16"));
                 var htmlContent = new StreamReader(message.AlternateViews[1].ContentStream).ReadToEnd();
                 htmlContent.ShouldEqual("<p>Hello, World!</p>");
             }
