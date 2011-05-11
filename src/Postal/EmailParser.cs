@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Postal
 {
@@ -190,6 +191,13 @@ namespace Postal
                     break;
                 case "reply-to":
                     message.ReplyToList.Add(value);
+                    break;
+                case "content-type":
+                    var charsetMatch = Regex.Match(value, @"\bcharset\s*=\s*(.*)$");
+                    if (charsetMatch.Success)
+                    {
+                        message.BodyEncoding = Encoding.GetEncoding(charsetMatch.Groups[1].Value);
+                    }
                     break;
                 default:
                     message.Headers[key] = value;
