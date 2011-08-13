@@ -35,7 +35,7 @@ namespace Postal
                 AssignCommonHeaders(message, email);
                 if (message.AlternateViews.Count == 0)
                 {
-                    message.Body = reader.ReadToEnd();
+                    message.Body = reader.ReadToEnd().Trim();
                     if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
                 }
 

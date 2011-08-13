@@ -100,6 +100,25 @@ Subject: Test Subject
         }
 
         [Fact]
+        public void Can_detect_HTML_body_with_leading_whitespace()
+        {
+            var input = @"
+To: test1@test.com
+From: test2@test.com
+Subject: Test Subject
+
+
+<p>Hello, World!</p>";
+            var renderer = new Mock<IEmailViewRenderer>();
+            var parser = new EmailParser(renderer.Object);
+            using (var message = parser.Parse(input, new Email("Test")))
+            {
+                message.Body.ShouldEqual("<p>Hello, World!</p>");
+                message.IsBodyHtml.ShouldBeTrue();
+            }
+        }
+
+        [Fact]
         public void Alternative_views_are_added_to_MailMessage()
         {
             var input = @"
