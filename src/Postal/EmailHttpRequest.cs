@@ -12,6 +12,7 @@ namespace Postal
     {
         readonly Uri url;
         readonly NameValueCollection serverVariables = new NameValueCollection();
+        readonly Lazy<HttpBrowserCapabilitiesBase> browser = new Lazy<HttpBrowserCapabilitiesBase>(() => new HttpBrowserCapabilitiesWrapper(new HttpBrowserCapabilities()));
 
         public EmailHttpRequest(Uri url)
         {
@@ -38,6 +39,14 @@ namespace Postal
             get
             {
                 return !url.IsAbsoluteUri;
+            }
+        }
+
+        public override HttpBrowserCapabilitiesBase Browser
+        {
+            get
+            {
+                return browser.Value;
             }
         }
     }
