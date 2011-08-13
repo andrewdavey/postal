@@ -11,7 +11,7 @@ namespace Postal
     /// <summary>
     /// Converts the raw string output of a view into a <see cref="MailMessage"/>.
     /// </summary>
-    class EmailParser : IEmailParser
+    public class EmailParser : IEmailParser
     {
         public EmailParser(IEmailViewRenderer alternativeViewRenderer)
         {

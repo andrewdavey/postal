@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Postal
 {
-    static class ParserUtils
+    public static class ParserUtils
     {
         /// <summary>
         /// Headers are of the form "(key): (value)" e.g. "Subject: Hello, world".
