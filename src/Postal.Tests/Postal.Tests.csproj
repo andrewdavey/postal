@@ -54,6 +54,7 @@
     <Compile Include="EmailServiceTests.cs" />
     <Compile Include="EmailTests.cs" />
     <Compile Include="EmailViewRendererTests.cs" />
+    <Compile Include="FileSystemRazorViewTests.cs" />
     <Compile Include="ImageEmbedderTests.cs" />
     <Compile Include="ParserUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

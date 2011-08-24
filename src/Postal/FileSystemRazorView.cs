@@ -12,14 +12,14 @@ namespace Postal
     /// </summary>
     public class FileSystemRazorView : IView
     {
-        readonly string filename;
         readonly string template;
+        readonly string cacheName;
         readonly static MethodInfo genericParseMethod;
 
         public FileSystemRazorView(string filename)
         {
-            this.filename = filename;
             template = File.ReadAllText(filename);
+            cacheName = filename + File.GetLastWriteTimeUtc(filename).Ticks.ToString();
         }
 
         static FileSystemRazorView()
@@ -38,10 +38,10 @@ namespace Postal
             // instead of requiring a generic parameter... ah well...
             var parseMethod = genericParseMethod
                 .MakeGenericMethod(viewContext.ViewData.Model.GetType());
-            
+
             var content = (string)parseMethod.Invoke(
                 null, 
-                new object[] { template, viewContext.ViewData.Model, filename }
+                new object[] { template, viewContext.ViewData.Model, cacheName }
             );
 
             writer.Write(content);
