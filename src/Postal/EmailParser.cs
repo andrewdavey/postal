@@ -70,6 +70,11 @@ namespace Postal
                 AssignCommonHeader<string>(email, "replyto", replyTo => message.ReplyToList.Add(replyTo));
                 AssignCommonHeader<MailAddress>(email, "replyto", replyTo => message.ReplyToList.Add(replyTo));
             }
+            if (message.Sender == null)
+            {
+                AssignCommonHeader<string>(email, "sender", sender => message.Sender = new MailAddress(sender));
+                AssignCommonHeader<MailAddress>(email, "sender", sender => message.Sender = sender);
+            }
             if (string.IsNullOrEmpty(message.Subject))
             {
                 AssignCommonHeader<string>(email, "subject", subject => message.Subject = subject);
@@ -191,6 +196,9 @@ namespace Postal
                     break;
                 case "reply-to":
                     message.ReplyToList.Add(value);
+                    break;
+                case "sender":
+                    message.Sender = new MailAddress(value);
                     break;
                 case "content-type":
                     var charsetMatch = Regex.Match(value, @"\bcharset\s*=\s*(.*)$");
