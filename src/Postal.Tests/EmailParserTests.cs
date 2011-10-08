@@ -19,6 +19,7 @@ From: test2@test.com
 CC: test3@test.com
 Bcc: test4@test.com
 Reply-To: test5@test.com
+Sender: test6@test.com
 X-Test: test
 Subject: Test Subject
 
@@ -33,9 +34,28 @@ Hello, World!";
                 message.Bcc[0].Address.ShouldEqual("test4@test.com");
                 message.ReplyToList[0].Address.ShouldEqual("test5@test.com");
                 message.Subject.ShouldEqual("Test Subject");
+                message.Sender.Address.ShouldEqual("test6@test.com");
                 message.Headers["X-Test"].ShouldEqual("test");
                 message.Body.ShouldEqual("Hello, World!");
                 message.IsBodyHtml.ShouldBeFalse();
+            }
+        }
+
+        [Fact]
+        public void Parse_creates_email_addresses_with_display_name()
+        {
+            var input = @"
+To: John H Smith test1@test.com
+From: test2@test.com
+Subject: Test Subject
+
+Hello, World!";
+            var renderer = new Mock<IEmailViewRenderer>();
+            var parser = new EmailParser(renderer.Object);
+            using (var message = parser.Parse(input, new Email("Test")))
+            {
+                message.To[0].Address.ShouldEqual("test1@test.com");
+                message.To[0].DisplayName.ShouldEqual("John H Smith");
             }
         }
 
