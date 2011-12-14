@@ -30,13 +30,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Postal.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq">
       <HintPath>..\..\lib\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\packages\RazorEngine.3.0.5\lib\net40\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.0.5\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,19 +54,13 @@
     <Reference Include="xunit">
       <HintPath>..\..\lib\xunit.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.runner.tdnet">
-      <HintPath>..\..\lib\xunit.runner.tdnet.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.runner.utility">
-      <HintPath>..\..\lib\xunit.runner.utility.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentEmailViewRendererTests.cs" />
     <Compile Include="EmailParserTests.cs" />
     <Compile Include="EmailServiceTests.cs" />
     <Compile Include="EmailTests.cs" />
     <Compile Include="EmailViewRendererTests.cs" />
+    <Compile Include="FileSystemRazorViewTests.cs" />
     <Compile Include="ImageEmbedderTests.cs" />
     <Compile Include="ParserUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +70,9 @@
       <Project>{D2FCFAFA-6EFA-45A8-845B-C5ACE1A5878B}</Project>
       <Name>Postal</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\..\wraps\openwrap\build\OpenWrap.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

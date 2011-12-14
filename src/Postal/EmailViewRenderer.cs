@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -11,15 +11,24 @@ namespace Postal
     /// </summary>
     public class EmailViewRenderer : IEmailViewRenderer
     {
-        public EmailViewRenderer(ViewEngineCollection viewEngines, string urlHostName)
+        public EmailViewRenderer(ViewEngineCollection viewEngines, Uri url)
         {
             this.viewEngines = viewEngines;
-            this.urlHostName = urlHostName ?? GetHostNameFromHttpContext();
+            if (url != null)
+            {
+                this.getUrl = () => url;
+            }
+            else
+            {
+                // Delay asking for Url from HttpContext since EmailViewRenderer may be
+                // created before any HttpContext exists.
+                this.getUrl = () => GetUrlFromHttpContext() ?? DefaultUrlRatherThanNull();
+            }
             EmailViewDirectoryName = "Emails";
         }
 
         readonly ViewEngineCollection viewEngines;
-        readonly string urlHostName;
+        readonly Func<Uri> getUrl;
 
         /// <summary>
         /// The name of the directory in "Views" that contains the email views.
@@ -38,7 +47,7 @@ namespace Postal
 
         ControllerContext CreateControllerContext()
         {
-            var httpContext = new EmailHttpContext(urlHostName);
+            var httpContext = new EmailHttpContext(getUrl());
             var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
@@ -68,11 +77,15 @@ namespace Postal
             }
         }
 
-        string GetHostNameFromHttpContext()
+        Uri GetUrlFromHttpContext()
         {
-            var url = HttpContext.Current.Request.Url;
-            if (url.IsDefaultPort) return url.Host;
-            return url.Host + ":" + url.Port;
+            if (HttpContext.Current == null) return null;
+            return HttpContext.Current.Request.Url;
+        }
+
+        Uri DefaultUrlRatherThanNull()
+        {
+            return new Uri("http://localhost");
         }
 
         // StubController so we can create a ControllerContext.

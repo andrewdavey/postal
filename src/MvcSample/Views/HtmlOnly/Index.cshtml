@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Postal";
+}
+<h1>Postal</h1>
+
+<form method="post" action="@Url.Action("Send")">
+    <div>
+        <button type="submit">Send</button>
+    </div>
+</form>
+
+<p>Emails are only saved to 'c:\email'. See web.config for this setting.</p>

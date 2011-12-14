@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Postal
 {
     /// <summary>
     /// Converts the raw string output of a view into a <see cref="MailMessage"/>.
     /// </summary>
-    class EmailParser : IEmailParser
+    public class EmailParser : IEmailParser
     {
         public EmailParser(IEmailViewRenderer alternativeViewRenderer)
         {
@@ -33,7 +35,7 @@ namespace Postal
                 AssignCommonHeaders(message, email);
                 if (message.AlternateViews.Count == 0)
                 {
-                    message.Body = reader.ReadToEnd();
+                    message.Body = reader.ReadToEnd().Trim();
                     if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
                 }
 
@@ -67,6 +69,11 @@ namespace Postal
             {
                 AssignCommonHeader<string>(email, "replyto", replyTo => message.ReplyToList.Add(replyTo));
                 AssignCommonHeader<MailAddress>(email, "replyto", replyTo => message.ReplyToList.Add(replyTo));
+            }
+            if (message.Sender == null)
+            {
+                AssignCommonHeader<string>(email, "sender", sender => message.Sender = new MailAddress(sender));
+                AssignCommonHeader<MailAddress>(email, "sender", sender => message.Sender = sender);
             }
             if (string.IsNullOrEmpty(message.Subject))
             {
@@ -127,6 +134,14 @@ namespace Postal
 
             var stream = CreateStreamOfBody(body);
             var alternativeView = new AlternateView(stream, contentType);
+            if (alternativeView.ContentType.CharSet == null)
+            {
+                // Must set a charset otherwise mail readers seem to guess the wrong one!
+                // Strings are unicode by default in .net.
+                alternativeView.ContentType.CharSet = Encoding.Unicode.WebName;
+                // A different charset can be specified in the Content-Type header.
+                // e.g. Content-Type: text/html; charset=utf-8
+            }
             imageEmbedder.PutImagesIntoView(alternativeView);
             email.ViewData.Remove("Postal.ImageEmbedder");
             return alternativeView;
@@ -181,6 +196,16 @@ namespace Postal
                     break;
                 case "reply-to":
                     message.ReplyToList.Add(value);
+                    break;
+                case "sender":
+                    message.Sender = new MailAddress(value);
+                    break;
+                case "content-type":
+                    var charsetMatch = Regex.Match(value, @"\bcharset\s*=\s*(.*)$");
+                    if (charsetMatch.Success)
+                    {
+                        message.BodyEncoding = Encoding.GetEncoding(charsetMatch.Groups[1].Value);
+                    }
                     break;
                 default:
                     message.Headers[key] = value;

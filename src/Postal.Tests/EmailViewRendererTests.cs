@@ -16,7 +16,7 @@ namespace Postal
             var view = new FakeView();
             viewEngines.Setup(e => e.FindView(It.IsAny<ControllerContext>(), "Test", null))
                        .Returns(new ViewEngineResult(view, Mock.Of<IViewEngine>()));
-            var renderer = new EmailViewRenderer(viewEngines.Object, "test.com");
+            var renderer = new EmailViewRenderer(viewEngines.Object, new Uri("http://test.com"));
 
             var actualEmailString = renderer.Render(new Email("Test"));
 
@@ -37,7 +37,7 @@ namespace Postal
             var viewEngines = new Mock<ViewEngineCollection>();
             viewEngines.Setup(e => e.FindView(It.IsAny<ControllerContext>(), "Test", It.IsAny<string>()))
                        .Returns(new ViewEngineResult(new[] { "Test" }));
-            var renderer = new EmailViewRenderer(viewEngines.Object, "test.com");
+            var renderer = new EmailViewRenderer(viewEngines.Object, new Uri("http://test.com"));
 
             Assert.Throws<Exception>(delegate
             {

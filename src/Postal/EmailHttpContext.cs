@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Web;
 using System.Web.Caching;
 
@@ -10,10 +11,10 @@ namespace Postal
 
     class EmailHttpContext : HttpContextBase
     {
-        public EmailHttpContext(string urlHostName)
+        public EmailHttpContext(Uri url)
         {
             items = new Hashtable();
-            request = new EmailHttpRequest(urlHostName);
+            request = new EmailHttpRequest(url);
             response = new EmailHttpResponse();
         }
 
