@@ -28,7 +28,13 @@ namespace Postal
             // so cache the generic MethodInfo.
             genericParseMethod = typeof(Razor)
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                .Single(m => m.Name == "Parse" && m.IsGenericMethod);
+                .FirstOrDefault(m => m.Name == "Parse" && m.IsGenericMethod && 
+                    // HACK: There are better ways to query method signatures, but there are only 2 
+                    // Prase methods today with sparing forward durability...
+                    (m.GetParameters().Count() == 3 &&
+                        m.GetParameters()[0].ParameterType == typeof(string) &&
+                        // Should check for the generic type here.
+                        m.GetParameters()[2].ParameterType == typeof(string)));
         }
 
         public void Render(ViewContext viewContext, TextWriter writer)
