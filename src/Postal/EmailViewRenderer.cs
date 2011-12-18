@@ -24,11 +24,13 @@ namespace Postal
                 // created before any HttpContext exists.
                 this.getUrl = () => GetUrlFromHttpContext() ?? DefaultUrlRatherThanNull();
             }
+
             EmailViewDirectoryName = "Emails";
         }
 
         readonly ViewEngineCollection viewEngines;
         readonly Func<Uri> getUrl;
+        readonly Func<RouteData> getRouteData;
 
         /// <summary>
         /// The name of the directory in "Views" that contains the email views.
@@ -48,7 +50,7 @@ namespace Postal
         ControllerContext CreateControllerContext()
         {
             var httpContext = new EmailHttpContext(getUrl());
-            var routeData = new RouteData();
+            var routeData = GetRouteDataFromHttpContext() ?? new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
             return new ControllerContext(requestContext, new StubController());
@@ -75,6 +77,12 @@ namespace Postal
                 view.Render(viewContext, writer);
                 return writer.GetStringBuilder().ToString();
             }
+        }
+
+        RouteData GetRouteDataFromHttpContext() {
+          if (HttpContext.Current == null) return null;
+          var wrapper = new HttpContextWrapper(HttpContext.Current);
+          return RouteTable.Routes.GetRouteData(wrapper);
         }
 
         Uri GetUrlFromHttpContext()
