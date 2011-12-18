@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using RazorEngine;
@@ -10,17 +8,7 @@ namespace Postal
     public class ResourceRazorView : IView
     {
         private readonly string resourcePath;
-        private readonly static MethodInfo genericParseMethod;
         private readonly string template;
-
-        static ResourceRazorView()
-        {
-            // HACK: We need to strongly-type the call to Razor.Parse,
-            // so cache the generic MethodInfo.
-            genericParseMethod = typeof(Razor)
-                .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                .Single(m => m.Name == "Parse" && m.IsGenericMethod);
-        }
 
         public ResourceRazorView(Assembly sourceAssembly, string resourcePath)
         {
@@ -35,16 +23,8 @@ namespace Postal
 
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            // HACK: There should be a way to do this without reflection.
-            // RazorEngine needs a Parse method that takes an Object and uses GetType
-            // instead of requiring a generic parameter... ah well...
-            var parseMethod = genericParseMethod
-                .MakeGenericMethod(viewContext.ViewData.Model.GetType());
-
-            var content = (string)parseMethod.Invoke(
-                null,
-                new[] { template, viewContext.ViewData.Model, resourcePath }
-            );
+            Razor.Compile(template, viewContext.ViewData.Model.GetType(), resourcePath);
+            var content = Razor.Run(resourcePath, viewContext.ViewData.Model);
 
             writer.Write(content);
             writer.Flush();

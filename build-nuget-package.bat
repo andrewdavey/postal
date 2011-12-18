@@ -1,15 +1,15 @@
 msbuild /p:Configuration=Release src\postal\postal.csproj
 
 pushd .
-cd tools\nuget
+cd nuget
 
-rmdir /S /Q package\lib
+rmdir /S /Q lib
 
-mkdir package\lib
-mkdir package\lib\net40
+mkdir lib
+mkdir lib\net40
 
-copy ..\..\src\postal\bin\release\postal.dll package\lib\net40
+copy ..\src\postal\bin\release\postal.dll lib\net40
 
-nuget pack package\postal.nuspec
+..\src\.nuget\nuget.exe pack postal.nuspec
 
 popd

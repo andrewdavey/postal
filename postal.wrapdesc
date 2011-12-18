@@ -1,4 +1,0 @@
-﻿depends: openwrap content
-name: postal
-depends: Should
-depends: RazorEngine

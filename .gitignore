@@ -11,6 +11,7 @@ _ReSharper.*
 *.cache
 *.Cache
 *.user
-tools/nuget/*.nupkg
-tools/nuget/package/lib
-/*.wrap
+
+/nuget/*.nupkg
+/nuget/lib
+/src/packages

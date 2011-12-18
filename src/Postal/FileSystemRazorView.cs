@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
 using RazorEngine;
 
@@ -14,35 +12,17 @@ namespace Postal
     {
         readonly string template;
         readonly string cacheName;
-        readonly static MethodInfo genericParseMethod;
-
+        
         public FileSystemRazorView(string filename)
         {
             template = File.ReadAllText(filename);
             cacheName = filename + File.GetLastWriteTimeUtc(filename).Ticks.ToString();
         }
 
-        static FileSystemRazorView()
-        {
-            // HACK: We need to strongly-type the call to Razor.Parse,
-            // so cache the generic MethodInfo.
-            genericParseMethod = typeof(Razor)
-                .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                .Single(m => m.Name == "Parse" && m.IsGenericMethod);
-        }
-
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            // HACK: There should be a way to do this without reflection.
-            // RazorEngine needs a Parse method that takes an Object and uses GetType
-            // instead of requiring a generic parameter... ah well...
-            var parseMethod = genericParseMethod
-                .MakeGenericMethod(viewContext.ViewData.Model.GetType());
-
-            var content = (string)parseMethod.Invoke(
-                null, 
-                new object[] { template, viewContext.ViewData.Model, cacheName }
-            );
+            Razor.Compile(template, viewContext.ViewData.Model.GetType(), cacheName);
+            var content = Razor.Run(cacheName, viewContext.ViewData.Model);
 
             writer.Write(content);
             writer.Flush();
