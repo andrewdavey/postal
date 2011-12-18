@@ -35,7 +35,7 @@ namespace Postal
         readonly IEmailParser emailParser;
         readonly Func<SmtpClient> createSmtpClient;
 
-        public void Send(Email email)
+        public virtual void Send(Email email)
         {
             using (var mailMessage = CreateMailMessage(email))
             using (var smtp = createSmtpClient())
@@ -44,7 +44,7 @@ namespace Postal
             }
         }
 
-        public Task SendAsync(Email email)
+        public virtual Task SendAsync(Email email)
         {
             // Wrap the SmtpClient's awkward async API in the much nicer Task pattern.
             // However, we must be careful to dispose of the resources we create correctly.
@@ -91,7 +91,7 @@ namespace Postal
             }
         }
 
-        public MailMessage CreateMailMessage(Email email)
+        public virtual MailMessage CreateMailMessage(Email email)
         {
             var rawEmailString = emailViewRenderer.Render(email);
             var mailMessage = emailParser.Parse(rawEmailString, email);
