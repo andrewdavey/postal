@@ -16,13 +16,12 @@ namespace Postal
         public FileSystemRazorView(string filename)
         {
             template = File.ReadAllText(filename);
-            cacheName = filename + File.GetLastWriteTimeUtc(filename).Ticks.ToString();
+            cacheName = filename;
         }
 
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            Razor.Compile(template, viewContext.ViewData.Model.GetType(), cacheName);
-            var content = Razor.Run(cacheName, viewContext.ViewData.Model);
+            var content = Razor.Parse(template, viewContext.ViewData.Model, cacheName);
 
             writer.Write(content);
             writer.Flush();
