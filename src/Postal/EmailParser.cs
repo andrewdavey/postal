@@ -116,7 +116,7 @@ namespace Postal
 
         AlternateView CreateAlternativeView(Email email, string alternativeViewName)
         {
-            var fullViewName = email.ViewName + "." + alternativeViewName;
+            var fullViewName = GetAlternativeViewName(email, alternativeViewName);
             var imageEmbedder = new ImageEmbedder();
             email.ViewData["Postal.ImageEmbedder"] = imageEmbedder;
             var output = alternativeViewRenderer.Render(email, fullViewName);
@@ -145,6 +145,19 @@ namespace Postal
             imageEmbedder.PutImagesIntoView(alternativeView);
             email.ViewData.Remove("Postal.ImageEmbedder");
             return alternativeView;
+        }
+
+        static string GetAlternativeViewName(Email email, string alternativeViewName)
+        {
+            if (email.ViewName.StartsWith("~"))
+            {
+                var index = email.ViewName.LastIndexOf('.');
+                return email.ViewName.Insert(index + 1, alternativeViewName + ".");
+            }
+            else
+            {
+                return email.ViewName + "." + alternativeViewName;
+            }
         }
 
         MemoryStream CreateStreamOfBody(string body)

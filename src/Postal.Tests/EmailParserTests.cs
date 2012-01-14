@@ -172,6 +172,39 @@ Hello, World!";
         }
 
         [Fact]
+        public void Given_base_view_is_full_path_Then_alternative_views_are_correctly_looked_up()
+        {
+            var input = @"
+To: test1@test.com
+From: test2@test.com
+Subject: Test Subject
+Views: Text, Html";
+            var text = @"Content-Type: text/plain
+
+Hello, World!";
+            var html = @"Content-Type: text/html
+
+<p>Hello, World!</p>";
+
+            var email = new Email("~/Views/Emails/Test.cshtml");
+            var renderer = new Mock<IEmailViewRenderer>();
+            renderer.Setup(r => r.Render(email, "~/Views/Emails/Test.Text.cshtml")).Returns(text);
+            renderer.Setup(r => r.Render(email, "~/Views/Emails/Test.Html.cshtml")).Returns(html);
+
+            var parser = new EmailParser(renderer.Object);
+            using (var message = parser.Parse(input, email))
+            {
+                message.AlternateViews[0].ContentType.ShouldEqual(new ContentType("text/plain; charset=utf-16"));
+                var textContent = new StreamReader(message.AlternateViews[0].ContentStream).ReadToEnd();
+                textContent.ShouldEqual("Hello, World!");
+
+                message.AlternateViews[1].ContentType.ShouldEqual(new ContentType("text/html; charset=utf-16"));
+                var htmlContent = new StreamReader(message.AlternateViews[1].ContentStream).ReadToEnd();
+                htmlContent.ShouldEqual("<p>Hello, World!</p>");
+            }
+        }
+
+        [Fact]
         public void Attachments_are_added_to_MailMessage()
         {
             var input = @"
