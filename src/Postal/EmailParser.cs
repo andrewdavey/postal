@@ -130,7 +130,20 @@ namespace Postal
             }
 
             if (string.IsNullOrWhiteSpace(contentType))
-                throw new Exception("The 'Content-Type' header is missing from the alternative view '" + fullViewName + "'.");
+            {
+                if (alternativeViewName.Equals("text", StringComparison.OrdinalIgnoreCase))
+                {
+                    contentType = "text/plain";
+                }
+                else if (alternativeViewName.Equals("html", StringComparison.OrdinalIgnoreCase))
+                {
+                    contentType = "text/html";
+                }
+                else
+                {
+                    throw new Exception("The 'Content-Type' header is missing from the alternative view '" + fullViewName + "'.");
+                }
+            }
 
             var stream = CreateStreamOfBody(body);
             var alternativeView = new AlternateView(stream, contentType);

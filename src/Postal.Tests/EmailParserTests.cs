@@ -225,18 +225,16 @@ Hello, World!";
         }
 
         [Fact]
-        public void Exception_throw_when_alternative_view_is_missing_Content_Type_header()
+        public void ContentType_determined_by_view_name_when_alternative_view_is_missing_Content_Type_header()
         {
             var input = @"
 To: test1@test.com
 From: test2@test.com
 Subject: Test Subject
 Views: Text, Html";
-            var text = @"incorrect: header
-
+            var text = @"
 Hello, World!";
-            var html = @"incorrect: header
-
+            var html = @"
 <p>Hello, World!</p>";
 
             var email = new Email("Test");
@@ -245,10 +243,11 @@ Hello, World!";
             renderer.Setup(r => r.Render(email, "Test.Html")).Returns(html);
 
             var parser = new EmailParser(renderer.Object);
-            Assert.Throws<Exception>(delegate
+            using (var message = parser.Parse(input, email))
             {
-                parser.Parse(input, email);
-            });
+                message.AlternateViews[0].ContentType.MediaType.ShouldEqual("text/plain");
+                message.AlternateViews[1].ContentType.MediaType.ShouldEqual("text/html");
+            }
         }
 
         [Fact]
