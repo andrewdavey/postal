@@ -12,7 +12,7 @@ namespace Postal
     {
         readonly Uri url;
         readonly NameValueCollection serverVariables = new NameValueCollection();
-        readonly Lazy<HttpBrowserCapabilitiesBase> browser = new Lazy<HttpBrowserCapabilitiesBase>(() => new HttpBrowserCapabilitiesWrapper(new HttpBrowserCapabilities()));
+        readonly Lazy<HttpBrowserCapabilitiesBase> browser = new Lazy<HttpBrowserCapabilitiesBase>(CreateHttpBrowserCapabilities);
 
         public EmailHttpRequest(Uri url)
         {
@@ -48,6 +48,18 @@ namespace Postal
             {
                 return browser.Value;
             }
+        }
+
+        static HttpBrowserCapabilitiesWrapper CreateHttpBrowserCapabilities()
+        {
+            return new HttpBrowserCapabilitiesWrapper(
+                HttpContext.Current == null
+                    ? new HttpBrowserCapabilities()
+                    : new HttpBrowserCapabilities
+                    {
+                        Capabilities = HttpContext.Current.Request.Browser.Capabilities
+                    }
+            );
         }
     }
 }
