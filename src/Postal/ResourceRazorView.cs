@@ -23,8 +23,7 @@ namespace Postal
 
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            Razor.Compile(template, viewContext.ViewData.Model.GetType(), resourcePath);
-            var content = Razor.Run(resourcePath, viewContext.ViewData.Model);
+            var content = Razor.Parse(template, viewContext.ViewData.Model, resourcePath);
 
             writer.Write(content);
             writer.Flush();
