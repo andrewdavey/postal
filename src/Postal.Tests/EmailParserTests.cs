@@ -20,6 +20,7 @@ CC: test3@test.com
 Bcc: test4@test.com
 Reply-To: test5@test.com
 Sender: test6@test.com
+Priority: high
 X-Test: test
 Subject: Test Subject
 
@@ -35,6 +36,7 @@ Hello, World!";
                 message.ReplyToList[0].Address.ShouldEqual("test5@test.com");
                 message.Subject.ShouldEqual("Test Subject");
                 message.Sender.Address.ShouldEqual("test6@test.com");
+                message.Priority.ShouldEqual(MailPriority.High);
                 message.Headers["X-Test"].ShouldEqual("test");
                 message.Body.ShouldEqual("Hello, World!");
                 message.IsBodyHtml.ShouldBeFalse();
@@ -306,6 +308,30 @@ Hello, World!";
             using (var message = parser.Parse("body", (Email)email))
             {
                 message.ReplyToList[0].Address.ShouldEqual("test@test.com");
+            }
+        }
+
+        [Fact]
+        public void Priority_header_can_be_set_automatically()
+        {
+            dynamic email = new Email("Test");
+            email.Priority = "high";
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.Priority = MailPriority.High;
+            }
+        }
+
+        [Fact]
+        public void Priority_header_can_be_set_automatically_from_MailPriorityEnum()
+        {
+            dynamic email = new Email("Test");
+            email.Priority = MailPriority.High;
+            var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+            using (var message = parser.Parse("body", (Email)email))
+            {
+                message.Priority = MailPriority.High;
             }
         }
 

@@ -213,6 +213,17 @@ namespace Postal
                 case "sender":
                     message.Sender = new MailAddress(value);
                     break;
+                case "priority":
+                    MailPriority priority;
+                    if (Enum.TryParse(value, true, out priority))
+                    {
+                        message.Priority = priority;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(string.Format("Invalid email priority: {0}. It must be High, Medium or Low.", value));
+                    }
+                    break;
                 case "content-type":
                     var charsetMatch = Regex.Match(value, @"\bcharset\s*=\s*(.*)$");
                     if (charsetMatch.Success)
