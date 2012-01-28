@@ -13,6 +13,7 @@ namespace Postal
         readonly Uri url;
         readonly NameValueCollection serverVariables = new NameValueCollection();
         readonly Lazy<HttpBrowserCapabilitiesBase> browser = new Lazy<HttpBrowserCapabilitiesBase>(CreateHttpBrowserCapabilities);
+        private readonly HttpCookieCollection cookies = new HttpCookieCollection();
 
         public EmailHttpRequest(Uri url)
         {
@@ -47,6 +48,22 @@ namespace Postal
             get
             {
                 return browser.Value;
+            }
+        }
+
+        public override string UserAgent
+        {
+            get
+            {
+                return "Postal";
+            }
+        }
+
+        public override HttpCookieCollection Cookies
+        {
+            get
+            {
+                return cookies;
             }
         }
 
