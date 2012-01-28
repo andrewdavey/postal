@@ -8,7 +8,7 @@ namespace Postal
 
     class EmailHttpResponse : HttpResponseBase
     {
-        private readonly HttpCookieCollection cookies = new HttpCookieCollection();
+        readonly HttpCookieCollection cookies = new HttpCookieCollection();
 
         public override string ApplyAppPathModifier(string virtualPath)
         {

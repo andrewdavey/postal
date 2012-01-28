@@ -13,7 +13,7 @@ namespace Postal
         readonly Uri url;
         readonly NameValueCollection serverVariables = new NameValueCollection();
         readonly Lazy<HttpBrowserCapabilitiesBase> browser = new Lazy<HttpBrowserCapabilitiesBase>(CreateHttpBrowserCapabilities);
-        private readonly HttpCookieCollection cookies = new HttpCookieCollection();
+        readonly HttpCookieCollection cookies = new HttpCookieCollection();
 
         public EmailHttpRequest(Uri url)
         {
