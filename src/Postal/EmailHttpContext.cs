@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Web;
 using System.Web.Caching;
+#if NET45
+using System.Web.Instrumentation;
+#endif
 
 namespace Postal
 {
@@ -27,5 +30,15 @@ namespace Postal
         public override HttpResponseBase Response { get { return response; } }
         public override Cache Cache { get { return HttpRuntime.Cache; } }
         public override HttpServerUtilityBase Server { get { return new HttpServerUtilityWrapper(HttpContext.Current.Server); } }
+
+#if NET45
+        public override PageInstrumentationService PageInstrumentation
+        {
+            get
+            {
+                return new PageInstrumentationService();
+            }
+        }
+#endif
     }
 }
