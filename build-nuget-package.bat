@@ -1,6 +1,8 @@
-msbuild /p:Configuration=Release /p:TargetFrameworkVersion=v4.0 /t:Rebuild src\postal\postal.csproj
+set msbuild=%windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe
 
-msbuild /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /t:Rebuild src\postal\postal.csproj 
+%msbuild% /p:Configuration=Release /p:TargetFrameworkVersion=v4.0 /t:Rebuild src\postal\postal.csproj
+
+%msbuild% /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /t:Rebuild src\postal\postal.csproj 
 
 pushd .
 cd nuget
