@@ -1,4 +1,4 @@
-baseurl: "http://aboutcode.net/postal"
+baseurl: "/postal"
 
 pygments: true
 
