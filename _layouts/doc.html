@@ -11,7 +11,7 @@
   <body class="doc">
     <header>
       <div class="container">
-        <h1><a href="/">Postal</a></h1>
+        <h1><a href="{{ site.baseurl }}/">Postal</a></h1>
         <p>Create email using ASP.NET MVC views</p>
       </div>
     </header>
@@ -25,7 +25,7 @@
           <h3>Documentation</h3>
           <nav class="list-group">
             {% for link in site.docs %}
-            <a href="{{ link.url }}" class="list-group-item {% if page.url == link.url %}active{% endif %}">{{ link.text }}</a>
+            <a href="{{ site.baseurl }}/{{ link.url }}" class="list-group-item {% if page.url == link.url %}active{% endif %}">{{ link.text }}</a>
             {% endfor %}
           </nav>
         </div>

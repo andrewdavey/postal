@@ -3,79 +3,79 @@ layout: site
 title: Postal
 ---
 
+<div class="row">
+  <div class="col-md-6">
+    <h2>Install</h2>
+    <p>Install Postal into your ASP.NET web application using Nuget.</p>
+              <pre>PM&gt; Install-Package Postal</pre>
+
+    </div>
+    <div class="col-md-6">
+      <h2>Open source</h2>
+      <p>MIT License</p>
+      <a href="https://github.com/andrewdavey/postal" class="btn btn-default">
+        <i class="fa fa-github"></i>
+        GitHub
+      </a>
+      <a href="#docs" class="btn btn-default">
+        <i class="fa fa-info-circle"></i>
+        Documentation
+      </a>
+      <a href="#video" class="btn btn-default">
+        <i class="fa fa-play"></i>
+        Video
+      </a>
+      <a href="https://twitter.com/intent/tweet?text=http%3A%2F%2Faboutcode.net%2Fpostal%2F+Postal+-+Create+emails+from+ASP.NET+MVC+views" target="_blank" class="btn btn-default">
+        <i class="fa fa-twitter"></i>
+        Tweet
+      </a>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-6">
-      <h2>Install</h2>
-      <p>Install Postal into your ASP.NET web application using Nuget.</p>
-                <pre>PM&gt; Install-Package Postal</pre>
-
-      </div>
-      <div class="col-md-6">
-        <h2>Open source</h2>
-        <p>MIT License</p>
-        <a href="https://github.com/andrewdavey/postal" class="btn btn-default">
-          <i class="fa fa-github"></i>
-          GitHub
-        </a>
-        <a href="#docs" class="btn btn-default">
-          <i class="fa fa-info-circle"></i>
-          Documentation
-        </a>
-        <a href="#video" class="btn btn-default">
-          <i class="fa fa-play"></i>
-          Video
-        </a>
-        <a href="https://twitter.com/intent/tweet?text=http%3A%2F%2Faboutcode.net%2Fpostal%2F+Postal+-+Create+emails+from+ASP.NET+MVC+views" target="_blank" class="btn btn-default">
-          <i class="fa fa-twitter"></i>
-          Tweet
-        </a>
-      </div>
+      <h2>Getting started</h2>
+      <p>Use Postal in your controller action method.</p>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <h2>Getting started</h2>
-        <p>Use Postal in your controller action method.</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        {% highlight csharp %}
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      {% highlight csharp %}
 using Postal;
 
 public class HomeController : Controller
 {
-    public ActionResult Index()
-    {
-        dynamic email = new Email("Example");
-        email.To = "webninja@example.com";
-        email.FunnyLink = DB.GetRandomLolcatLink();
-        email.Send();
-        return View();
-    }
+  public ActionResult Index()
+  {
+      dynamic email = new Email("Example");
+      email.To = "webninja@example.com";
+      email.FunnyLink = DB.GetRandomLolcatLink();
+      email.Send();
+      return View();
+  }
 }{% endhighlight %}
-      </div>
-      <div class="col-md-6">
-        <p>
-        Create an <code>Email</code>, passing it the name of the view to use for the email.
-        </p>
-        <p>
-        Using dynamic means we can nicely assign some data to use in the view.
-        It's also possible to create a <a href="strongly-typed-emails.html">strongly-typed</a> email class.
-        </p>
-        <p>
-        Calling <code>Send()</code> will send the email using the .NET Framework's
-        <code>SmtpClient</code>.
-        </p>
-      </div>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <p>Postal will find the email view at <code>Views\Emails\Example.cshtml</code>:</p>
-      </div>
+    <div class="col-md-6">
+      <p>
+      Create an <code>Email</code>, passing it the name of the view to use for the email.
+      </p>
+      <p>
+      Using dynamic means we can nicely assign some data to use in the view.
+      It's also possible to create a <a href="strongly-typed-emails.html">strongly-typed</a> email class.
+      </p>
+      <p>
+      Calling <code>Send()</code> will send the email using the .NET Framework's
+      <code>SmtpClient</code>.
+      </p>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <pre>To: @ViewBag.To
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <p>Postal will find the email view at <code>Views\Emails\Example.cshtml</code>:</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <pre>To: @ViewBag.To
 From: lolcats@website.com
 Subject: Important Message
 
@@ -84,153 +84,58 @@ You wanted important web links right?
 Check out this: @ViewBag.FunnyLink
 
 &lt;3</pre>
-      </div>
-      <div class="col-md-6">
-        <p>
-        The email view specifies the headers and body content.
-        </p>
-        <p>
-        The <code>ViewBag</code> contains any data you assigned to the <code>Email</code> object.
-        </p>
-        <p>
-        Postal can work with any ASP.NET MVC view engine.
-        </p>
-      </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <a id="docs"></a>
-        <h2>Documentation</h2>
-        <ul class="doc-links">
-          {% for link in site.docs %}
-          <li>
-            <h3>{{ link.text }}</h3>
-            <p>
-              {{ link.description | markdownify  }}
-            </p>
-            <p>
-              <a href="{{ link.url }}">Learn more&hellip;</a>
-            </p>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
+    <div class="col-md-6">
+      <p>
+      The email view specifies the headers and body content.
+      </p>
+      <p>
+      The <code>ViewBag</code> contains any data you assigned to the <code>Email</code> object.
+      </p>
+      <p>
+      Postal can work with any ASP.NET MVC view engine.
+      </p>
     </div>
+  </div>
 
-    <div class="row">
-      <div class="col-md-12">
-        <a id="video"></a>
-        <h2>Video presentation from mvcConf 2</h2>
-        <p>
-        <video poster="http://ak.channel9.msdn.com/ch9/98F1/68E86138-6D6B-41E0-8B1B-9E89016998F1/mvcconfandrewdavey_512_ch9.jpg" controls style="width: 100%">
-        <source src="http://ak.channel9.msdn.com/ch9/98F1/68E86138-6D6B-41E0-8B1B-9E89016998F1/mvcconfandrewdavey_high_ch9.mp4" type="video/mp4" />
-        </video>
-        </p>
-
-        <h2>Credits</h2>
-        <p>
-        Postal was created by Andrew Davey.
-        Read his blog <a href="http://aboutcode.net/">aboutcode.net</a>
-        or follow him <a href="https://twitter.com/andrewdavey">@andrewdavey</a>
-        </p>
-        <p>
-        Photo Credit: <a href="http://www.flickr.com/photos/32466163@N00/697806617/">....Tim</a> via <a href="http://compfight.com">Compfight</a> <a href="http://creativecommons.org/licenses/by-nc-nd/2.0/">cc</a>
-        </p>
-      </div>
+  <div class="row">
+    <div class="col-md-12">
+      <a id="docs"></a>
+      <h2>Documentation</h2>
+      <ul class="doc-links">
+        {% for link in site.docs %}
+        <li>
+          <h3>{{ link.text }}</h3>
+          <p>
+            {{ link.description | markdownify  }}
+          </p>
+          <p>
+            <a href="{{ site.baseurl }}/{{ link.url }}">Learn more&hellip;</a>
+          </p>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
+  </div>
 
-  <!--
-  <div>
-    <div class="row">
-      <div class="col-md-6">
-        <h2>Strongly-typed emails</h2>
-        <p>
-        Not everyone likes using dynamic objects.
-        Postal lets you strongly type your email data if you need to.
-        </p>
-        <p>Step 1 - Define a class that inherits from Email</p>
-        <pre>namespace App.Models {
-  public class ExampleEmail : Email {
-    public string To { get; set; }
-    public string Message { get; set; }
-  }
-}</pre>
-        <p>Step 2 - Use that class!</p>
-        <pre>public void Send() {
-  var email = new ExampleEmail {
-    To = "hello@world.com",
-    Message = "Strong typed message"
-  };
-  email.Send();
-}</pre>
-        <p>
-        Step 3 - Create a view that uses your model.
-        The name of the view is based on the class name.
-        So <code>ExampleEmail</code> requires a view called <code>Example.cshtml</code>.
-        </p>
-        <pre>
-@model App.Models.ExampleEmail
-To: @Model.To
-From: postal@example.com
-Subject: Example
+  <div class="row">
+    <div class="col-md-12">
+      <a id="video"></a>
+      <h2>Video presentation from mvcConf 2</h2>
+      <p>
+      <video poster="http://ak.channel9.msdn.com/ch9/98F1/68E86138-6D6B-41E0-8B1B-9E89016998F1/mvcconfandrewdavey_512_ch9.jpg" controls style="width: 100%">
+      <source src="http://ak.channel9.msdn.com/ch9/98F1/68E86138-6D6B-41E0-8B1B-9E89016998F1/mvcconfandrewdavey_high_ch9.mp4" type="video/mp4" />
+      </video>
+      </p>
 
-Hello,
-@Model.Message
-Thanks!</pre>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <h2>Unit Testing</h2>
-          <p>
-          When unit testing code that uses Postal, you may want to verify
-          that an email would be sent, without actual sending it.
-          </p>
-          <p>
-          Postal provides an interface <code>IEmailService</code> and an 
-          implementation, <code>EmailService</code>, which actually sends
-          email.
-          </p>
-          <p>
-          Assuming you use some kind of IoC container, configure it to inject
-          an <code>IEmailService</code> into your controller.
-          </p>
-          <p>
-          Then use the service to send email objects (instead of calling <code>Email.Send()</code>).
-          </p>
-          <pre>public class ExampleController : Controller 
-{
-    public ExampleController(IEmailService emailService)
-    {
-        this.emailService = emailService;
-    }
-
-    readonly IEmailService emailService;
-
-    public ActionResult Index()
-    {
-        dynamic email = new Email("Example");
-        // ...
-        emailService.Send(email);
-        return View();
-    }
-}</pre>
-          <p>
-          Test this controller by creating a mock of the <code>IEmailService</code> interface.
-          </p>
-          <p>
-          Here's an example using <a href="https://github.com/FakeItEasy/FakeItEasy">FakeItEasy</a>.
-          </p>
-          <pre>[Test]
-public void ItSendsEmail()
-{
-    var emailService = A.Fake&lt;IEmailService&gt;();
-    var controller = new ExampleController(emailService);
-    controller.Index();
-    A.CallTo(() => emailService.Send(A&lt;Email&gt;._))
-     .MustHaveHappened();
-}</pre>
-          </div>
-        </div>
-      </div>-->
+      <h2>Credits</h2>
+      <p>
+      Postal was created by Andrew Davey.
+      Read his blog <a href="http://aboutcode.net/">aboutcode.net</a>
+      or follow him <a href="https://twitter.com/andrewdavey">@andrewdavey</a>
+      </p>
+      <p>
+      Photo Credit: <a href="http://www.flickr.com/photos/32466163@N00/697806617/">....Tim</a> via <a href="http://compfight.com">Compfight</a> <a href="http://creativecommons.org/licenses/by-nc-nd/2.0/">cc</a>
+      </p>
+    </div>
+  </div>

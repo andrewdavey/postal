@@ -1,3 +1,5 @@
+baseurl: "http://aboutcode.net/postal"
+
 pygments: true
 
 docs:
