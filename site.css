@@ -50,5 +50,6 @@ h2 {
   box-sizing: border-box;
   display: block;
   float: left;
+  padding-right: 20px;
 }
 

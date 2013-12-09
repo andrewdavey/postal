@@ -1,4 +1,5 @@
 src
 wraps
 nuget
+_site
 *.swp
