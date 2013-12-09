@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Postal - Create emails using ASP.NET MVC views</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link href="syntax.css" rel="stylesheet"/>
+    <link href="site.css" rel="stylesheet"/>
+    <meta name="description" content="Create emails using ASP.NET MVC views" />
+  </head>
+  <body class="doc">
+    <header>
+      <div class="container">
+        <h1><a href="/">Postal</a></h1>
+        <p>Create email using ASP.NET MVC views</p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h2>HTML and plain-text emails</h2>
+          <p>You want to send an email that includes both rich HTML and plain text versions? Postal makes it easy.</p>
+
+<h3 id='step_1'>Step 1</h3>
+
+<p>Create the main view. This will have the headers and reference the views to use.</p>
+
+<p><code>~\Views\Emails\Example.cshtml</code></p>
+<pre>
+To: test@test.com
+From: example@test.com
+Subject: Fancy email
+Views: Text, Html
+</pre>
+<h3 id='step_2'>Step 2</h3>
+
+<p>Create the text view. Note the naming convention: <code>Example.cshtml</code> &#8594; <code>Example.Text.cshtml</code></p>
+
+<p><code>Views\Emails\Example.Text.cshtml</code></p>
+<pre>
+Content-Type: text/plain; charset=utf-8
+
+Hello @ViewBag.PersonName,
+This is a message
+</pre>
+<p>You must specify a single Content-Type header.</p>
+
+<h3 id='step_3'>Step 3</h3>
+
+<p>Create the HTML view, also with a single Content-Type header.</p>
+
+<p><code>Views\Email\Example.Html.cshtml</code></p>
+<div class='highlight'><pre><code class='xml'>Content-Type: text/html; charset=utf-8
+
+<span class='nt'>&lt;html&gt;</span>
+  <span class='nt'>&lt;body&gt;</span>
+    <span class='nt'>&lt;p&gt;</span>Hello @ViewBag.PersonName,<span class='nt'>&lt;/p&gt;</span>
+    <span class='nt'>&lt;p&gt;</span>This is a message<span class='nt'>&lt;/p&gt;</span>
+  <span class='nt'>&lt;/body&gt;</span>
+<span class='nt'>&lt;/html&gt;</span>
+</code></pre></div>
+        </div>
+        <div class="col-md-4">
+          <h3>Documentation</h3>
+          <nav class="list-group">
+            
+            <a href="/smtp-config.html" class="list-group-item ">SMTP Configuration</a>
+            
+            <a href="/strongly-typed-emails.html" class="list-group-item ">Strongly-typed Emails</a>
+            
+            <a href="/unit-testing.html" class="list-group-item ">Unit Testing</a>
+            
+            <a href="/attachments.html" class="list-group-item ">Attachments</a>
+            
+            <a href="/multi-part.html" class="list-group-item active">HTML & Plain-text Emails</a>
+            
+            <a href="/embedding-images.html" class="list-group-item ">Embedding Images</a>
+            
+            <a href="/outside-aspnet.html" class="list-group-item ">Postal Outside of ASP.NET</a>
+            
+            <a href="/email-headers.html" class="list-group-item ">Email Headers</a>
+            
+            <a href="/create-mail-message.html" class="list-group-item ">Creating Email Without Sending</a>
+            
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-19461164-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+  </body>
+</html>
+

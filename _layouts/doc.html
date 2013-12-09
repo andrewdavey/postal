@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Postal - Create emails using ASP.NET MVC views</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link href="syntax.css" rel="stylesheet"/>
+    <link href="site.css" rel="stylesheet"/>
+    <meta name="description" content="Create emails using ASP.NET MVC views" />
+  </head>
+  <body class="doc">
+    <header>
+      <div class="container">
+        <h1><a href="/">Postal</a></h1>
+        <p>Create email using ASP.NET MVC views</p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h2>{{ page.title }}</h2>
+          {{content}}
+        </div>
+        <div class="col-md-4">
+          <h3>Documentation</h3>
+          <nav class="list-group">
+            {% for link in site.docs %}
+            <a href="{{ link.url }}" class="list-group-item {% if page.url == link.url %}active{% endif %}">{{ link.text }}</a>
+            {% endfor %}
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-19461164-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+  </body>
+</html>
+

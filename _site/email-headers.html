@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Postal - Create emails using ASP.NET MVC views</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link href="syntax.css" rel="stylesheet"/>
+    <link href="site.css" rel="stylesheet"/>
+    <meta name="description" content="Create emails using ASP.NET MVC views" />
+  </head>
+  <body class="doc">
+    <header>
+      <div class="container">
+        <h1><a href="/">Postal</a></h1>
+        <p>Create email using ASP.NET MVC views</p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h2>Email headers</h2>
+          <h3 id='email_addresses_with_names'>Email addresses with names</h3>
+
+<p>To include the name in an email address use the following format:</p>
+<pre>
+To: John Smith &lt;john@example.org&gt;
+</pre>
+<h3 id='multiple_values'>Multiple values</h3>
+
+<p>Some headers can have multiple values e.g. Bcc and CC.</p>
+
+<p>You can specify these in an Email view in two ways:</p>
+
+<p>Comma separate:</p>
+<pre>
+Bcc: john@smith.com, harry@green.com
+Subject: Example
+
+etc
+</pre>
+<p>Or, repeat the header:</p>
+<pre>
+Bcc: john@smith.com
+Bcc: harry@green.com
+Subject: Example
+
+etc
+</pre>
+        </div>
+        <div class="col-md-4">
+          <h3>Documentation</h3>
+          <nav class="list-group">
+            
+            <a href="/smtp-config.html" class="list-group-item ">SMTP Configuration</a>
+            
+            <a href="/strongly-typed-emails.html" class="list-group-item ">Strongly-typed Emails</a>
+            
+            <a href="/unit-testing.html" class="list-group-item ">Unit Testing</a>
+            
+            <a href="/attachments.html" class="list-group-item ">Attachments</a>
+            
+            <a href="/multi-part.html" class="list-group-item ">HTML & Plain-text Emails</a>
+            
+            <a href="/embedding-images.html" class="list-group-item ">Embedding Images</a>
+            
+            <a href="/outside-aspnet.html" class="list-group-item ">Postal Outside of ASP.NET</a>
+            
+            <a href="/email-headers.html" class="list-group-item active">Email Headers</a>
+            
+            <a href="/create-mail-message.html" class="list-group-item ">Creating Email Without Sending</a>
+            
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-19461164-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+  </body>
+</html>
+

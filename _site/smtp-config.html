@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Postal - Create emails using ASP.NET MVC views</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link href="syntax.css" rel="stylesheet"/>
+    <link href="site.css" rel="stylesheet"/>
+    <meta name="description" content="Create emails using ASP.NET MVC views" />
+  </head>
+  <body class="doc">
+    <header>
+      <div class="container">
+        <h1><a href="/">Postal</a></h1>
+        <p>Create email using ASP.NET MVC views</p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h2>SMTP Configuration</h2>
+          <p>Postal sends email using the .NET Framework&#8217;s built-in <code>SmtpClient</code>.</p>
+
+<p>You can configure this in your <code>Web.config</code> file. See the <a href='http://msdn.microsoft.com/en-us/library/ms164240(v=vs.110).aspx'>MSDN documentation</a> for more details.</p>
+<div class='highlight'><pre><code class='xml'><span class='nt'>&lt;configuration&gt;</span>
+  ...
+  <span class='nt'>&lt;system.net&gt;</span>
+    <span class='nt'>&lt;mailSettings&gt;</span>
+      <span class='nt'>&lt;smtp</span> <span class='na'>deliveryMethod=</span><span class='s'>&quot;network&quot;</span><span class='nt'>&gt;</span>
+        <span class='nt'>&lt;network</span> <span class='na'>host=</span><span class='s'>&quot;example.org&quot;</span> <span class='na'>port=</span><span class='s'>&quot;25&quot;</span> <span class='na'>defaultCredentials=</span><span class='s'>&quot;true&quot;</span><span class='nt'>/&gt;</span>
+      <span class='nt'>&lt;/smtp&gt;</span>
+    <span class='nt'>&lt;/mailSettings&gt;</span>
+  <span class='nt'>&lt;/system.net&gt;</span>
+  ...
+<span class='nt'>&lt;/configuration&gt;</span>
+</code></pre></div>
+        </div>
+        <div class="col-md-4">
+          <h3>Documentation</h3>
+          <nav class="list-group">
+            
+            <a href="/smtp-config.html" class="list-group-item active">SMTP Configuration</a>
+            
+            <a href="/strongly-typed-emails.html" class="list-group-item ">Strongly-typed Emails</a>
+            
+            <a href="/unit-testing.html" class="list-group-item ">Unit Testing</a>
+            
+            <a href="/attachments.html" class="list-group-item ">Attachments</a>
+            
+            <a href="/multi-part.html" class="list-group-item ">HTML & Plain-text Emails</a>
+            
+            <a href="/embedding-images.html" class="list-group-item ">Embedding Images</a>
+            
+            <a href="/outside-aspnet.html" class="list-group-item ">Postal Outside of ASP.NET</a>
+            
+            <a href="/email-headers.html" class="list-group-item ">Email Headers</a>
+            
+            <a href="/create-mail-message.html" class="list-group-item ">Creating Email Without Sending</a>
+            
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-19461164-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+  </body>
+</html>
+

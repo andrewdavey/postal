@@ -1,9 +1,22 @@
----
-layout: site
-title: Postal
----
-
-  <div class="row">
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Postal - Create emails using ASP.NET MVC views</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link href="syntax.css" rel="stylesheet"/>
+    <link href="site.css" rel="stylesheet"/>
+    <meta name="description" content="Create emails using ASP.NET MVC views" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Postal</h1>
+        <p>Create email using ASP.NET MVC views</p>
+      </div>
+    </header>
+    <div class="container">
+        <div class="row">
     <div class="col-md-6">
       <h2>Install</h2>
       <p>Install Postal into your ASP.NET web application using Nuget.</p>
@@ -39,20 +52,20 @@ title: Postal
     </div>
     <div class="row">
       <div class="col-md-6">
-        {% highlight csharp %}
-using Postal;
+        <div class="highlight"><pre><code class="csharp"><span class="k">using</span> <span class="nn">Postal</span><span class="p">;</span>
 
-public class HomeController : Controller
-{
-    public ActionResult Index()
-    {
-        dynamic email = new Email("Example");
-        email.To = "webninja@example.com";
-        email.FunnyLink = DB.GetRandomLolcatLink();
-        email.Send();
-        return View();
-    }
-}{% endhighlight %}
+<span class="k">public</span> <span class="k">class</span> <span class="nc">HomeController</span> <span class="p">:</span> <span class="n">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Index</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">dynamic</span> <span class="n">email</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Email</span><span class="p">(</span><span class="s">&quot;Example&quot;</span><span class="p">);</span>
+        <span class="n">email</span><span class="p">.</span><span class="n">To</span> <span class="p">=</span> <span class="s">&quot;webninja@example.com&quot;</span><span class="p">;</span>
+        <span class="n">email</span><span class="p">.</span><span class="n">FunnyLink</span> <span class="p">=</span> <span class="n">DB</span><span class="p">.</span><span class="n">GetRandomLolcatLink</span><span class="p">();</span>
+        <span class="n">email</span><span class="p">.</span><span class="n">Send</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
       </div>
       <div class="col-md-6">
         <p>
@@ -103,17 +116,97 @@ Check out this: @ViewBag.FunnyLink
         <a id="docs"></a>
         <h2>Documentation</h2>
         <ul class="doc-links">
-          {% for link in site.docs %}
+          
           <li>
-            <h3>{{ link.text }}</h3>
+            <h3>SMTP Configuration</h3>
             <p>
-              {{ link.description | markdownify  }}
+              <p>Postal uses <code>SmtpClient</code>, which can be configured in <code>Web.config</code>.</p>
             </p>
             <p>
-              <a href="{{ link.url }}">Learn more&hellip;</a>
+              <a href="/smtp-config.html">Learn more&hellip;</a>
             </p>
           </li>
-          {% endfor %}
+          
+          <li>
+            <h3>Strongly-typed Emails</h3>
+            <p>
+              <p>Not everyone likes using dynamic objects. Postal lets you strongly type your email data if you need to.</p>
+            </p>
+            <p>
+              <a href="/strongly-typed-emails.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>Unit Testing</h3>
+            <p>
+              <p>Verify that your code would send emails, without actually sending them.</p>
+            </p>
+            <p>
+              <a href="/unit-testing.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>Attachments</h3>
+            <p>
+              <p>Attach files to your emails.</p>
+            </p>
+            <p>
+              <a href="/attachments.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>HTML & Plain-text Emails</h3>
+            <p>
+              <p>Use multiple views to define the HTML and plain-text content of your emails.</p>
+            </p>
+            <p>
+              <a href="/multi-part.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>Embedding Images</h3>
+            <p>
+              <p>Embed images in your emails. Postal will handle the multi-part stuff for you.</p>
+            </p>
+            <p>
+              <a href="/embedding-images.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>Postal Outside of ASP.NET</h3>
+            <p>
+              <p>Send email from command line applications and Windows services.</p>
+            </p>
+            <p>
+              <a href="/outside-aspnet.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>Email Headers</h3>
+            <p>
+              <p>Set email headers, such as CC, BCC, Reply-To, etc.</p>
+            </p>
+            <p>
+              <a href="/email-headers.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
+          <li>
+            <h3>Creating Email Without Sending</h3>
+            <p>
+              <p>Instead of directly sending email, Postal can just create a <code>System.Net.MailMessage</code> object for you.</p>
+            </p>
+            <p>
+              <a href="/create-mail-message.html">Learn more&hellip;</a>
+            </p>
+          </li>
+          
         </ul>
       </div>
     </div>
@@ -234,3 +327,19 @@ public void ItSendsEmail()
           </div>
         </div>
       </div>-->
+
+    </div>
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-19461164-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+  </body>
+</html>
+

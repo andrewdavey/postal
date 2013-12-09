@@ -1,0 +1,41 @@
+pygments: true
+
+docs:
+- text: SMTP Configuration
+  url: /smtp-config.html
+  description: Postal uses `SmtpClient`, which can be configured in `Web.config`.
+
+- text: Strongly-typed Emails
+  url: /strongly-typed-emails.html
+  description: Not everyone likes using dynamic objects. Postal lets you strongly type your email data if you need to.
+
+- text: Unit Testing
+  url: /unit-testing.html
+  description: Verify that your code would send emails, without actually sending them.
+
+- text: HTML & Plain-text Emails
+  url: /multi-part.html
+  description: Use multiple views to define the HTML and plain-text content of your emails.
+
+- text: Attachments
+  url: /attachments.html
+  description: Attach files to your emails.
+
+- text: Embedding Images
+  url: /embedding-images.html
+  description: Embed images in your emails. Postal will handle the multi-part stuff for you.
+
+- text: Postal Outside of ASP.NET
+  url: /outside-aspnet.html
+  description: Send email from command line applications and Windows services.
+
+- text: Email Headers
+  url: /email-headers.html
+  description: Set email headers, such as CC, BCC, Reply-To, etc.
+
+- text: Creating Email Without Sending
+  url: /create-mail-message.html
+  description: Instead of directly sending email, Postal can just create a `System.Net.MailMessage` object for you.
+
+
+
