@@ -25,7 +25,8 @@
           <h3>Documentation</h3>
           <nav class="list-group">
             {% for link in site.docs %}
-            <a href="{{ site.baseurl }}/{{ link.url }}" class="list-group-item {% if page.url == link.url %}active{% endif %}">{{ link.text }}</a>
+            {% capture url %}{{ site.baseurl }}/{{ link.url }}{% endcapture %}
+            <a href="{{ url }}" class="list-group-item {% if page.url == url %}active{% endif %}">{{ link.text }}</a>
             {% endfor %}
           </nav>
         </div>
