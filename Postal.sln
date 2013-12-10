@@ -15,6 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceSample", "src\Sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal-net40", "src\Postal-net40\Postal-net40.csproj", "{883A1184-BDB2-47EC-9D2C-AC57F7AE0ED3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F70EF96E-BECF-4500-BF12-6D982CE1C39B}"
+	ProjectSection(SolutionItems) = preProject
+		build\_ViewStart.cshtml = build\_ViewStart.cshtml
+		build\build.xml = build\build.xml
+		build\Postal.nuspec = build\Postal.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
