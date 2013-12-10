@@ -1,11 +1,3 @@
-{% capture description %}
-{% for doc in site.docs %}
-{% capture url %}{{ site.baseurl }}/{{ doc.url }}{% endcapture %}
-{% if url == page.url %}
-{{ doc.description }}
-{% endif %}
-{% endfor %}
-{% endcapture %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -15,6 +7,14 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
     <link href="syntax.css" rel="stylesheet"/>
     <link href="site.css" rel="stylesheet"/>
+{% capture description %}
+{% for doc in site.docs %}
+{% capture url %}{{ site.baseurl }}/{{ doc.url }}{% endcapture %}
+{% if url == page.url %}
+{{ doc.description }}
+{% endif %}
+{% endfor %}
+{% endcapture %}
     <meta name="description" content="{{ description | strip_newlines }}" />
   </head>
   <body class="doc">
@@ -42,7 +42,12 @@
       </div>
     </div>
 
-    <!-- DEBUG: {{ site.baseurl }} -->
+    <!-- DEBUG: 
+    {% for link in site.docs %}
+    {% capture url %}{{ site.baseurl }}/{{ link.url }}{% endcapture %}
+    {{ url }} =? {{ page.url }}
+    {% endfor %}
+    -->
 
     <script type="text/javascript">
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
