@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvc5Sample", "src\Samples\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceSample", "src\Samples\ResourceSample\ResourceSample.csproj", "{AB26BB59-F976-4361-A041-21C7EF1F2AE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal-net40", "src\Postal-net40\Postal-net40.csproj", "{883A1184-BDB2-47EC-9D2C-AC57F7AE0ED3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{883A1184-BDB2-47EC-9D2C-AC57F7AE0ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{883A1184-BDB2-47EC-9D2C-AC57F7AE0ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{883A1184-BDB2-47EC-9D2C-AC57F7AE0ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{883A1184-BDB2-47EC-9D2C-AC57F7AE0ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

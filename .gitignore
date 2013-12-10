@@ -3,7 +3,6 @@ Bin
 obj
 Obj
 packages
-build/lib
 _ReSharper.*
 *.csproj.user
 *.resharper.user
