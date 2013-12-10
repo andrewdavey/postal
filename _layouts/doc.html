@@ -9,7 +9,7 @@
     <link href="site.css" rel="stylesheet"/>
 {% capture description %}
 {% for doc in site.docs %}
-{% capture url %}{{ site.baseurl }}/{{ doc.url }}{% endcapture %}
+{% capture url %}/{{ doc.url }}{% endcapture %}
 {% if url == page.url %}
 {{ doc.description }}
 {% endif %}
