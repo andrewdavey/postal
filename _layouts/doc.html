@@ -34,20 +34,13 @@
           <h3>Documentation</h3>
           <nav class="list-group">
             {% for link in site.docs %}
-            {% capture url %}{{ site.baseurl }}/{{ link.url }}{% endcapture %}
-            <a href="{{ url }}" class="list-group-item {% if page.url == url %}active{% endif %}">{{ link.text }}</a>
+            {% capture url %}/{{ link.url }}{% endcapture %}
+            <a href="{{ site.baseurl}}{{ url }}" class="list-group-item{% if page.url == url %} active{% endif %}">{{ link.text }}</a>
             {% endfor %}
           </nav>
         </div>
       </div>
     </div>
-
-    <!-- DEBUG: 
-    {% for link in site.docs %}
-    {% capture url %}{{ site.baseurl }}/{{ link.url }}{% endcapture %}
-    {{ url }} =? {{ page.url }}
-    {% endfor %}
-    -->
 
     <script type="text/javascript">
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
