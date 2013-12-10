@@ -69,13 +69,13 @@ namespace Postal
 
         static HttpBrowserCapabilitiesWrapper CreateHttpBrowserCapabilities()
         {
-			var factory = new System.Web.Configuration.BrowserCapabilitiesFactory();
-			var browserCapabilities = new HttpBrowserCapabilities();
+            var factory = new System.Web.Configuration.BrowserCapabilitiesFactory();
+            var browserCapabilities = new HttpBrowserCapabilities();
 
-			browserCapabilities.Capabilities = HttpContext.Current != null ? HttpContext.Current.Request.Browser.Capabilities : new System.Collections.Hashtable();
+            browserCapabilities.Capabilities = HttpContext.Current != null ? HttpContext.Current.Request.Browser.Capabilities : new System.Collections.Hashtable();
 
-			factory.ConfigureBrowserCapabilities(new NameValueCollection(), browserCapabilities);
-			return new HttpBrowserCapabilitiesWrapper(browserCapabilities);
+            factory.ConfigureBrowserCapabilities(new NameValueCollection(), browserCapabilities);
+            return new HttpBrowserCapabilitiesWrapper(browserCapabilities);
         }
     }
 }
