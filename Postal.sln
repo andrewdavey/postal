@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F70EF96E
 		build\_ViewStart.cshtml = build\_ViewStart.cshtml
 		build\build.xml = build\build.xml
 		build\Postal.nuspec = build\Postal.nuspec
+		build\Web.config.transform = build\Web.config.transform
 	EndProjectSection
 EndProject
 Global
