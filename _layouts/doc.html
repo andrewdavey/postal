@@ -1,12 +1,21 @@
+{% capture description %}
+{% for doc in site.docs %}
+{% capture url %}{{ site.baseurl }}/{{ doc.url }}{% endcapture %}
+{% if url == page.url %}
+{{ doc.description }}
+{% endif %}
+{% endfor %}
+{% endcapture %}
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Postal - Create emails using ASP.NET MVC views</title>
+    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
     <link href="syntax.css" rel="stylesheet"/>
     <link href="site.css" rel="stylesheet"/>
-    <meta name="description" content="Create emails using ASP.NET MVC views" />
+    <meta name="description" content="{{ description | strip_newlines }}" />
   </head>
   <body class="doc">
     <header>
@@ -32,6 +41,8 @@
         </div>
       </div>
     </div>
+
+    <!-- DEBUG: {{ site.baseurl }} -->
 
     <script type="text/javascript">
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
