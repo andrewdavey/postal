@@ -2,6 +2,8 @@ bin
 Bin
 obj
 Obj
+packages
+build/lib
 _ReSharper.*
 *.csproj.user
 *.resharper.user
@@ -11,7 +13,4 @@ _ReSharper.*
 *.cache
 *.Cache
 *.user
-
-/nuget/*.nupkg
-/nuget/lib
-/src/packages
+build/*.nupkg

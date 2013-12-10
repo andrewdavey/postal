@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Postal";
+}
+<h1>Postal</h1>
+
+<form method="post" action="@Url.Action("Send")" enctype="multipart/form-data">
+    <div>
+        <label>To</label>
+        <input type="text" name="To" />
+    </div>
+    <div>
+        <label>Subject</label>
+        <input type="text" name="Subject" />
+    </div>
+    <div>
+        <label>Message</label>
+        <textarea name="Message" rows="5" cols="20"></textarea>
+    </div>
+    <div>
+        <label>Attachment</label>
+        <input type="file" name="file"/>
+    </div>
+    <div>
+        <button type="submit">Send</button>
+    </div>
+</form>
+
+<p>Emails are only saved to 'c:\email'. See web.config for this setting.</p>

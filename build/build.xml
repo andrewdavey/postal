@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Target Name="Build">
+    <MSBuild Projects="..\Postal.sln"
+             Properties="Configuration=Release;TargetFramework=v4.0;OutDir=$(MSBuildProjectDirectory)\lib\net40" />
+    
+    <MSBuild Projects="..\Postal.sln"
+             Properties="Configuration=Release;TargetFramework=v4.5;OutDir=$(MSBuildProjectDirectory)\lib\net45" />
+    
+    <Exec Command="..\.nuget\Nuget.exe pack Postal.nuspec -Symbols"/>
+  </Target>
+</Project>

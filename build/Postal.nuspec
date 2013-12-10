@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Postal</id>
+    <version>0.9.0</version>
+    <title>Postal</title>
+    <authors>Andrew Davey</authors>
+    <owners>Andrew Davey</owners>
+    <description>Create emails using ASP.NET MVC views.</description>
+    <projectUrl>https://github.com/andrewdavey/postal</projectUrl>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <tags>asp.net mvc web email smtp</tags>
+    <language>en-US</language>
+    <dependencies>
+      <dependency id="Microsoft.AspNet.Mvc" version="3.0"/>
+      <dependency id="RazorEngine" version="3.4"/>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Web" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="_ViewStart.cshtml" target="content\Views\Emails" />
+    <file src="lib\net40\Postal.dll" target="lib\net40"/>
+    <file src="lib\net40\Postal.pdb" target="lib\net40"/>
+    <file src="lib\net45\Postal.dll" target="lib\net45"/>
+    <file src="lib\net45\Postal.pdb" target="lib\net45"/>
+    <file src="..\src\Postal\**\*.cs" exclude="..\src\Postal\obj\**\*.cs" target="src" />
+  </files>
+</package>
