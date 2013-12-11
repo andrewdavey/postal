@@ -22,12 +22,9 @@
   <files>
     <file src="_ViewStart.cshtml" target="content\Views\Emails" />
     <file src="Web.config.transform" target="content\Views\Emails" />
-    <file src="..\src\Postal-net40\bin\Release\Postal.dll" target="lib\net40"/>
-    <file src="..\src\Postal-net40\bin\Release\Postal.pdb" target="lib\net40"/>
-    <file src="..\src\Postal-net40\bin\Release\Postal.xml" target="lib\net40"/>
-    <file src="..\src\Postal\bin\Release\Postal.dll" target="lib\net45"/>
-    <file src="..\src\Postal\bin\Release\Postal.pdb" target="lib\net45"/>
-    <file src="..\src\Postal\bin\Release\Postal.xml" target="lib\net45"/>
+    <file src="..\src\Postal\bin\Release\Postal.dll" target="lib\net40"/>
+    <file src="..\src\Postal\bin\Release\Postal.pdb" target="lib\net40"/>
+    <file src="..\src\Postal\bin\Release\Postal.xml" target="lib\net40"/>
     <file src="..\src\Postal\**\*.cs" exclude="..\src\Postal\obj\**\*.cs" target="src" />
   </files>
 </package>
