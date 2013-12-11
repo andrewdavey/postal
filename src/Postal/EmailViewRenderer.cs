@@ -11,26 +11,13 @@ namespace Postal
     /// </summary>
     public class EmailViewRenderer : IEmailViewRenderer
     {
-        public EmailViewRenderer(ViewEngineCollection viewEngines, Uri url)
+        public EmailViewRenderer(ViewEngineCollection viewEngines)
         {
             this.viewEngines = viewEngines;
-            if (url != null)
-            {
-                this.getUrl = () => url;
-            }
-            else
-            {
-                // Delay asking for Url from HttpContext since EmailViewRenderer may be
-                // created before any HttpContext exists.
-                this.getUrl = () => GetUrlFromHttpContext() ?? DefaultUrlRatherThanNull();
-            }
-
             EmailViewDirectoryName = "Emails";
         }
 
         readonly ViewEngineCollection viewEngines;
-        readonly Func<Uri> getUrl;
-        readonly Func<RouteData> getRouteData;
 
         /// <summary>
         /// The name of the directory in "Views" that contains the email views.
@@ -49,8 +36,14 @@ namespace Postal
 
         ControllerContext CreateControllerContext()
         {
-            var httpContext = new EmailHttpContext(getUrl());
-            var routeData = GetRouteDataFromHttpContext() ?? new RouteData();
+            // A dummy HttpContextBase that is enough to allow the view to be rendered.
+            var httpContext = new HttpContextWrapper(
+                new HttpContext(
+                    new HttpRequest("", "http://localhost/", ""),
+                    new HttpResponse(TextWriter.Null)
+                )
+            );
+            var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
             return new ControllerContext(requestContext, new StubController());
@@ -77,23 +70,6 @@ namespace Postal
                 view.Render(viewContext, writer);
                 return writer.GetStringBuilder().ToString();
             }
-        }
-
-        RouteData GetRouteDataFromHttpContext() {
-          if (HttpContext.Current == null) return null;
-          var wrapper = new HttpContextWrapper(HttpContext.Current);
-          return RouteTable.Routes.GetRouteData(wrapper);
-        }
-
-        Uri GetUrlFromHttpContext()
-        {
-            if (HttpContext.Current == null) return null;
-            return HttpContext.Current.Request.Url;
-        }
-
-        Uri DefaultUrlRatherThanNull()
-        {
-            return new Uri("http://localhost");
         }
 
         // StubController so we can create a ControllerContext.

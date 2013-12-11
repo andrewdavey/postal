@@ -19,7 +19,7 @@ namespace Postal
         /// <param name="createSmtpClient">A function that creates a <see cref="SmtpClient"/>. If null, a default creation function is used.</param>
         public EmailService(ViewEngineCollection viewEngines, Uri url = null, Func<SmtpClient> createSmtpClient = null)
         {
-            emailViewRenderer = new EmailViewRenderer(viewEngines, url);
+            emailViewRenderer = new EmailViewRenderer(viewEngines);
             emailParser = new EmailParser(emailViewRenderer);
             this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }

@@ -81,9 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Email.cs" />
-    <Compile Include="EmailHttpContext.cs" />
-    <Compile Include="EmailHttpRequest.cs" />
-    <Compile Include="EmailHttpResponse.cs" />
     <Compile Include="EmailParser.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmailViewRenderer.cs" />

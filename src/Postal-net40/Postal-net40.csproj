@@ -85,15 +85,6 @@
     <Compile Include="..\Postal\Email.cs">
       <Link>Email.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\EmailHttpContext.cs">
-      <Link>EmailHttpContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Postal\EmailHttpRequest.cs">
-      <Link>EmailHttpRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Postal\EmailHttpResponse.cs">
-      <Link>EmailHttpResponse.cs</Link>
-    </Compile>
     <Compile Include="..\Postal\EmailParser.cs">
       <Link>EmailParser.cs</Link>
     </Compile>
