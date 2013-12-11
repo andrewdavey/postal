@@ -4,6 +4,25 @@
       AssemblyFile="..\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll"
       TaskName="Xunit.Runner.MSBuild.xunit"/>
 
+  <UsingTask TaskName="GetAssemblyInformationalVersion"
+        TaskFactory="CodeTaskFactory"
+        AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <Assembly ParameterType="System.String" Required="true" />
+      <Version ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System"/>
+      <Using Namespace="System.Diagnostics"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+var version = FileVersionInfo.GetVersionInfo(Assembly);
+Version = version.ProductVersion;
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
   <Target Name="Default" DependsOnTargets="Test;Build;Package"/>
 
   <Target Name="Build">
@@ -15,6 +34,9 @@
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build">
-    <Exec Command="..\.nuget\Nuget.exe pack Postal.nuspec -Symbols"/>
+    <GetAssemblyInformationalVersion Assembly="..\src\Postal\bin\Release\Postal.dll">
+      <Output PropertyName="Version" TaskParameter="Version" />
+    </GetAssemblyInformationalVersion>
+    <Exec Command="..\.nuget\Nuget.exe pack Postal.nuspec -Symbols -Version $(Version)"/>
   </Target>
 </Project>
