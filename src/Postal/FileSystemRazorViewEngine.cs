@@ -14,6 +14,10 @@ namespace Postal
     {
         readonly string viewPathRoot;
 
+        /// <summary>
+        /// Creates a new <see cref="FileSystemRazorViewEngine"/> that finds views within the given path.
+        /// </summary>
+        /// <param name="viewPathRoot">The root directory that contains views.</param>
         public FileSystemRazorViewEngine(string viewPathRoot)
         {
             this.viewPathRoot = viewPathRoot;
@@ -24,6 +28,9 @@ namespace Postal
             return Path.Combine(viewPathRoot, path);
         }
 
+        /// <summary>
+        /// Tries to find a razor view (.cshtml or .vbhtml files).
+        /// </summary>
         public ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
             var possibleFilenames = new List<string>();
@@ -39,7 +46,7 @@ namespace Postal
                 possibleFilenames.Add(partialViewName);
             }
 
-            var possibleFullPaths = possibleFilenames.Select(GetViewFullPath);
+            var possibleFullPaths = possibleFilenames.Select(GetViewFullPath).ToArray();
 
             var existingPath = possibleFullPaths.FirstOrDefault(File.Exists);
 
@@ -53,11 +60,17 @@ namespace Postal
             }
         }
 
+        /// <summary>
+        /// Tries to find a razor view (.cshtml or .vbhtml files).
+        /// </summary>
         public ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
             return FindPartialView(controllerContext, viewName, useCache);
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
         public void ReleaseView(ControllerContext controllerContext, IView view)
         {
             // Nothing to do here - FileSystemRazorView does not need disposing.

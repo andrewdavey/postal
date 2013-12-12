@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net.Mail;
 using System.IO;
 using System.Net.Mime;
-using System.Web;
 using System.Net;
 
 namespace Postal
 {
+    /// <summary>
+    /// Used by the <see cref="HtmlExtensions.EmbedImage"/> helper method.
+    /// It generates the <see cref="LinkedResource"/> objects need to embed images into an email.
+    /// </summary>
     public class ImageEmbedder
     {
+        /// <summary>
+        /// Creats a new <see cref="ImageEmbedder"/>.
+        /// </summary>
         public ImageEmbedder()
         {
-            this.createLinkedResource = CreateLinkedResource;
+            createLinkedResource = CreateLinkedResource;
         }
 
+        /// <summary>
+        /// Creates a new <see cref="ImageEmbedder"/>.
+        /// </summary>
+        /// <param name="createLinkedResource">A delegate that creates a <see cref="LinkedResource"/> from an image path or URL.</param>
         public ImageEmbedder(Func<string, LinkedResource> createLinkedResource)
         {
             this.createLinkedResource = createLinkedResource;
@@ -25,47 +33,52 @@ namespace Postal
         readonly Func<string, LinkedResource> createLinkedResource;
         readonly Dictionary<string, LinkedResource> images = new Dictionary<string, LinkedResource>();
 
-        public static LinkedResource CreateLinkedResource(string pathOrUrl)
+        /// <summary>
+        /// Creates a <see cref="LinkedResource"/> from an image path or URL.
+        /// </summary>
+        /// <param name="imagePathOrUrl">The image path or URL.</param>
+        /// <returns>A new <see cref="LinkedResource"/></returns>
+        public static LinkedResource CreateLinkedResource(string imagePathOrUrl)
         {
-            if (Uri.IsWellFormedUriString(pathOrUrl, UriKind.Absolute))
+            if (Uri.IsWellFormedUriString(imagePathOrUrl, UriKind.Absolute))
             {
                 var client = new WebClient();
-                var bytes = client.DownloadData(pathOrUrl);
+                var bytes = client.DownloadData(imagePathOrUrl);
                 return new LinkedResource(new MemoryStream(bytes));
             }
             else
             {
-                return new LinkedResource(File.OpenRead(pathOrUrl));
+                return new LinkedResource(File.OpenRead(imagePathOrUrl));
             }
         }
 
-        public LinkedResource AddImage(string pathOrUrl, string contentType = null)
+        /// <summary>
+        /// Records a reference to the given image.
+        /// </summary>
+        /// <param name="imagePathOrUrl">The image path or URL.</param>
+        /// <param name="contentType">The content type of the image e.g. "image/png". If null, then content type is determined from the file name extension.</param>
+        /// <returns>A <see cref="LinkedResource"/> representing the embedded image.</returns>
+        public LinkedResource ReferenceImage(string imagePathOrUrl, string contentType = null)
         {
             LinkedResource resource;
-            if (images.TryGetValue(pathOrUrl, out resource))
-            {
-                return resource;
-            }
-            else
-            {
-                resource = createLinkedResource(pathOrUrl);
+            if (images.TryGetValue(imagePathOrUrl, out resource)) return resource;
 
-                if (contentType == null)
-                {
-                    contentType = DetermineContentType(pathOrUrl);
-                    if (contentType != null)
-                    {
-                        resource.ContentType = new ContentType(contentType);
-                    }
-                }
+            resource = createLinkedResource(imagePathOrUrl);
 
-                images[pathOrUrl] = resource;
-                return resource;
+            contentType = contentType ?? DetermineContentType(imagePathOrUrl);
+            if (contentType != null)
+            {
+                resource.ContentType = new ContentType(contentType);
             }
+
+            images[imagePathOrUrl] = resource;
+            return resource;
         }
 
         string DetermineContentType(string pathOrUrl)
         {
+            if (pathOrUrl == null) throw new ArgumentNullException("pathOrUrl");
+
             var extension = Path.GetExtension(pathOrUrl).ToLowerInvariant();
             switch (extension)
             {
@@ -81,7 +94,10 @@ namespace Postal
             }
         }
 
-        public void PutImagesIntoView(AlternateView view)
+        /// <summary>
+        /// Adds recorded <see cref="LinkedResource"/> image references to the given <see cref="AlternateView"/>.
+        /// </summary>
+        public void AddImagesToView(AlternateView view)
         {
             foreach (var image in images)
             {

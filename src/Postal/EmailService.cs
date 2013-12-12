@@ -10,20 +10,26 @@ namespace Postal
     /// </summary>
     public class EmailService : IEmailService
     {
-        public EmailService() : this(ViewEngines.Engines, null, null)
+        /// <summary>
+        /// Creates a new cref="EmailService"/, using the default view engines.
+        /// </summary>
+        public EmailService() : this(ViewEngines.Engines)
         {
         }
 
+        /// <summary>Creates a new <see cref="EmailService"/>, using the given view engines.</summary>
         /// <param name="viewEngines">The view engines to use when creating email views.</param>
-        /// <param name="url">The URL of the current request. This is for the UrlHelper used when generating Urls in a view. When null, this is determined from the current HttpContext instead.</param>
         /// <param name="createSmtpClient">A function that creates a <see cref="SmtpClient"/>. If null, a default creation function is used.</param>
-        public EmailService(ViewEngineCollection viewEngines, Uri url = null, Func<SmtpClient> createSmtpClient = null)
+        public EmailService(ViewEngineCollection viewEngines, Func<SmtpClient> createSmtpClient = null)
         {
             emailViewRenderer = new EmailViewRenderer(viewEngines);
             emailParser = new EmailParser(emailViewRenderer);
             this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }
 
+        /// <summary>
+        /// Creates a new <see cref="EmailService"/>.
+        /// </summary>
         public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser, Func<SmtpClient> createSmtpClient)
         {
             this.emailViewRenderer = emailViewRenderer;
@@ -35,6 +41,10 @@ namespace Postal
         readonly IEmailParser emailParser;
         readonly Func<SmtpClient> createSmtpClient;
 
+        /// <summary>
+        /// Sends an email using an <see cref="SmtpClient"/>.
+        /// </summary>
+        /// <param name="email">The email to send.</param>
         public void Send(Email email)
         {
             using (var mailMessage = CreateMailMessage(email))
@@ -44,6 +54,11 @@ namespace Postal
             }
         }
 
+        /// <summary>
+        /// Send an email asynchronously, using an <see cref="SmtpClient"/>.
+        /// </summary>
+        /// <param name="email">The email to send.</param>
+        /// <returns>A <see cref="Task"/> that completes once the email has been sent.</returns>
         public Task SendAsync(Email email)
         {
             // Wrap the SmtpClient's awkward async API in the much nicer Task pattern.
@@ -91,6 +106,11 @@ namespace Postal
             }
         }
 
+        /// <summary>
+        /// Renders the email view and builds a <see cref="MailMessage"/>. Does not send the email.
+        /// </summary>
+        /// <param name="email">The email to render.</param>
+        /// <returns>A <see cref="MailMessage"/> containing the rendered email.</returns>
         public MailMessage CreateMailMessage(Email email)
         {
             var rawEmailString = emailViewRenderer.Render(email);

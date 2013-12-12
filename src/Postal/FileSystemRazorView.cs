@@ -13,12 +13,21 @@ namespace Postal
         readonly string template;
         readonly string cacheName;
         
+        /// <summary>
+        /// Creates a new <see cref="FileSystemRazorView"/> using the given view filename.
+        /// </summary>
+        /// <param name="filename">The filename of the view.</param>
         public FileSystemRazorView(string filename)
         {
             template = File.ReadAllText(filename);
             cacheName = filename;
         }
 
+        /// <summary>
+        /// Renders the view into the given <see cref="TextWriter"/>.
+        /// </summary>
+        /// <param name="viewContext">The <see cref="ViewContext"/> that contains the view data model.</param>
+        /// <param name="writer">The <see cref="TextWriter"/> used to write the rendered output.</param>
         public void Render(ViewContext viewContext, TextWriter writer)
         {
             var content = Razor.Parse(template, viewContext.ViewData.Model, cacheName);

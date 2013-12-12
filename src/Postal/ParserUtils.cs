@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Postal
 {
+    /// <summary>
+    /// Helper methods for parsing email.
+    /// </summary>
     public static class ParserUtils
     {
         /// <summary>

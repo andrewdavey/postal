@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 using Should;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -18,10 +14,10 @@ namespace Postal
         }
 
         [Fact]
-        public void AddImage_returns_LinkedResource()
+        public void ReferenceImage_returns_LinkedResource()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var resource = embedder.AddImage("test.png");
+            var resource = embedder.ReferenceImage("test.png");
             resource.ShouldNotBeNull();
         }
 
@@ -29,8 +25,8 @@ namespace Postal
         public void Repeated_images_use_the_same_LinkedResource()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var r1 = embedder.AddImage("test-a.png");
-            var r2 = embedder.AddImage("test-a.png");
+            var r1 = embedder.ReferenceImage("test-a.png");
+            var r2 = embedder.ReferenceImage("test-a.png");
             Assert.Same(r1, r2);
         }
 
@@ -38,7 +34,7 @@ namespace Postal
         public void Determine_content_type_from_PNG_file_extension()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var resource = embedder.AddImage("test.png");
+            var resource = embedder.ReferenceImage("test.png");
             resource.ContentType.ShouldEqual(new ContentType("image/png"));
         }
 
@@ -46,7 +42,7 @@ namespace Postal
         public void Determine_content_type_from_PNG_http_file_extension()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var resource = embedder.AddImage("http://test.com/test.png");
+            var resource = embedder.ReferenceImage("http://test.com/test.png");
             resource.ContentType.ShouldEqual(new ContentType("image/png"));
         }
 
@@ -54,7 +50,7 @@ namespace Postal
         public void Determine_content_type_from_JPEG_file_extension()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var resource = embedder.AddImage("test.jpeg");
+            var resource = embedder.ReferenceImage("test.jpeg");
             resource.ContentType.ShouldEqual(new ContentType("image/jpeg"));
         }
 
@@ -62,7 +58,7 @@ namespace Postal
         public void Determine_content_type_from_JPG_file_extension()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var resource = embedder.AddImage("test.jpg");
+            var resource = embedder.ReferenceImage("test.jpg");
             resource.ContentType.ShouldEqual(new ContentType("image/jpeg"));
         }
 
@@ -70,7 +66,7 @@ namespace Postal
         public void Determine_content_type_from_GIF_file_extension()
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
-            var resource = embedder.AddImage("test.gif");
+            var resource = embedder.ReferenceImage("test.gif");
             resource.ContentType.ShouldEqual(new ContentType("image/gif"));
         }
 
@@ -82,7 +78,7 @@ namespace Postal
             try
             {
                 File.WriteAllBytes(filename, new byte[] { 42 });
-                using (var resource = embedder.AddImage(filename))
+                using (var resource = embedder.ReferenceImage(filename))
                 {
                     resource.ContentStream.Length.ShouldEqual(1);
                 }
@@ -97,20 +93,20 @@ namespace Postal
         public void Can_read_image_from_http_url()
         {
             var embedder = new ImageEmbedder();
-            using (var resource = embedder.AddImage("http://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png"))
+            using (var resource = embedder.ReferenceImage("http://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png"))
             {
                 resource.ContentStream.Length.ShouldNotEqual(0);
             }
         }
 
         [Fact]
-        public void PutImagesIntoView_adds_linked_resources()
+        public void AddImagesToView_adds_linked_resources()
         {
             var embedder = new ImageEmbedder(s => new LinkedResource(new MemoryStream()));
-            var cid = embedder.AddImage("test.png");
+            var cid = embedder.ReferenceImage("test.png");
             using (var view = AlternateView.CreateAlternateViewFromString("<img src=\"cid:" + cid.ContentId + "\" />", new ContentType("text/html")))
             {
-                embedder.PutImagesIntoView(view);
+                embedder.AddImagesToView(view);
 
                 view.LinkedResources.Count.ShouldEqual(1);
                 view.LinkedResources[0].ShouldBeSameAs(cid);

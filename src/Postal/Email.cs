@@ -15,6 +15,10 @@ namespace Postal
     /// </summary>
     public class Email : DynamicObject, IViewDataContainer
     {
+        /// <summary>
+        /// Creates a new Email, that will render the given view.
+        /// </summary>
+        /// <param name="viewName">The name of the view to render</param>
         public Email(string viewName)
         {
             if (viewName == null) throw new ArgumentNullException("viewName");
@@ -82,12 +86,24 @@ namespace Postal
         // Any dynamic property access is delegated to view data dictionary.
         // This makes for sweet looking syntax - thank you C#4!
 
+        /// <summary>
+        /// Stores the given value into the <see cref="ViewData"/>.
+        /// </summary>
+        /// <param name="binder">Provides the name of the view data property.</param>
+        /// <param name="value">The value to store.</param>
+        /// <returns>Always returns true.</returns>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
             ViewData[binder.Name] = value;
             return true;
         }
 
+        /// <summary>
+        /// Tries to get a stored value from <see cref="ViewData"/>.
+        /// </summary>
+        /// <param name="binder">Provides the name of the view data property.</param>
+        /// <param name="result">If found, this is the view data property value.</param>
+        /// <returns>True if the property was found, otherwise false.</returns>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return ViewData.TryGetValue(binder.Name, out result);

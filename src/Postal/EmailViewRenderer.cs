@@ -11,6 +11,10 @@ namespace Postal
     /// </summary>
     public class EmailViewRenderer : IEmailViewRenderer
     {
+        /// <summary>
+        /// Creates a new <see cref="EmailViewRenderer"/> that uses the given view engines.
+        /// </summary>
+        /// <param name="viewEngines">The view engines to use when rendering email views.</param>
         public EmailViewRenderer(ViewEngineCollection viewEngines)
         {
             this.viewEngines = viewEngines;
@@ -25,6 +29,12 @@ namespace Postal
         /// </summary>
         public string EmailViewDirectoryName { get; set; }
 
+        /// <summary>
+        /// Renders an email view.
+        /// </summary>
+        /// <param name="email">The email to render.</param>
+        /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
+        /// <returns>The rendered email view output.</returns>
         public string Render(Email email, string viewName = null)
         {
             viewName = viewName ?? email.ViewName;

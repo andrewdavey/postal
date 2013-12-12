@@ -13,6 +13,9 @@ namespace Postal
     /// </summary>
     public class EmailParser : IEmailParser
     {
+        /// <summary>
+        /// Creates a new <see cref="EmailParser"/>.
+        /// </summary>
         public EmailParser(IEmailViewRenderer alternativeViewRenderer)
         {
             this.alternativeViewRenderer = alternativeViewRenderer;
@@ -20,6 +23,12 @@ namespace Postal
 
         readonly IEmailViewRenderer alternativeViewRenderer;
 
+        /// <summary>
+        /// Parses the email view output into a <see cref="MailMessage"/>.
+        /// </summary>
+        /// <param name="emailViewOutput">The email view output.</param>
+        /// <param name="email">The <see cref="Email"/> used to generate the output.</param>
+        /// <returns>A <see cref="MailMessage"/> containing the email headers and content.</returns>
         public MailMessage Parse(string emailViewOutput, Email email)
         {
             var message = new MailMessage();
@@ -121,8 +130,8 @@ namespace Postal
             email.ViewData["Postal.ImageEmbedder"] = imageEmbedder;
             var output = alternativeViewRenderer.Render(email, fullViewName);
 
-            string contentType = null;
-            string body = null;
+            string contentType;
+            string body;
             using (var reader = new StringReader(output))
             {
                 contentType = ParseHeadersForContentType(reader);
@@ -155,7 +164,7 @@ namespace Postal
                 // A different charset can be specified in the Content-Type header.
                 // e.g. Content-Type: text/html; charset=utf-8
             }
-            imageEmbedder.PutImagesIntoView(alternativeView);
+            imageEmbedder.AddImagesToView(alternativeView);
             email.ViewData.Remove("Postal.ImageEmbedder");
             return alternativeView;
         }
