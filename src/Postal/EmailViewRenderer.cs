@@ -49,7 +49,7 @@ namespace Postal
             // A dummy HttpContextBase that is enough to allow the view to be rendered.
             var httpContext = new HttpContextWrapper(
                 new HttpContext(
-                    new HttpRequest("", "http://localhost/", ""),
+                    new HttpRequest("", UrlRoot(), ""),
                     new HttpResponse(TextWriter.Null)
                 )
             );
@@ -57,6 +57,18 @@ namespace Postal
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
             return new ControllerContext(requestContext, new StubController());
+        }
+
+        string UrlRoot()
+        {
+            var httpContext = HttpContext.Current;
+            if (httpContext == null)
+            {
+                return "http://localhost";
+            }
+            
+            return httpContext.Request.Url.GetLeftPart(UriPartial.Authority) +
+                   httpContext.Request.ApplicationPath;
         }
 
         IView CreateView(string viewName, ControllerContext controllerContext)
