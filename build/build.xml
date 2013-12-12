@@ -17,7 +17,7 @@
       <Code Type="Fragment" Language="cs">
         <![CDATA[
 var version = FileVersionInfo.GetVersionInfo(Assembly);
-Version = version.ProductVersion;
+Version = version.ProductMajorPart + "." + version.ProductMinorPart + "." + version.ProductBuildPart;
 ]]>
       </Code>
     </Task>
