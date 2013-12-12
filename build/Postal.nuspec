@@ -13,7 +13,6 @@
     <language>en-US</language>
     <dependencies>
       <dependency id="Microsoft.AspNet.Mvc" version="3.0"/>
-      <dependency id="RazorEngine" version="3.3"/>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Web" />
