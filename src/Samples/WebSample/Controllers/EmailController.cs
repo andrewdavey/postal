@@ -13,7 +13,7 @@ namespace WebSample.Controllers
             email.Date = DateTime.UtcNow.ToString();
             email.Send();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Sent", "Home");
         }
 
         [HttpPost]
@@ -23,7 +23,7 @@ namespace WebSample.Controllers
             email.Date = DateTime.UtcNow.ToString();
             email.Send();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Sent", "Home");
         }
 
         [HttpPost]
@@ -33,7 +33,7 @@ namespace WebSample.Controllers
             email.Date = DateTime.UtcNow.ToString();
             email.Send();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Sent", "Home");
         }
     }
 

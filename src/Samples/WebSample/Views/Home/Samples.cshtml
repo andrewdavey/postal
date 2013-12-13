@@ -1,0 +1,31 @@
+﻿<h1>Postal Samples</h1>
+
+<p>
+    The buttons on this page post to <code>Controllers\EmailController.cs</code>
+</p>
+
+<h2>Sending a basic email</h2>
+<p>Email will be generated from <code>Views\Email\Simple.cshtml</code></p>
+<form action="@Url.Action("SendSimple", "Email")" method="POST">
+    <button type="submit" class="btn btn-primary">Send Email</button>
+</form>
+
+<h2>Strongly-typed email class</h2>
+<p>Email will be generated from <code>Views\Email\Typed.cshtml</code></p>
+<form action="@Url.Action("SendTypedEmail", "Email")" method="POST">
+    <button type="submit" class="btn btn-primary">Send Email</button>
+</form>
+
+<h2>Multipart emails</h2>
+<p>
+    Use separate views to define HTML and plain-text content for a single email.
+</p>
+<pre>Views\Email\Simple.cshtml
+Views\Email\Simple.Html.cshtml
+Views\Email\Simple.Text.cshtml</pre>
+<p>
+    Images can be embedded into the email using <code>@@Html.EmbedImage("~/image.png")</code>.
+</p>
+<form action="@Url.Action("SendMultiPart", "Email")" method="POST">
+    <button type="submit" class="btn btn-primary">Send Email</button>
+</form>

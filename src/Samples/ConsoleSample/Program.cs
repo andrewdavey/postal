@@ -1,10 +1,17 @@
 ﻿using System.IO;
-using System.Net.Mail;
 using System.Web.Mvc;
 using Postal;
 
 namespace ConsoleSample
 {
+    /* 
+    Before running this sample, please start the SMTP development server,
+    found in the Postal code directory: tools\smtp4dev.exe
+
+    Use the SMTP development server to inspect the contents of generated email (headers, content, etc).
+    No email is really sent, so it's perfect for debugging.
+    */
+
     class Program // That's right, no asp.net runtime required!
     {
         static void Main(string[] args)

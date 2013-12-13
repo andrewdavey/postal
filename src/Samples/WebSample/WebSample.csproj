@@ -153,6 +153,11 @@
     <Content Include="Views\Emails\MultiPart.Text.cshtml" />
     <Content Include="Views\Emails\MultiPart.Html.cshtml" />
     <Content Include="Views\Emails\Typed.cshtml" />
+    <Content Include="Views\Home\Samples.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Emails\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Sent.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
