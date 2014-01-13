@@ -56,7 +56,10 @@ namespace Postal
             var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
             var requestContext = new RequestContext(httpContext, routeData);
-            return new ControllerContext(requestContext, new StubController());
+            var stubController = new StubController();
+            var controllerContext = new ControllerContext(requestContext, stubController);
+            stubController.ControllerContext = controllerContext;
+            return controllerContext;
         }
 
         string UrlRoot()
