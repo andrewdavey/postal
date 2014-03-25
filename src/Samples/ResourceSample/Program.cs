@@ -1,5 +1,6 @@
-﻿using System.Web.Mvc;
+﻿
 using Postal;
+using System.Web.Mvc;
 
 namespace ResourceSample
 {
