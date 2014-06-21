@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 using Should;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -111,6 +112,34 @@ namespace Postal
                 view.LinkedResources.Count.ShouldEqual(1);
                 view.LinkedResources[0].ShouldBeSameAs(cid);
             }
+        }
+
+        [Fact]
+        public void ReplaceImageData_replaces_cid_reference()
+        {
+            var embedder = new ImageEmbedder();
+            var resource = embedder.ReferenceImage("postal.png");
+
+            string body = "<img src=\"cid:" + resource.ContentId + @"""/>";
+            var view = AlternateView.CreateAlternateViewFromString(body);
+            embedder.AddImagesToView(view);
+            
+            string replaced = embedder.ReplaceImageData(view, body);
+            Assert.DoesNotContain("cid:", replaced);
+        }
+        
+        [Fact]
+        public void ReplaceImageData_replaces_cid_reference_with_correct_mime()
+        {
+            var embedder = new ImageEmbedder();
+            var resource = embedder.ReferenceImage("postal.png");
+
+            string body = "<img src=\"cid:" + resource.ContentId + @"""/>";
+            var view = AlternateView.CreateAlternateViewFromString(body);
+            embedder.AddImagesToView(view);
+            
+            string replaced = embedder.ReplaceImageData(view, body);
+            Assert.Contains("data:image/png;base64,", replaced);
         }
     }
 }
