@@ -87,6 +87,7 @@
     <Compile Include="EmailParser.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmailViewRenderer.cs" />
+    <Compile Include="EmailViewResult.cs" />
     <Compile Include="FileSystemRazorView.cs" />
     <Compile Include="FileSystemRazorViewEngine.cs" />
     <Compile Include="HtmlExtensions.cs" />

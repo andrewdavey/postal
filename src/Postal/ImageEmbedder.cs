@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mail;
 using System.IO;
 using System.Net.Mime;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace Postal
 {
@@ -102,6 +104,52 @@ namespace Postal
             foreach (var image in images)
             {
                 view.LinkedResources.Add(image.Value);
+            }
+        }
+
+        /// <summary>
+        /// Replaces all occurrences of the linked resources <see cref="LinkedResource"/> in the content
+        /// </summary>
+        public string ReplaceImageData(AlternateView view, string content)
+        {
+            var resources = view.LinkedResources;
+
+            if (!resources.Any())
+                return content;
+
+            foreach (var resource in resources)
+            {
+                var regex = new Regex("src=\"cid:" + resource.ContentId + "\"");
+
+                string imageData = ComposeImageData(resource);
+
+                content = regex.Replace(content, "src=\"" + imageData + "\"");
+            }
+
+            return content;
+        }
+
+        string ComposeImageData(LinkedResource resource)
+        {
+            string contentType = resource.ContentType.MediaType;
+            byte[] bytes = ReadFully(resource.ContentStream);
+
+            return string.Format("data:{0};base64,{1}",
+                contentType,
+                Convert.ToBase64String(bytes));
+        }
+
+        static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
             }
         }
     }
