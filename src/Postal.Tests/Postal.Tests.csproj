@@ -85,6 +85,7 @@
     <Compile Include="EmailServiceTests.cs" />
     <Compile Include="EmailTests.cs" />
     <Compile Include="EmailViewRendererTests.cs" />
+    <Compile Include="EmailViewResultTests.cs" />
     <Compile Include="FileSystemRazorViewTests.cs" />
     <Compile Include="ImageEmbedderTests.cs" />
     <Compile Include="ParserUtilsTests.cs" />
@@ -95,6 +96,12 @@
       <Project>{779257ef-f8dd-495b-8b54-1f2e6ac5fa9b}</Project>
       <Name>Postal</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Samples\WebSample\Content\postal.png">
+      <Link>postal.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
