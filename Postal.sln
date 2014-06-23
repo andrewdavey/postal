@@ -15,11 +15,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F70EF96E
 	ProjectSection(SolutionItems) = preProject
 		build\_ViewStart.cshtml = build\_ViewStart.cshtml
 		build\build.xml = build\build.xml
-		build\Postal.nuspec = build\Postal.nuspec
+		build\Postal.Mvc3.nuspec = build\Postal.Mvc3.nuspec
+		build\Postal.Mvc4.nuspec = build\Postal.Mvc4.nuspec
+		build\Postal.Mvc5.nuspec = build\Postal.Mvc5.nuspec
 		build\Web.config.transform = build\Web.config.transform
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSample", "src\Samples\WebSample\WebSample.csproj", "{20E5601B-354D-4393-951C-C3BCC970EAAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc3", "src\Postal.Mvc3\Postal.Mvc3.csproj", "{FC488BE2-1C99-468A-85F3-12FBB539CFE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc4", "src\Postal.Mvc4\Postal.Mvc4.csproj", "{4EF69363-FA1E-4850-8028-44A419ADA249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc5", "src\Postal.Mvc5\Postal.Mvc5.csproj", "{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +55,18 @@ Global
 		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EF69363-FA1E-4850-8028-44A419ADA249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EF69363-FA1E-4850-8028-44A419ADA249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EF69363-FA1E-4850-8028-44A419ADA249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EF69363-FA1E-4850-8028-44A419ADA249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
