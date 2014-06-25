@@ -2,4 +2,8 @@ src
 wraps
 nuget
 _site
+build
+packages
 *.swp
+*.user
+*.suo
