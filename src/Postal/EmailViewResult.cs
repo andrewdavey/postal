@@ -2,9 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Postal
@@ -118,9 +116,7 @@ namespace Postal
             using (var reader = new StreamReader(view.ContentStream))
                 content = reader.ReadToEnd();
 
-            // Replace image embeds through linked resources
-            var embedder = new ImageEmbedder();
-            content = embedder.ReplaceImageData(view, content);
+            content = ReplaceLinkedImagesWithEmbeddedImages(view, content);
 
             writer.Write(content);
             return contentType;
@@ -168,6 +164,41 @@ namespace Postal
             }
 
             return null;
+        }
+
+        internal static string ReplaceLinkedImagesWithEmbeddedImages(AlternateView view, string content)
+        {
+            var resources = view.LinkedResources;
+
+            if (!resources.Any())
+                return content;
+
+            foreach (var resource in resources)
+            {
+                var find = "src=\"cid:" + resource.ContentId + "\"";
+                var imageData = ComposeImageData(resource);
+                content = content.Replace(find, "src=\"" + imageData + "\"");
+            }
+
+            return content;
+        }
+
+        static string ComposeImageData(LinkedResource resource)
+        {
+            var contentType = resource.ContentType.MediaType;
+            var bytes = ReadFully(resource.ContentStream);
+            return string.Format("data:{0};base64,{1}",
+                contentType,
+                Convert.ToBase64String(bytes));
+        }
+
+        static byte[] ReadFully(Stream input)
+        {
+            using (var ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
     }
 }
