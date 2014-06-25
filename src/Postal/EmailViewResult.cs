@@ -2,12 +2,16 @@
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
 namespace Postal
 {
+    /// <summary>
+    /// Renders a preview of an email to display in the browser.
+    /// </summary>
     public class EmailViewResult : ViewResult
     {
         const string TextContentType = "text/plain";
@@ -15,9 +19,11 @@ namespace Postal
 
         IEmailViewRenderer Renderer { get; set; }
         IEmailParser Parser { get; set; }
-
         Email Email { get; set; }
 
+        /// <summary>
+        /// Creates a new <see cref="EmailViewResult"/>.
+        /// </summary>
         public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser)
         {
             Email = email;
@@ -25,6 +31,9 @@ namespace Postal
             Parser = parser ?? new EmailParser(Renderer);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="EmailViewResult"/>.
+        /// </summary>
         public EmailViewResult(Email email)
             : this(email, null, null)
         {
@@ -32,19 +41,21 @@ namespace Postal
 
         public override void ExecuteResult(ControllerContext context)
         {
-            HttpContextBase httpContext = context.RequestContext.HttpContext;
-
+            var httpContext = context.RequestContext.HttpContext;
             var query = httpContext.Request.QueryString;
-            string format = query["format"];
-
-            string contentType = ExecuteResult(context.HttpContext.Response.Output, format);
+            var format = query["format"];
+            var contentType = ExecuteResult(context.HttpContext.Response.Output, format);
             httpContext.Response.ContentType = contentType;
         }
 
+        /// <summary>
+        /// Writes the email preview in the given format.
+        /// </summary>
+        /// <returns>The content type for the HTTP response.</returns>
         public string ExecuteResult(TextWriter writer, string format = null)
         {
-            string result = Renderer.Render(Email);
-            MailMessage mailMessage = Parser.Parse(result, Email);
+            var result = Renderer.Render(Email);
+            var mailMessage = Parser.Parse(result, Email);
 
             // no special requests; render what's in the template
             if (string.IsNullOrEmpty(format))
@@ -55,13 +66,13 @@ namespace Postal
                     return TextContentType;
                 }
 
-                TemplateParts template = Extract(result);
+                var template = Extract(result);
                 template.Write(writer);
                 return HtmlContentType;
             }
 
             // Check if alternative 
-            string alternativeContentType = CheckAlternativeViews(writer, mailMessage, format);
+            var alternativeContentType = CheckAlternativeViews(writer, mailMessage, format);
 
             if (!string.IsNullOrEmpty(alternativeContentType))
                 return alternativeContentType;
@@ -80,7 +91,7 @@ namespace Postal
                 if (!mailMessage.IsBodyHtml)
                     throw new NotSupportedException("No html view available for this email");
 
-                TemplateParts template = Extract(result);
+                var template = Extract(result);
                 template.Write(writer);
                 return HtmlContentType;
             }
@@ -90,7 +101,7 @@ namespace Postal
 
         static string CheckAlternativeViews(TextWriter writer, MailMessage mailMessage, string format)
         {
-            string contentType = format == "html"
+            var contentType = format == "html"
                 ? HtmlContentType
                 : TextContentType;
 
@@ -112,18 +123,23 @@ namespace Postal
             return contentType;
         }
 
-        private class TemplateParts
+        class TemplateParts
         {
-            public string Header { get; set; }
+            readonly string header;
+            readonly string body;
 
-            public string Body { get; set; }
+            public TemplateParts(string header, string body)
+            {
+                this.header = header;
+                this.body = body;
+            }
 
             public void Write(TextWriter writer)
             {
                 writer.WriteLine("<!--");
-                writer.WriteLine(Header);
+                writer.WriteLine(header);
                 writer.WriteLine("-->");
-                writer.WriteLine(Body);
+                writer.WriteLine(body);
             }
         }
 
@@ -134,17 +150,13 @@ namespace Postal
             using (var reader = new StringReader(template))
             {
                 // try to read until we passed headers
-                string line = reader.ReadLine();
+                var line = reader.ReadLine();
 
                 while (line != null)
                 {
                     if (string.IsNullOrEmpty(line))
                     {
-                        return new TemplateParts
-                        {
-                            Header = headerBuilder.ToString(),
-                            Body = reader.ReadToEnd(),
-                        };
+                        return new TemplateParts(headerBuilder.ToString(), reader.ReadToEnd());
                     }
 
                     headerBuilder.AppendLine(line);
