@@ -39,6 +39,9 @@ namespace Postal
         {
         }
 
+        /// <summary>
+        /// When called by the action invoker, renders the view to the response.
+        /// </summary>
         public override void ExecuteResult(ControllerContext context)
         {
             var httpContext = context.RequestContext.HttpContext;
