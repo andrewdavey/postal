@@ -39,5 +39,8 @@ docs:
   url: create-mail-message.html
   description: Instead of directly sending email, Postal can just create a `System.Net.MailMessage` object for you.
 
+- text: Preview Generated Emails
+  url: previewing-emails.html
+  description: During development it can be handy to preview generated emails in the browser. Postal can handle that with a one-liner.
 
 
