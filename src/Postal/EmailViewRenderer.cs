@@ -40,7 +40,7 @@ namespace Postal
             viewName = viewName ?? email.ViewName;
             var controllerContext = CreateControllerContext();
             var view = CreateView(viewName, controllerContext);
-            var viewOutput = RenderView(view, email.ViewData, controllerContext);
+            var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder);
             return viewOutput;
         }
 
@@ -69,7 +69,7 @@ namespace Postal
             {
                 return "http://localhost";
             }
-            
+
             return httpContext.Request.Url.GetLeftPart(UriPartial.Authority) +
                    httpContext.Request.ApplicationPath;
         }
@@ -81,18 +81,20 @@ namespace Postal
                 return result.View;
 
             throw new Exception(
-                "Email view not found for " + viewName + 
+                "Email view not found for " + viewName +
                 ". Locations searched:" + Environment.NewLine +
                 string.Join(Environment.NewLine, result.SearchedLocations)
             );
         }
 
-        string RenderView(IView view, ViewDataDictionary viewData, ControllerContext controllerContext)
+        string RenderView(IView view, ViewDataDictionary viewData, ControllerContext controllerContext, ImageEmbedder imageEmbedder)
         {
             using (var writer = new StringWriter())
             {
                 var viewContext = new ViewContext(controllerContext, view, viewData, new TempDataDictionary(), writer);
+                viewData[ImageEmbedder.ViewDataKey] = imageEmbedder;
                 view.Render(viewContext, writer);
+                viewData.Remove(ImageEmbedder.ViewDataKey);
                 return writer.GetStringBuilder().ToString();
             }
         }

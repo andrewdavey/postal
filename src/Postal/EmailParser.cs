@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -44,8 +45,20 @@ namespace Postal
                 AssignCommonHeaders(message, email);
                 if (message.AlternateViews.Count == 0)
                 {
-                    message.Body = reader.ReadToEnd().Trim();
-                    if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
+                    var messageBody = reader.ReadToEnd().Trim();
+                    if (email.ImageEmbedder.HasImages)
+                    {
+                        var view = AlternateView.CreateAlternateViewFromString(messageBody, new ContentType("text/html"));
+                        email.ImageEmbedder.AddImagesToView(view);
+                        message.AlternateViews.Add(view);
+                        message.Body = "Plain text not available.";
+                        message.IsBodyHtml = false;
+                    }
+                    else
+                    {
+                        message.Body = messageBody;
+                        if (message.Body.StartsWith("<")) message.IsBodyHtml = true;
+                    }
                 }
 
                 AddAttachments(message, email);
@@ -126,8 +139,6 @@ namespace Postal
         AlternateView CreateAlternativeView(Email email, string alternativeViewName)
         {
             var fullViewName = GetAlternativeViewName(email, alternativeViewName);
-            var imageEmbedder = new ImageEmbedder();
-            email.ViewData["Postal.ImageEmbedder"] = imageEmbedder;
             var output = alternativeViewRenderer.Render(email, fullViewName);
 
             string contentType;
@@ -164,8 +175,7 @@ namespace Postal
                 // A different charset can be specified in the Content-Type header.
                 // e.g. Content-Type: text/html; charset=utf-8
             }
-            imageEmbedder.AddImagesToView(alternativeView);
-            email.ViewData.Remove("Postal.ImageEmbedder");
+            email.ImageEmbedder.AddImagesToView(alternativeView);
             return alternativeView;
         }
 

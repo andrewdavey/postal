@@ -24,7 +24,7 @@ namespace Postal
             {
                 imagePathOrUrl = html.ViewContext.HttpContext.Server.MapPath(imagePathOrUrl);
             }
-            var imageEmbedder = (ImageEmbedder)html.ViewData["Postal.ImageEmbedder"];
+            var imageEmbedder = (ImageEmbedder)html.ViewData[ImageEmbedder.ViewDataKey];
             var resource = imageEmbedder.ReferenceImage(imagePathOrUrl);
             return new HtmlString(string.Format("<img src=\"cid:{0}\" alt=\"{1}\"/>", resource.ContentId, html.AttributeEncode(alt)));
         }

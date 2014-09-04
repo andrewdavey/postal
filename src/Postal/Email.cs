@@ -27,6 +27,7 @@ namespace Postal
             Attachments = new List<Attachment>();
             ViewName = viewName;
             ViewData = new ViewDataDictionary(this);
+            ImageEmbedder = new ImageEmbedder();
         }
 
         /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
@@ -36,6 +37,7 @@ namespace Postal
             Attachments = new List<Attachment>();
             ViewName = DeriveViewNameFromClassName();
             ViewData = new ViewDataDictionary(this);
+            ImageEmbedder = new ImageEmbedder();
         }
 
         /// <summary>
@@ -52,6 +54,8 @@ namespace Postal
         /// The attachments to send with the email.
         /// </summary>
         public List<Attachment> Attachments { get; set; }
+
+        internal ImageEmbedder ImageEmbedder { get; private set; }
 
         /// <summary>
         /// Adds an attachment to the email.

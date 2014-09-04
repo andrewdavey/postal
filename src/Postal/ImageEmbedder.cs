@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.IO;
 using System.Net.Mime;
 using System.Net;
-using System.Text.RegularExpressions;
 
 namespace Postal
 {
@@ -15,8 +13,10 @@ namespace Postal
     /// </summary>
     public class ImageEmbedder
     {
+        internal static string ViewDataKey = "Postal.ImageEmbedder";
+
         /// <summary>
-        /// Creats a new <see cref="ImageEmbedder"/>.
+        /// Creates a new <see cref="ImageEmbedder"/>.
         /// </summary>
         public ImageEmbedder()
         {
@@ -34,6 +34,11 @@ namespace Postal
 
         readonly Func<string, LinkedResource> createLinkedResource;
         readonly Dictionary<string, LinkedResource> images = new Dictionary<string, LinkedResource>();
+
+        public bool HasImages
+        {
+            get { return images.Count > 0; }
+        }
 
         /// <summary>
         /// Creates a <see cref="LinkedResource"/> from an image path or URL.
