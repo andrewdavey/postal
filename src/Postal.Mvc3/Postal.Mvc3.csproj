@@ -91,6 +91,9 @@
     <Compile Include="..\Postal\EmailViewRenderer.cs">
       <Link>EmailViewRenderer.cs</Link>
     </Compile>
+    <Compile Include="..\Postal\EmailViewResult.cs">
+      <Link>EmailViewResult.cs</Link>
+    </Compile>
     <Compile Include="..\Postal\FileSystemRazorView.cs">
       <Link>FileSystemRazorView.cs</Link>
     </Compile>
