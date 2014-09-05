@@ -35,6 +35,9 @@ namespace Postal
         readonly Func<string, LinkedResource> createLinkedResource;
         readonly Dictionary<string, LinkedResource> images = new Dictionary<string, LinkedResource>();
 
+        /// <summary>
+        /// Gets if any images have been referenced.
+        /// </summary>
         public bool HasImages
         {
             get { return images.Count > 0; }
