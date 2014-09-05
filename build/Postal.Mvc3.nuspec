@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Postal.Mvc3</id>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <title>Postal for MVC3</title>
     <authors>Andrew Davey</authors>
     <owners>Andrew Davey</owners>
