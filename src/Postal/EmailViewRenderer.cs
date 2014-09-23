@@ -61,7 +61,7 @@ namespace Postal
             var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
 
-            // if populated will add searching Areas for the view
+            // if populated will add searching the named Area for the view
             if (!string.IsNullOrWhiteSpace(areaName))
                 routeData.DataTokens["Area"] = areaName;
 
