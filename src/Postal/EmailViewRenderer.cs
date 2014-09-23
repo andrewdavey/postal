@@ -38,13 +38,18 @@ namespace Postal
         public string Render(Email email, string viewName = null)
         {
             viewName = viewName ?? email.ViewName;
-            var controllerContext = CreateControllerContext();
+            var controllerContext = CreateControllerContext(email.AreaName);
             var view = CreateView(viewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder);
             return viewOutput;
         }
 
-        ControllerContext CreateControllerContext()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
+        /// <returns></returns>
+        ControllerContext CreateControllerContext(string areaName)
         {
             // A dummy HttpContextBase that is enough to allow the view to be rendered.
             var httpContext = new HttpContextWrapper(
@@ -55,6 +60,11 @@ namespace Postal
             );
             var routeData = new RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
+
+            // if populated will add searching Areas for the view
+            if (!string.IsNullOrWhiteSpace(areaName))
+                routeData.DataTokens["Area"] = areaName;
+
             var requestContext = new RequestContext(httpContext, routeData);
             var stubController = new StubController();
             var controllerContext = new ControllerContext(requestContext, stubController);

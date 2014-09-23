@@ -30,6 +30,17 @@ namespace Postal
             ImageEmbedder = new ImageEmbedder();
         }
 
+        /// <summary>
+        /// Creates a new Email, that will render the given view.
+        /// </summary>
+        /// <param name="viewName">The name of the view to render</param>
+        /// <param name="areaName">The name of the area containing the view to render</param>
+        public Email(string viewName, string areaName)
+            : this(viewName)
+        {
+            AreaName = areaName;
+        }
+
         /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
         /// <remarks>Used when defining strongly typed Email classes.</remarks>
         protected Email()
@@ -44,6 +55,11 @@ namespace Postal
         /// The name of the view containing the email template.
         /// </summary>
         public string ViewName { get; set; }
+
+        /// <summary>
+        /// The name of the area containing the email template.
+        /// </summary>
+        public string AreaName { get; set; }
 
         /// <summary>
         /// The view data to pass to the view.
