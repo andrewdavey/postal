@@ -54,7 +54,17 @@ namespace Postal
             {
                 var client = new WebClient();
                 var bytes = client.DownloadData(imagePathOrUrl);
-                return new LinkedResource(new MemoryStream(bytes));
+
+                // get content type from response
+                string contentType = client.ResponseHeaders[HttpResponseHeader.ContentType];
+                if (!String.IsNullOrWhiteSpace( contentType ))
+                {
+                    return new LinkedResource( new MemoryStream( bytes ), new ContentType( contentType ) );
+                }
+                else
+                {
+                    return new LinkedResource( new MemoryStream( bytes ));
+                }
             }
             else
             {
