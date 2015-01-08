@@ -24,6 +24,15 @@ namespace Postal
         Task SendAsync(Email email);
 
         /// <summary>
+        /// Saves a copy of the email to a file.  Using this you can
+        /// save a file and then also use the Send() function to send the email.
+        /// </summary>
+        /// <param name="path">The full path to the folder where you want to save the file.
+        /// <param name="email">The email to send.</param>
+        /// For example, "c:\emails" </param>
+        void SaveToFile(Email email, string path);
+
+        /// <summary>
         /// Creates a new <see cref="MailMessage"/> for the given email. You can
         /// modify the message, for example adding attachments, and then send this yourself.
         /// </summary>

@@ -75,6 +75,14 @@ namespace Postal
         }
 
         /// <summary>
+        /// Convenience method that sends this email asynchronously via a default EmailService. 
+        /// </summary>
+        public Task SendAsync()
+        {
+            return CreateEmailService().SendAsync(this);
+        }
+
+        /// <summary>
         /// Convenience method that saves a copy of the email to a file.  Using this you can
         /// save a file and then also use the Send() function to send the email.
         /// </summary>
@@ -82,23 +90,7 @@ namespace Postal
         /// For example, "c:\emails" </param>
         public void SaveToFile(string path)
         {
-            var service = new EmailService();
-            MailMessage message = service.CreateMailMessage(this);
-
-            SmtpClient client = new SmtpClient("SaveEmailSMTPClient");
-            client.EnableSsl = false;
-            client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-            client.PickupDirectoryLocation = path;
-            client.Send(message);
-            client.Dispose();
-        }
-
-        /// <summary>
-        /// Convenience method that sends this email asynchronously via a default EmailService. 
-        /// </summary>
-        public Task SendAsync()
-        {
-            return CreateEmailService().SendAsync(this);
+            CreateEmailService().SaveToFile(this, path);
         }
 
         /// <summary>
