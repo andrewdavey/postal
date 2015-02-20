@@ -29,6 +29,23 @@ namespace Postal
             ViewData = new ViewDataDictionary(this);
             ImageEmbedder = new ImageEmbedder();
         }
+        
+        /// <summary>
+        /// Creates a new Email, that will render the given view.
+        /// </summary>
+        /// <param name="viewName">The name of the view to render</param>
+        /// <param name="model">The model associate of the view to render</param>
+        public Email(string viewName, object model)
+        {
+            if (viewName == null) throw new ArgumentNullException("viewName");
+            if (string.IsNullOrWhiteSpace(viewName)) throw new ArgumentException("View name cannot be empty.", "viewName");
+            if (model == null) throw new ArgumentNullException("model");
+         
+            Attachments = new List<Attachment>();
+            ViewName = viewName;
+            ViewData = new ViewDataDictionary(model);
+            ImageEmbedder = new ImageEmbedder();
+        }
 
         /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
         /// <remarks>Used when defining strongly typed Email classes.</remarks>
