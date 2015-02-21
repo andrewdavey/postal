@@ -55,6 +55,20 @@ namespace Postal
         }
 
         /// <summary>
+        /// Sends an email using an <see cref="SmtpClient"/>.
+        /// </summary>
+        /// <param name="email">The email to send.</param>
+        /// <param name="viewName">The name of the view to render.</param>
+        public void Send(string viewName, Email email)
+        {
+            using (var mailMessage = CreateMailMessage(viewName, email))
+            using (var smtp = createSmtpClient())
+            {
+                smtp.Send(mailMessage);
+            }
+        }
+
+        /// <summary>
         /// Send an email asynchronously, using an <see cref="SmtpClient"/>.
         /// </summary>
         /// <param name="email">The email to send.</param>
@@ -117,5 +131,21 @@ namespace Postal
             var mailMessage = emailParser.Parse(rawEmailString, email);
             return mailMessage;
         }
+
+        /// <summary>
+        /// Renders the email view and builds a <see cref="MailMessage"/>. Does not send the email.
+        /// </summary>
+        /// <param name="email">The email to render.</param>
+        /// <param name="viewName">The name of the view to render.</param>
+        /// <returns>A <see cref="MailMessage"/> containing the rendered email.</returns>
+        public MailMessage CreateMailMessage(string viewName, Email email)
+        {
+            var rawEmailString = emailViewRenderer.Render(email, viewName);
+            var mailMessage = emailParser.Parse(rawEmailString, email);
+            return mailMessage;
+        }
+
+
+
     }
 }
