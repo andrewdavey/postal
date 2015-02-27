@@ -15,8 +15,9 @@ namespace Postal
         /// <param name="html">The <see cref="HtmlHelper"/>.</param>
         /// <param name="imagePathOrUrl">An image file path or URL. A file path can be relative to the web application root directory.</param>
         /// <param name="alt">The content for the &lt;img alt&gt; attribute.</param>
+        /// <param name="style">The content for the &lt;style&gt; attribute.</param>
         /// <returns>An HTML &lt;img&gt; tag.</returns>
-        public static IHtmlString EmbedImage(this HtmlHelper html, string imagePathOrUrl, string alt = "")
+        public static IHtmlString EmbedImage(this HtmlHelper html, string imagePathOrUrl, string alt = "", string style = "")
         {
             if (string.IsNullOrWhiteSpace(imagePathOrUrl)) throw new ArgumentException("Path or URL required", "imagePathOrUrl");
 
@@ -26,7 +27,7 @@ namespace Postal
             }
             var imageEmbedder = (ImageEmbedder)html.ViewData[ImageEmbedder.ViewDataKey];
             var resource = imageEmbedder.ReferenceImage(imagePathOrUrl);
-            return new HtmlString(string.Format("<img src=\"cid:{0}\" alt=\"{1}\"/>", resource.ContentId, html.AttributeEncode(alt)));
+            return new HtmlString(string.Format("<img src=\"cid:{0}\" alt=\"{1}\" style=\"{2}\"/>", resource.ContentId, html.AttributeEncode(alt), html.AttributeEncode(style)));
         }
 
         static bool IsFileName(string pathOrUrl)
