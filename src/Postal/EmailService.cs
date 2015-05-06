@@ -59,50 +59,19 @@ namespace Postal
         /// </summary>
         /// <param name="email">The email to send.</param>
         /// <returns>A <see cref="Task"/> that completes once the email has been sent.</returns>
-        public Task SendAsync(Email email)
+        public async Task SendAsync(Email email)
         {
             // Wrap the SmtpClient's awkward async API in the much nicer Task pattern.
-            // However, we must be careful to dispose of the resources we create correctly.
-            var mailMessage = CreateMailMessage(email);
-            try
-            {
-                var smtp = createSmtpClient();
-                try
+            using (var mailMessage = CreateMailMessage(email))
+            { 
+                using (var smtp = createSmtpClient())
                 {
-                    var taskCompletionSource = new TaskCompletionSource<object>();
-
-                    smtp.SendCompleted += (o, e) =>
-                    {
-                        smtp.Dispose();
-                        mailMessage.Dispose();
-
-                        if (e.Error != null)
-                        {
-                            taskCompletionSource.TrySetException(e.Error);
-                        }
-                        else if (e.Cancelled)
-                        {
-                            taskCompletionSource.TrySetCanceled();
-                        }
-                        else // Success
-                        {
-                            taskCompletionSource.TrySetResult(null);
-                        }
-                    };
-
-                    smtp.SendAsync(mailMessage, null);
-                    return taskCompletionSource.Task;
+#if NET45
+                    await smtp.SendMailAsync(mailMessage);
+#else
+                    await smtp.SendTaskAsync(mailMessage);
+#endif
                 }
-                catch
-                {
-                    smtp.Dispose();
-                    throw;
-                }
-            }
-            catch
-            {
-                mailMessage.Dispose();
-                throw;
             }
         }
 
