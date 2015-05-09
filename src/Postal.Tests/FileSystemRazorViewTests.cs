@@ -40,5 +40,33 @@ namespace Postal
                 File.Delete(filename);
             }
         }
+
+        [Fact]
+        public void Layout_template_is_supported()
+        {
+            var tempPath = Path.GetTempPath();
+            var layoutFilename = Path.Combine(tempPath, "layout.cshtml");
+            var bodyFilename = Path.Combine(tempPath, "body.cshtml");
+            File.WriteAllText(layoutFilename, "layout-test\r\n@RenderBody()");
+            File.WriteAllText(bodyFilename, "@{Layout=\"layout.cshtml\";}\r\nbody-test");
+            try
+            {
+                var engine = new FileSystemRazorViewEngine(tempPath);
+                var view = engine.FindView(null, "body", null, true).View;
+                var context = new Mock<ViewContext>();
+                context.Setup(c => c.ViewData).Returns(new ViewDataDictionary(new object()));
+                using (var writer = new StringWriter())
+                {
+                    view.Render(context.Object, writer);
+                    var content = writer.GetStringBuilder().ToString();
+                    Assert.Equal("layout-test\r\n\r\nbody-test", content);
+                }
+            }
+            finally
+            {
+                File.Delete(layoutFilename);
+                File.Delete(bodyFilename);
+            }
+        }
     }
 }
