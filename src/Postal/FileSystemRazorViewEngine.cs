@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using RazorEngine.Configuration;
+using RazorEngine.Templating;
 
 namespace Postal
 {
@@ -13,6 +15,7 @@ namespace Postal
     public class FileSystemRazorViewEngine : IViewEngine
     {
         readonly string viewPathRoot;
+        readonly ITemplateService razorService;
 
         /// <summary>
         /// Creates a new <see cref="FileSystemRazorViewEngine"/> that finds views within the given path.
@@ -21,6 +24,10 @@ namespace Postal
         public FileSystemRazorViewEngine(string viewPathRoot)
         {
             this.viewPathRoot = viewPathRoot;
+
+            var razorConfig = new TemplateServiceConfiguration();
+            razorConfig.Resolver = new DelegateTemplateResolver(ResolveTemplate);
+            razorService = new TemplateService(razorConfig);
         }
 
         string GetViewFullPath(string path)
@@ -28,36 +35,54 @@ namespace Postal
             return Path.Combine(viewPathRoot, path);
         }
 
-        /// <summary>
-        /// Tries to find a razor view (.cshtml or .vbhtml files).
-        /// </summary>
-        public ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
+        private string ResolveTemplate(string viewName)
+        {
+            var path = ResolveTemplatePath(viewName);
+            if (path == null) return null;
+            return File.ReadAllText(path);
+        }
+
+        private string ResolveTemplatePath(string viewName)
+        {
+            IEnumerable<string> searchedPaths;
+            var existingPath = ResolveTemplatePath(viewName, out searchedPaths);
+            return existingPath;
+        }
+
+        private string ResolveTemplatePath(string viewName, out IEnumerable<string> searchedPaths )
         {
             var possibleFilenames = new List<string>();
 
-            if (!partialViewName.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase)
-                && !partialViewName.EndsWith(".vbhtml", StringComparison.OrdinalIgnoreCase))
+            if (!viewName.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase)
+                && !viewName.EndsWith(".vbhtml", StringComparison.OrdinalIgnoreCase))
             {
-                possibleFilenames.Add(partialViewName + ".cshtml");
-                possibleFilenames.Add(partialViewName + ".vbhtml");
+                possibleFilenames.Add(viewName + ".cshtml");
+                possibleFilenames.Add(viewName + ".vbhtml");
             }
             else
             {
-                possibleFilenames.Add(partialViewName);
+                possibleFilenames.Add(viewName);
             }
 
             var possibleFullPaths = possibleFilenames.Select(GetViewFullPath).ToArray();
 
             var existingPath = possibleFullPaths.FirstOrDefault(File.Exists);
+            searchedPaths = possibleFullPaths;
+            return existingPath;
+        }
+
+        /// <summary>
+        /// Tries to find a razor view (.cshtml or .vbhtml files).
+        /// </summary>
+        public ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
+        {
+            IEnumerable<string> searchedPaths;
+            var existingPath = ResolveTemplatePath(partialViewName, out searchedPaths);
 
             if (existingPath != null)
-            {
-                return new ViewEngineResult(new FileSystemRazorView(existingPath), this);
-            }
-            else
-            {
-                return new ViewEngineResult(possibleFullPaths);
-            }
+                return new ViewEngineResult(new FileSystemRazorView(razorService, existingPath), this);
+
+            return new ViewEngineResult(searchedPaths);
         }
 
         /// <summary>
