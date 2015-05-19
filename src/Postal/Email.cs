@@ -55,7 +55,10 @@ namespace Postal
         /// </summary>
         public List<Attachment> Attachments { get; set; }
 
-        internal ImageEmbedder ImageEmbedder { get; private set; }
+        /// <summary>
+        /// ImageEmbedder that generates embed images from linked resources
+        /// </summary>
+        public ImageEmbedder ImageEmbedder { get; private set; }
 
         /// <summary>
         /// Adds an attachment to the email.
