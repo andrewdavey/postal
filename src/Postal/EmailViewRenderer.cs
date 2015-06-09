@@ -35,10 +35,10 @@ namespace Postal
         /// <param name="email">The email to render.</param>
         /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
         /// <returns>The rendered email view output.</returns>
-        public string Render(Email email, string viewName = null)
+        public string Render(Email email, string viewName = null, HttpRequestBase request = null)
         {
             viewName = viewName ?? email.ViewName;
-            var controllerContext = CreateControllerContext(email.AreaName);
+            var controllerContext = CreateControllerContext(email.AreaName, request);
             var view = CreateView(viewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder);
             return viewOutput;
@@ -49,12 +49,12 @@ namespace Postal
         /// </summary>
         /// <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
         /// <returns></returns>
-        ControllerContext CreateControllerContext(string areaName)
+        ControllerContext CreateControllerContext(string areaName, HttpRequestBase request = null)
         {
             // A dummy HttpContextBase that is enough to allow the view to be rendered.
             var httpContext = new HttpContextWrapper(
                 new HttpContext(
-                    new HttpRequest("", UrlRoot(), ""),
+                    new HttpRequest("", UrlRoot(request), ""),
                     new HttpResponse(TextWriter.Null)
                 )
             );
@@ -72,8 +72,13 @@ namespace Postal
             return controllerContext;
         }
 
-        string UrlRoot()
+        string UrlRoot(HttpRequestBase request = null)
         {
+            if (request != null)
+            {
+                return request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath;
+            }
+
             var httpContext = HttpContext.Current;
             if (httpContext == null)
             {

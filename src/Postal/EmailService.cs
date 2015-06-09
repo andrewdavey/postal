@@ -10,6 +10,8 @@ namespace Postal
     /// </summary>
     public class EmailService : IEmailService
     {
+        public System.Web.HttpRequestBase Request { get; set; }
+
         /// <summary>
         /// Creates a new cref="EmailService"/, using the default view engines.
         /// </summary>
@@ -113,7 +115,7 @@ namespace Postal
         /// <returns>A <see cref="MailMessage"/> containing the rendered email.</returns>
         public MailMessage CreateMailMessage(Email email)
         {
-            var rawEmailString = emailViewRenderer.Render(email);
+            var rawEmailString = emailViewRenderer.Render(email, request: Request);
             var mailMessage = emailParser.Parse(rawEmailString, email);
             return mailMessage;
         }
