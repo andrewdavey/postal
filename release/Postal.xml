@@ -1,0 +1,420 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Postal</name>
+    </assembly>
+    <members>
+        <member name="T:Postal.Email">
+            <summary>
+            An Email object has the name of the MVC view to render and a view data dictionary
+            to store the data to render. It is best used as a dynamic object, just like the 
+            ViewBag property of a Controller. Any dynamic property access is mapped to the
+            view data dictionary.
+            </summary>
+        </member>
+        <member name="M:Postal.Email.#ctor(System.String)">
+            <summary>
+            Creates a new Email, that will render the given view.
+            </summary>
+            <param name="viewName">The name of the view to render</param>
+        </member>
+        <member name="M:Postal.Email.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new Email, that will render the given view.
+            </summary>
+            <param name="viewName">The name of the view to render</param>
+            <param name="areaName">The name of the area containing the view to render</param>
+        </member>
+        <member name="M:Postal.Email.#ctor">
+            <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
+            <remarks>Used when defining strongly typed Email classes.</remarks>
+        </member>
+        <member name="M:Postal.Email.Attach(System.Net.Mail.Attachment)">
+            <summary>
+            Adds an attachment to the email.
+            </summary>
+            <param name="attachment">The attachment to add.</param>
+        </member>
+        <member name="M:Postal.Email.Send">
+            <summary>
+            Convenience method that sends this email via a default EmailService. 
+            </summary>
+        </member>
+        <member name="M:Postal.Email.SendAsync">
+            <summary>
+            Convenience method that sends this email asynchronously via a default EmailService. 
+            </summary>
+        </member>
+        <member name="F:Postal.Email.CreateEmailService">
+            <summary>
+            A function that returns an instance of <see cref="T:Postal.IEmailService"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.Email.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+            <summary>
+            Stores the given value into the <see cref="P:Postal.Email.ViewData"/>.
+            </summary>
+            <param name="binder">Provides the name of the view data property.</param>
+            <param name="value">The value to store.</param>
+            <returns>Always returns true.</returns>
+        </member>
+        <member name="M:Postal.Email.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+            <summary>
+            Tries to get a stored value from <see cref="P:Postal.Email.ViewData"/>.
+            </summary>
+            <param name="binder">Provides the name of the view data property.</param>
+            <param name="result">If found, this is the view data property value.</param>
+            <returns>True if the property was found, otherwise false.</returns>
+        </member>
+        <member name="P:Postal.Email.ViewName">
+            <summary>
+            The name of the view containing the email template.
+            </summary>
+        </member>
+        <member name="P:Postal.Email.AreaName">
+            <summary>
+            The name of the area containing the email template.
+            </summary>
+        </member>
+        <member name="P:Postal.Email.ViewData">
+            <summary>
+            The view data to pass to the view.
+            </summary>
+        </member>
+        <member name="P:Postal.Email.Attachments">
+            <summary>
+            The attachments to send with the email.
+            </summary>
+        </member>
+        <member name="T:Postal.EmailParser">
+            <summary>
+            Converts the raw string output of a view into a <see cref="T:System.Net.Mail.MailMessage"/>.
+            </summary>
+        </member>
+        <member name="T:Postal.IEmailParser">
+            <summary>
+            Parses raw string output of email views into <see cref="T:System.Net.Mail.MailMessage"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.IEmailParser.Parse(System.String,Postal.Email)">
+            <summary>
+            Creates a <see cref="T:System.Net.Mail.MailMessage"/> from the string output of an email view.
+            </summary>
+            <param name="emailViewOutput">The string output of the email view.</param>
+            <param name="email">The email data used to render the view.</param>
+            <returns>The created <see cref="T:System.Net.Mail.MailMessage"/></returns>
+        </member>
+        <member name="M:Postal.EmailParser.#ctor(Postal.IEmailViewRenderer)">
+            <summary>
+            Creates a new <see cref="T:Postal.EmailParser"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailParser.Parse(System.String,Postal.Email)">
+            <summary>
+            Parses the email view output into a <see cref="T:System.Net.Mail.MailMessage"/>.
+            </summary>
+            <param name="emailViewOutput">The email view output.</param>
+            <param name="email">The <see cref="T:Postal.Email"/> used to generate the output.</param>
+            <returns>A <see cref="T:System.Net.Mail.MailMessage"/> containing the email headers and content.</returns>
+        </member>
+        <member name="T:Postal.EmailService">
+            <summary>
+            Sends email using the default <see cref="T:System.Net.Mail.SmtpClient"/>.
+            </summary>
+        </member>
+        <member name="T:Postal.IEmailService">
+            <summary>
+            Creates and send email.
+            </summary>
+        </member>
+        <member name="M:Postal.IEmailService.Send(Postal.Email)">
+            <summary>
+            Creates and sends a <see cref="T:System.Net.Mail.MailMessage"/> using <see cref="T:System.Net.Mail.SmtpClient"/>.
+            This uses the default configuration for mail defined in web.config.
+            </summary>
+            <param name="email">The email to send.</param>
+        </member>
+        <member name="M:Postal.IEmailService.SendAsync(Postal.Email)">
+            <summary>
+            Creates and sends a <see cref="T:System.Net.Mail.MailMessage"/> asynchronously using <see cref="T:System.Net.Mail.SmtpClient"/>.
+            This uses the default configuration for mail defined in web.config.
+            </summary>
+            <param name="email">The email to send.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> that can be used to await completion of sending the email.</returns>
+        </member>
+        <member name="M:Postal.IEmailService.CreateMailMessage(Postal.Email)">
+            <summary>
+            Creates a new <see cref="T:System.Net.Mail.MailMessage"/> for the given email. You can
+            modify the message, for example adding attachments, and then send this yourself.
+            </summary>
+            <param name="email">The email to generate.</param>
+            <returns>A new <see cref="T:System.Net.Mail.MailMessage"/>.</returns>
+        </member>
+        <member name="M:Postal.EmailService.#ctor">
+            <summary>
+            Creates a new cref="EmailService"/, using the default view engines.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailService.#ctor(System.Web.Mvc.ViewEngineCollection,System.Func{System.Net.Mail.SmtpClient})">
+            <summary>Creates a new <see cref="T:Postal.EmailService"/>, using the given view engines.</summary>
+            <param name="viewEngines">The view engines to use when creating email views.</param>
+            <param name="createSmtpClient">A function that creates a <see cref="T:System.Net.Mail.SmtpClient"/>. If null, a default creation function is used.</param>
+        </member>
+        <member name="M:Postal.EmailService.#ctor(Postal.IEmailViewRenderer,Postal.IEmailParser,System.Func{System.Net.Mail.SmtpClient})">
+            <summary>
+            Creates a new <see cref="T:Postal.EmailService"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailService.Send(Postal.Email)">
+            <summary>
+            Sends an email using an <see cref="T:System.Net.Mail.SmtpClient"/>.
+            </summary>
+            <param name="email">The email to send.</param>
+        </member>
+        <member name="M:Postal.EmailService.SendAsync(Postal.Email)">
+            <summary>
+            Send an email asynchronously, using an <see cref="T:System.Net.Mail.SmtpClient"/>.
+            </summary>
+            <param name="email">The email to send.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> that completes once the email has been sent.</returns>
+        </member>
+        <member name="M:Postal.EmailService.CreateMailMessage(Postal.Email)">
+            <summary>
+            Renders the email view and builds a <see cref="T:System.Net.Mail.MailMessage"/>. Does not send the email.
+            </summary>
+            <param name="email">The email to render.</param>
+            <returns>A <see cref="T:System.Net.Mail.MailMessage"/> containing the rendered email.</returns>
+        </member>
+        <member name="T:Postal.EmailViewRenderer">
+            <summary>
+            Renders <see cref="T:Postal.Email"/> view's into raw strings using the MVC ViewEngine infrastructure.
+            </summary>
+        </member>
+        <member name="T:Postal.IEmailViewRenderer">
+            <summary>
+            Renders an email view.
+            </summary>
+        </member>
+        <member name="M:Postal.IEmailViewRenderer.Render(Postal.Email,System.String,System.Web.HttpRequestBase)">
+            <summary>
+            Renders an email view based on the provided view name.
+            </summary>
+            <param name="email">The email data to pass to the view.</param>
+            <param name="viewName">Optional, the name of the view. If null, the ViewName of the email will be used.</param>
+            <returns>The string result of rendering the email.</returns>
+        </member>
+        <member name="M:Postal.EmailViewRenderer.#ctor(System.Web.Mvc.ViewEngineCollection)">
+            <summary>
+            Creates a new <see cref="T:Postal.EmailViewRenderer"/> that uses the given view engines.
+            </summary>
+            <param name="viewEngines">The view engines to use when rendering email views.</param>
+        </member>
+        <member name="M:Postal.EmailViewRenderer.Render(Postal.Email,System.String,System.Web.HttpRequestBase)">
+            <summary>
+            Renders an email view.
+            </summary>
+            <param name="email">The email to render.</param>
+            <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
+            <returns>The rendered email view output.</returns>
+        </member>
+        <member name="M:Postal.EmailViewRenderer.CreateControllerContext(System.String,System.Web.HttpRequestBase)">
+            <summary>
+            
+            </summary>
+            <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
+            <returns></returns>
+        </member>
+        <member name="P:Postal.EmailViewRenderer.EmailViewDirectoryName">
+            <summary>
+            The name of the directory in "Views" that contains the email views.
+            By default, this is "Emails".
+            </summary>
+        </member>
+        <member name="T:Postal.EmailViewResult">
+            <summary>
+            Renders a preview of an email to display in the browser.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailViewResult.#ctor(Postal.Email,Postal.IEmailViewRenderer,Postal.IEmailParser)">
+            <summary>
+            Creates a new <see cref="T:Postal.EmailViewResult"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailViewResult.#ctor(Postal.Email)">
+            <summary>
+            Creates a new <see cref="T:Postal.EmailViewResult"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailViewResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
+            <summary>
+            When called by the action invoker, renders the view to the response.
+            </summary>
+        </member>
+        <member name="M:Postal.EmailViewResult.ExecuteResult(System.IO.TextWriter,System.String)">
+            <summary>
+            Writes the email preview in the given format.
+            </summary>
+            <returns>The content type for the HTTP response.</returns>
+        </member>
+        <member name="T:Postal.FileSystemRazorView">
+            <summary>
+            A view that uses the Razor engine to render a templates loaded directly from the
+            file system. This means it will work outside of ASP.NET.
+            </summary>
+        </member>
+        <member name="M:Postal.FileSystemRazorView.#ctor(System.String)">
+            <summary>
+            Creates a new <see cref="T:Postal.FileSystemRazorView"/> using the given view filename.
+            </summary>
+            <param name="filename">The filename of the view.</param>
+        </member>
+        <member name="M:Postal.FileSystemRazorView.Render(System.Web.Mvc.ViewContext,System.IO.TextWriter)">
+            <summary>
+            Renders the view into the given <see cref="T:System.IO.TextWriter"/>.
+            </summary>
+            <param name="viewContext">The <see cref="T:System.Web.Mvc.ViewContext"/> that contains the view data model.</param>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> used to write the rendered output.</param>
+        </member>
+        <member name="T:Postal.FileSystemRazorViewEngine">
+            <summary>
+            A view engine that uses the Razor engine to render a templates loaded directly from the
+            file system. This means it will work outside of ASP.NET.
+            </summary>
+        </member>
+        <member name="M:Postal.FileSystemRazorViewEngine.#ctor(System.String)">
+            <summary>
+            Creates a new <see cref="T:Postal.FileSystemRazorViewEngine"/> that finds views within the given path.
+            </summary>
+            <param name="viewPathRoot">The root directory that contains views.</param>
+        </member>
+        <member name="M:Postal.FileSystemRazorViewEngine.FindPartialView(System.Web.Mvc.ControllerContext,System.String,System.Boolean)">
+            <summary>
+            Tries to find a razor view (.cshtml or .vbhtml files).
+            </summary>
+        </member>
+        <member name="M:Postal.FileSystemRazorViewEngine.FindView(System.Web.Mvc.ControllerContext,System.String,System.String,System.Boolean)">
+            <summary>
+            Tries to find a razor view (.cshtml or .vbhtml files).
+            </summary>
+        </member>
+        <member name="M:Postal.FileSystemRazorViewEngine.ReleaseView(System.Web.Mvc.ControllerContext,System.Web.Mvc.IView)">
+            <summary>
+            Does nothing.
+            </summary>
+        </member>
+        <member name="T:Postal.HtmlExtensions">
+            <summary>
+            Helper methods that extend <see cref="T:System.Web.Mvc.HtmlHelper"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.HtmlExtensions.EmbedImage(System.Web.Mvc.HtmlHelper,System.String,System.String)">
+            <summary>
+            Embeds the given image into the email and returns an HTML &lt;img&gt; tag referencing the image.
+            </summary>
+            <param name="html">The <see cref="T:System.Web.Mvc.HtmlHelper"/>.</param>
+            <param name="imagePathOrUrl">An image file path or URL. A file path can be relative to the web application root directory.</param>
+            <param name="alt">The content for the &lt;img alt&gt; attribute.</param>
+            <returns>An HTML &lt;img&gt; tag.</returns>
+        </member>
+        <member name="T:Postal.ImageEmbedder">
+            <summary>
+            Used by the <see cref="M:Postal.HtmlExtensions.EmbedImage(System.Web.Mvc.HtmlHelper,System.String,System.String)"/> helper method.
+            It generates the <see cref="T:System.Net.Mail.LinkedResource"/> objects need to embed images into an email.
+            </summary>
+        </member>
+        <member name="M:Postal.ImageEmbedder.#ctor">
+            <summary>
+            Creates a new <see cref="T:Postal.ImageEmbedder"/>.
+            </summary>
+        </member>
+        <member name="M:Postal.ImageEmbedder.#ctor(System.Func{System.String,System.Net.Mail.LinkedResource})">
+            <summary>
+            Creates a new <see cref="T:Postal.ImageEmbedder"/>.
+            </summary>
+            <param name="createLinkedResource">A delegate that creates a <see cref="T:System.Net.Mail.LinkedResource"/> from an image path or URL.</param>
+        </member>
+        <member name="M:Postal.ImageEmbedder.CreateLinkedResource(System.String)">
+            <summary>
+            Creates a <see cref="T:System.Net.Mail.LinkedResource"/> from an image path or URL.
+            </summary>
+            <param name="imagePathOrUrl">The image path or URL.</param>
+            <returns>A new <see cref="T:System.Net.Mail.LinkedResource"/></returns>
+        </member>
+        <member name="M:Postal.ImageEmbedder.ReferenceImage(System.String,System.String)">
+            <summary>
+            Records a reference to the given image.
+            </summary>
+            <param name="imagePathOrUrl">The image path or URL.</param>
+            <param name="contentType">The content type of the image e.g. "image/png". If null, then content type is determined from the file name extension.</param>
+            <returns>A <see cref="T:System.Net.Mail.LinkedResource"/> representing the embedded image.</returns>
+        </member>
+        <member name="M:Postal.ImageEmbedder.AddImagesToView(System.Net.Mail.AlternateView)">
+            <summary>
+            Adds recorded <see cref="T:System.Net.Mail.LinkedResource"/> image references to the given <see cref="T:System.Net.Mail.AlternateView"/>.
+            </summary>
+        </member>
+        <member name="P:Postal.ImageEmbedder.HasImages">
+            <summary>
+            Gets if any images have been referenced.
+            </summary>
+        </member>
+        <member name="T:Postal.ParserUtils">
+            <summary>
+            Helper methods for parsing email.
+            </summary>
+        </member>
+        <member name="M:Postal.ParserUtils.ParseHeaders(System.IO.TextReader,System.Action{System.String,System.String})">
+            <summary>
+            Headers are of the form "(key): (value)" e.g. "Subject: Hello, world".
+            The headers block is terminated by an empty line.
+            </summary>
+        </member>
+        <member name="T:Postal.ResourceRazorView">
+            <summary>
+            An <see cref="T:System.Web.Mvc.IView"/> that reads its content from an assembly resource.
+            </summary>
+        </member>
+        <member name="M:Postal.ResourceRazorView.#ctor(System.Reflection.Assembly,System.String)">
+            <summary>
+            Creates a new <see cref="T:Postal.ResourceRazorView"/> for a given assembly and resource.
+            </summary>
+            <param name="sourceAssembly">The assembly containing the resource.</param>
+            <param name="resourcePath">The resource path.</param>
+        </member>
+        <member name="M:Postal.ResourceRazorView.Render(System.Web.Mvc.ViewContext,System.IO.TextWriter)">
+            <summary>
+            Renders the view into the given <see cref="T:System.IO.TextWriter"/>.
+            </summary>
+            <param name="viewContext">Contains the view data model.</param>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> used to write the rendered output.</param>
+        </member>
+        <member name="T:Postal.ResourceRazorViewEngine">
+            <summary>
+            A view engine that uses the Razor engine to render a templates loaded from assembly resource.
+            This means it will work outside of ASP.NET.
+            </summary>
+        </member>
+        <member name="M:Postal.ResourceRazorViewEngine.#ctor(System.Reflection.Assembly,System.String)">
+            <summary>
+            Creates a new <see cref="T:Postal.ResourceRazorViewEngine"/> that finds views in the given assembly.
+            </summary>
+            <param name="viewSourceAssembly">The assembly containing view resources.</param>
+            <param name="viewPathRoot">A common resource path prefix.</param>
+        </member>
+        <member name="M:Postal.ResourceRazorViewEngine.FindPartialView(System.Web.Mvc.ControllerContext,System.String,System.Boolean)">
+            <summary>
+            Tries to find a razor view (.cshtml or .vbhtml files).
+            </summary>
+        </member>
+        <member name="M:Postal.ResourceRazorViewEngine.FindView(System.Web.Mvc.ControllerContext,System.String,System.String,System.Boolean)">
+            <summary>
+            Tries to find a razor view (.cshtml or .vbhtml files).
+            </summary>
+        </member>
+        <member name="M:Postal.ResourceRazorViewEngine.ReleaseView(System.Web.Mvc.ControllerContext,System.Web.Mvc.IView)">
+            <summary>
+            Does nothing.
+            </summary>
+        </member>
+    </members>
+</doc>
