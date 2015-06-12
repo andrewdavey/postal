@@ -264,7 +264,14 @@ namespace Postal
                     }
                     break;
                 default:
-                    message.Headers[key] = value;
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        message.Headers[key] = "   (empty)";
+                    }
+                    else
+                    {
+                        message.Headers[key] = value;
+                    }
                     break;
             }
         }
