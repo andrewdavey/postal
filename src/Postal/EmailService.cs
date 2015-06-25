@@ -11,7 +11,7 @@ namespace Postal
     public class EmailService : IEmailService
     {
         /// <summary>
-        /// Creates a new cref="EmailService"/, using the default view engines.
+        /// Creates a new <see cref="EmailService"/>, using the default view engines.
         /// </summary>
         public EmailService() : this(ViewEngines.Engines)
         {
