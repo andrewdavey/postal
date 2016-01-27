@@ -9,7 +9,7 @@ namespace Postal
 {
     /// <summary>
     /// An Email object has the name of the MVC view to render and a view data dictionary
-    /// to store the data to render. It is best used as a dynamic object, just like the 
+    /// to store the data to render. It is best used as a dynamic object, just like the
     /// ViewBag property of a Controller. Any dynamic property access is mapped to the
     /// view data dictionary.
     /// </summary>
@@ -55,7 +55,10 @@ namespace Postal
         /// </summary>
         public List<Attachment> Attachments { get; set; }
 
-        internal ImageEmbedder ImageEmbedder { get; private set; }
+        /// <summary>
+        /// The <see cref="ImageEmbedder"/> that generates the <see cref="LinkedResource"/> objects for the email.
+        /// </summary>
+        protected internal ImageEmbedder ImageEmbedder { get; private set; }
 
         /// <summary>
         /// Adds an attachment to the email.
@@ -67,7 +70,7 @@ namespace Postal
         }
 
         /// <summary>
-        /// Convenience method that sends this email via a default EmailService. 
+        /// Convenience method that sends this email via a default EmailService.
         /// </summary>
         public void Send()
         {
@@ -75,7 +78,7 @@ namespace Postal
         }
 
         /// <summary>
-        /// Convenience method that sends this email asynchronously via a default EmailService. 
+        /// Convenience method that sends this email asynchronously via a default EmailService.
         /// </summary>
         public Task SendAsync()
         {
