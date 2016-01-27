@@ -35,7 +35,7 @@ namespace Postal
         /// <param name="email">The email to render.</param>
         /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
         /// <returns>The rendered email view output.</returns>
-        public string Render(Email email, string viewName = null)
+        public virtual string Render(Email email, string viewName = null)
         {
             viewName = viewName ?? email.ViewName;
             var controllerContext = CreateControllerContext();

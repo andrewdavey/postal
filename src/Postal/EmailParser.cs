@@ -30,7 +30,7 @@ namespace Postal
         /// <param name="emailViewOutput">The email view output.</param>
         /// <param name="email">The <see cref="Email"/> used to generate the output.</param>
         /// <returns>A <see cref="MailMessage"/> containing the email headers and content.</returns>
-        public MailMessage Parse(string emailViewOutput, Email email)
+        public virtual MailMessage Parse(string emailViewOutput, Email email)
         {
             var message = new MailMessage();
             InitializeMailMessage(message, emailViewOutput, email);
@@ -132,7 +132,7 @@ namespace Postal
         IEnumerable<AlternateView> CreateAlternativeViews(string deliminatedViewNames, Email email)
         {
             var viewNames = deliminatedViewNames.Split(new[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            return from viewName in viewNames 
+            return from viewName in viewNames
                    select CreateAlternativeView(email, viewName);
         }
 
