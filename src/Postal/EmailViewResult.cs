@@ -61,29 +61,47 @@ namespace Postal
             // no special requests; render what's in the template
             if (string.IsNullOrEmpty(format))
             {
-                if (!mailMessage.IsBodyHtml)
+                // Check if HTML alternative
+                if (mailMessage.AlternateViews.Any(v => v.ContentType.MediaType == HtmlContentType))
                 {
-                    writer.Write(result);
-                    return TextContentType;
+                    var alternativeHtmlContentType = CheckAlternativeViews(writer, mailMessage, "html");
+
+                    if (!string.IsNullOrEmpty(alternativeHtmlContentType))
+                        return HtmlContentType;
                 }
 
-                var template = Extract(result);
+                // Check if Text alternative
+                if (mailMessage.AlternateViews.Any(v => v.ContentType.MediaType == TextContentType))
+                {
+                    var alternativeTextContentType = CheckAlternativeViews(writer, mailMessage, "text");
+
+                    if (!string.IsNullOrEmpty(alternativeTextContentType))
+                        return TextContentType;
+                }
+
+                var template = Extract(result, mailMessage);
                 template.Write(writer);
-                return HtmlContentType;
+
+                if (mailMessage.IsBodyHtml)
+                    return HtmlContentType;
+
+                return TextContentType;
             }
 
-            // Check if alternative 
+            // Check if alternative
             var alternativeContentType = CheckAlternativeViews(writer, mailMessage, format);
 
             if (!string.IsNullOrEmpty(alternativeContentType))
                 return alternativeContentType;
+
 
             if (format == "text")
             {
                 if(mailMessage.IsBodyHtml)
                     throw new NotSupportedException("No text view available for this email");
 
-                writer.Write(result);
+                var template = Extract(result, mailMessage);
+                template.Write(writer);
                 return TextContentType;
             }
 
@@ -92,7 +110,7 @@ namespace Postal
                 if (!mailMessage.IsBodyHtml)
                     throw new NotSupportedException("No html view available for this email");
 
-                var template = Extract(result);
+                var template = Extract(result, mailMessage);
                 template.Write(writer);
                 return HtmlContentType;
             }
@@ -156,6 +174,30 @@ namespace Postal
                     if (string.IsNullOrEmpty(line))
                     {
                         return new TemplateParts(headerBuilder.ToString(), reader.ReadToEnd());
+                    }
+
+                    headerBuilder.AppendLine(line);
+                    line = reader.ReadLine();
+                }
+            }
+
+            return null;
+        }
+
+        static TemplateParts Extract(string template, MailMessage mailMessage)
+        {
+            var headerBuilder = new StringBuilder();
+
+            using (var reader = new StringReader(template))
+            {
+                // try to read until we passed headers
+                var line = reader.ReadLine();
+
+                while (line != null)
+                {
+                    if (string.IsNullOrEmpty(line))
+                    {
+                        return new TemplateParts(headerBuilder.ToString(), mailMessage.Body);
                     }
 
                     headerBuilder.AppendLine(line);
