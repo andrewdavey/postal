@@ -34,6 +34,15 @@ class Program
 }
 {% endhighlight %}
 
+### View Sub-Directories
+
+If you want to organise your email views into sub-directories then you just need to modify the above slightly to include the path to the email view (relative to the Views directory) in the constructor for Email:
+
+{% highlight csharp %}
+// Will look for Folder\Test.cshtml or Folder\Test.vbhtml in Views directory.
+dynamic email = new Email("Folder\\Test");
+{% endhighlight %}
+
 ### Limitations
 
 Layouts are not supported by RazorEngine yet. So you cannot use layouts for your email views.
