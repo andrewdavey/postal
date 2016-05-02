@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Linq;
+using System.IO;
 using System.Web.Mvc;
 using RazorEngine;
+using RazorEngine.Templating;
 
 namespace Postal
 {
@@ -12,7 +14,7 @@ namespace Postal
     {
         readonly string template;
         readonly string cacheName;
-        
+
         /// <summary>
         /// Creates a new <see cref="FileSystemRazorView"/> using the given view filename.
         /// </summary>
@@ -30,7 +32,7 @@ namespace Postal
         /// <param name="writer">The <see cref="TextWriter"/> used to write the rendered output.</param>
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            var content = Razor.Parse(template, viewContext.ViewData.Model, cacheName);
+            var content = Engine.Razor.RunCompile(template, cacheName, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
 
             writer.Write(content);
             writer.Flush();

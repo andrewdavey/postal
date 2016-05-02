@@ -2,6 +2,7 @@ using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
 using RazorEngine;
+using RazorEngine.Templating;
 
 namespace Postal
 {
@@ -36,7 +37,7 @@ namespace Postal
         /// <param name="writer">The <see cref="TextWriter"/> used to write the rendered output.</param>
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            var content = Razor.Parse(template, viewContext.ViewData.Model, resourcePath);
+            var content = Engine.Razor.RunCompile(template, resourcePath, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
 
             writer.Write(content);
             writer.Flush();
