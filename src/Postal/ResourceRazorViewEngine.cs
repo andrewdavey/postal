@@ -14,16 +14,18 @@ namespace Postal
     {
         private readonly Assembly viewSourceAssembly;
         private readonly string viewPathRoot;
+        private readonly RazorEngine.Templating.IRazorEngineService razorEngine;
 
         /// <summary>
         /// Creates a new <see cref="ResourceRazorViewEngine"/> that finds views in the given assembly.
         /// </summary>
         /// <param name="viewSourceAssembly">The assembly containing view resources.</param>
         /// <param name="viewPathRoot">A common resource path prefix.</param>
-        public ResourceRazorViewEngine(Assembly viewSourceAssembly, string viewPathRoot)
+        public ResourceRazorViewEngine(Assembly viewSourceAssembly, string viewPathRoot, RazorEngine.Templating.IRazorEngineService razorEngine = null)
         {
             this.viewSourceAssembly = viewSourceAssembly;
             this.viewPathRoot = viewPathRoot;
+            this.razorEngine = razorEngine;
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace Postal
 
             if (existingPath != null)
             {
-                return new ViewEngineResult(new ResourceRazorView(viewSourceAssembly, existingPath), this);
+                return new ViewEngineResult(new ResourceRazorView(viewSourceAssembly, existingPath, razorEngine), this);
             }
             
             return new ViewEngineResult(possibleFullPaths);

@@ -13,13 +13,15 @@ namespace Postal
     {
         private readonly string resourcePath;
         private readonly string template;
+        private readonly IRazorEngineService razorEngine;
 
         /// <summary>
         /// Creates a new <see cref="ResourceRazorView"/> for a given assembly and resource.
         /// </summary>
         /// <param name="sourceAssembly">The assembly containing the resource.</param>
         /// <param name="resourcePath">The resource path.</param>
-        public ResourceRazorView(Assembly sourceAssembly, string resourcePath)
+        /// <param name="razorEngine">The RazorEngine instance.</param>
+        public ResourceRazorView(Assembly sourceAssembly, string resourcePath, IRazorEngineService razorEngine = null)
         {
             this.resourcePath = resourcePath;
             // We've already ensured that the resource exists in ResourceRazorViewEngine
@@ -28,6 +30,7 @@ namespace Postal
             using (var reader = new StreamReader(stream))
                 template = reader.ReadToEnd();
             // ReSharper restore AssignNullToNotNullAttribute
+            this.razorEngine = razorEngine;
         }
 
         /// <summary>
@@ -37,8 +40,15 @@ namespace Postal
         /// <param name="writer">The <see cref="TextWriter"/> used to write the rendered output.</param>
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            var content = Engine.Razor.RunCompile(template, resourcePath, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
-
+            string content = "";
+            if (razorEngine != null)
+            {
+                content = razorEngine.RunCompile(template, resourcePath, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
+            }
+            else
+            {
+                content = Engine.Razor.RunCompile(template, resourcePath, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
+            }
             writer.Write(content);
             writer.Flush();
         }

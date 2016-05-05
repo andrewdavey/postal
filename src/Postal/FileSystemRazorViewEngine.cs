@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RazorEngine.Templating;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,15 +13,18 @@ namespace Postal
     /// </summary>
     public class FileSystemRazorViewEngine : IViewEngine
     {
-        readonly string viewPathRoot;
+        private readonly string viewPathRoot;
+        private readonly IRazorEngineService razorEngine;
 
         /// <summary>
         /// Creates a new <see cref="FileSystemRazorViewEngine"/> that finds views within the given path.
         /// </summary>
         /// <param name="viewPathRoot">The root directory that contains views.</param>
-        public FileSystemRazorViewEngine(string viewPathRoot)
+        /// <param name="razorEngine">The RazorEngine instance.</param>
+        public FileSystemRazorViewEngine(string viewPathRoot, IRazorEngineService razorEngine = null)
         {
             this.viewPathRoot = viewPathRoot;
+            this.razorEngine = razorEngine;
         }
 
         string GetViewFullPath(string path)
@@ -52,7 +56,7 @@ namespace Postal
 
             if (existingPath != null)
             {
-                return new ViewEngineResult(new FileSystemRazorView(existingPath), this);
+                return new ViewEngineResult(new FileSystemRazorView(existingPath, razorEngine), this);
             }
             else
             {

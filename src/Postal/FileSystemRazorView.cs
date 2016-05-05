@@ -12,17 +12,20 @@ namespace Postal
     /// </summary>
     public class FileSystemRazorView : IView
     {
-        readonly string template;
-        readonly string cacheName;
+        private readonly string template;
+        private readonly string cacheName;
+        private readonly IRazorEngineService razorEngine;
 
         /// <summary>
         /// Creates a new <see cref="FileSystemRazorView"/> using the given view filename.
         /// </summary>
         /// <param name="filename">The filename of the view.</param>
-        public FileSystemRazorView(string filename)
+        /// <param name="razorEngine">The RazorEngine instance.</param>
+        public FileSystemRazorView(string filename, IRazorEngineService razorEngine = null)
         {
             template = File.ReadAllText(filename);
             cacheName = filename;
+            this.razorEngine = razorEngine;
         }
 
         /// <summary>
@@ -32,7 +35,15 @@ namespace Postal
         /// <param name="writer">The <see cref="TextWriter"/> used to write the rendered output.</param>
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            var content = Engine.Razor.RunCompile(template, cacheName, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
+            string content = "";
+            if (razorEngine != null)
+            {
+                content = razorEngine.RunCompile(template, cacheName, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
+            }
+            else
+            {
+                content = Engine.Razor.RunCompile(template, cacheName, viewContext.ViewData.ModelMetadata.ModelType, viewContext.ViewData.Model);
+            }
 
             writer.Write(content);
             writer.Flush();

@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 14.00
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal", "src\Postal\Postal.csproj", "{779257EF-F8DD-495B-8B54-1F2E6AC5FA9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Tests", "src\Postal.Tests\Postal.Tests.csproj", "{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}"
