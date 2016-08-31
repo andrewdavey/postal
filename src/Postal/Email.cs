@@ -83,6 +83,17 @@ namespace Postal
         }
 
         /// <summary>
+        /// Convenience method that saves a copy of the email to a file.  Using this you can
+        /// save a file and then also use the Send() function to send the email.
+        /// </summary>
+        /// <param name="path">The full path to the folder where you want to save the file.
+        /// For example, "c:\emails" </param>
+        public void SaveToFile(string path)
+        {
+            CreateEmailService().SaveToFile(this, path);
+        }
+
+        /// <summary>
         /// A function that returns an instance of <see cref="IEmailService"/>.
         /// </summary>
         public static Func<IEmailService> CreateEmailService = () => new EmailService();

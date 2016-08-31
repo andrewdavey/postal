@@ -107,6 +107,28 @@ namespace Postal
         }
 
         /// <summary>
+        /// Saves a copy of the email to a file.  Using this you can
+        /// save a file and then also use the Send() function to send the email.
+        /// </summary>
+        /// <param name="path">The full path to the folder where you want to save the file.
+        /// <param name="email">The email to send.</param>
+        /// For example, "c:\emails" </param>
+        public void SaveToFile(Email email, string path)
+        {
+            using (MailMessage mailMessage = CreateMailMessage(email))
+            using (var smtp = createSmtpClient())
+            {
+                var service = new EmailService();
+                SmtpClient client = new SmtpClient("SaveEmailSMTPClient");
+                client.EnableSsl = false;
+                client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                client.PickupDirectoryLocation = path;
+                client.Send(mailMessage);
+                client.Dispose();
+            }
+        }
+
+        /// <summary>
         /// Renders the email view and builds a <see cref="MailMessage"/>. Does not send the email.
         /// </summary>
         /// <param name="email">The email to render.</param>
