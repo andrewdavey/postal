@@ -157,8 +157,8 @@ Hello, World!";
 
             var email = new Email("Test");
             var renderer = new Mock<IEmailViewRenderer>();
-            renderer.Setup(r => r.Render(email, "Test.Text")).Returns(text);
-            renderer.Setup(r => r.Render(email, "Test.Html")).Returns(html);
+            renderer.Setup(r => r.Render(email, "Test.Text", null)).Returns(text);
+            renderer.Setup(r => r.Render(email, "Test.Html", null)).Returns(html);
 
             var parser = new EmailParser(renderer.Object);
             using (var message = parser.Parse(input, email))
@@ -190,8 +190,8 @@ Hello, World!";
 
             var email = new Email("~/Views/Emails/Test.cshtml");
             var renderer = new Mock<IEmailViewRenderer>();
-            renderer.Setup(r => r.Render(email, "~/Views/Emails/Test.Text.cshtml")).Returns(text);
-            renderer.Setup(r => r.Render(email, "~/Views/Emails/Test.Html.cshtml")).Returns(html);
+            renderer.Setup(r => r.Render(email, "~/Views/Emails/Test.Text.cshtml", null)).Returns(text);
+            renderer.Setup(r => r.Render(email, "~/Views/Emails/Test.Html.cshtml", null)).Returns(html);
 
             var parser = new EmailParser(renderer.Object);
             using (var message = parser.Parse(input, email))
@@ -239,8 +239,8 @@ Hello, World!";
 
             var email = new Email("Test");
             var renderer = new Mock<IEmailViewRenderer>();
-            renderer.Setup(r => r.Render(email, "Test.Text")).Returns(text);
-            renderer.Setup(r => r.Render(email, "Test.Html")).Returns(html);
+            renderer.Setup(r => r.Render(email, "Test.Text", null)).Returns(text);
+            renderer.Setup(r => r.Render(email, "Test.Html", null)).Returns(html);
 
             var parser = new EmailParser(renderer.Object);
             using (var message = parser.Parse(input, email))

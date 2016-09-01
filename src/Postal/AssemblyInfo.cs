@@ -36,7 +36,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+#if !ASPNET5
 [assembly: CLSCompliant(true)]
+#endif
 
 #if TESTABLE
 [assembly: InternalsVisibleTo("Postal.Tests")]

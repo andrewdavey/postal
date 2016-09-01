@@ -87,7 +87,7 @@ namespace Postal
 
         string DetermineContentType(string pathOrUrl)
         {
-            if (pathOrUrl == null) throw new ArgumentNullException("pathOrUrl");
+            if (pathOrUrl == null) throw new ArgumentNullException(nameof(pathOrUrl));
 
             var extension = Path.GetExtension(pathOrUrl).ToLowerInvariant();
             switch (extension)

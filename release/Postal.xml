@@ -208,11 +208,12 @@
             file system. This means it will work outside of ASP.NET.
             </summary>
         </member>
-        <member name="M:Postal.FileSystemRazorView.#ctor(System.String)">
+        <member name="M:Postal.FileSystemRazorView.#ctor(System.String,RazorEngine.Templating.IRazorEngineService)">
             <summary>
             Creates a new <see cref="T:Postal.FileSystemRazorView"/> using the given view filename.
             </summary>
             <param name="filename">The filename of the view.</param>
+            <param name="razorEngine">The RazorEngine instance.</param>
         </member>
         <member name="M:Postal.FileSystemRazorView.Render(System.Web.Mvc.ViewContext,System.IO.TextWriter)">
             <summary>
@@ -227,11 +228,12 @@
             file system. This means it will work outside of ASP.NET.
             </summary>
         </member>
-        <member name="M:Postal.FileSystemRazorViewEngine.#ctor(System.String)">
+        <member name="M:Postal.FileSystemRazorViewEngine.#ctor(System.String,RazorEngine.Templating.IRazorEngineService)">
             <summary>
             Creates a new <see cref="T:Postal.FileSystemRazorViewEngine"/> that finds views within the given path.
             </summary>
             <param name="viewPathRoot">The root directory that contains views.</param>
+            <param name="razorEngine">The RazorEngine instance.</param>
         </member>
         <member name="M:Postal.FileSystemRazorViewEngine.FindPartialView(System.Web.Mvc.ControllerContext,System.String,System.Boolean)">
             <summary>
@@ -374,12 +376,13 @@
             An <see cref="T:System.Web.Mvc.IView"/> that reads its content from an assembly resource.
             </summary>
         </member>
-        <member name="M:Postal.ResourceRazorView.#ctor(System.Reflection.Assembly,System.String)">
+        <member name="M:Postal.ResourceRazorView.#ctor(System.Reflection.Assembly,System.String,RazorEngine.Templating.IRazorEngineService)">
             <summary>
             Creates a new <see cref="T:Postal.ResourceRazorView"/> for a given assembly and resource.
             </summary>
             <param name="sourceAssembly">The assembly containing the resource.</param>
             <param name="resourcePath">The resource path.</param>
+            <param name="razorEngine">The RazorEngine instance.</param>
         </member>
         <member name="M:Postal.ResourceRazorView.Render(System.Web.Mvc.ViewContext,System.IO.TextWriter)">
             <summary>
@@ -394,7 +397,7 @@
             This means it will work outside of ASP.NET.
             </summary>
         </member>
-        <member name="M:Postal.ResourceRazorViewEngine.#ctor(System.Reflection.Assembly,System.String)">
+        <member name="M:Postal.ResourceRazorViewEngine.#ctor(System.Reflection.Assembly,System.String,RazorEngine.Templating.IRazorEngineService)">
             <summary>
             Creates a new <see cref="T:Postal.ResourceRazorViewEngine"/> that finds views in the given assembly.
             </summary>

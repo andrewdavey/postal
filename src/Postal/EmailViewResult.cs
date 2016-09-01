@@ -3,7 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+#if ASPNET5
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+#else
 using System.Web.Mvc;
+#endif
 
 namespace Postal
 {
@@ -22,6 +28,14 @@ namespace Postal
         /// <summary>
         /// Creates a new <see cref="EmailViewResult"/>.
         /// </summary>
+#if ASPNET5
+        public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser, IServiceProvider serviceProvider)
+        {
+            Email = email;
+            Renderer = renderer ?? new EmailViewRenderer(serviceProvider);
+            Parser = parser ?? new EmailParser(Renderer);
+        }
+#else
         public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser)
         {
             Email = email;
@@ -36,7 +50,76 @@ namespace Postal
             : this(email, null, null)
         {
         }
+#endif
 
+#if ASPNET5
+        /// <summary>
+        /// When called by the action invoker, renders the view to the response.
+        /// </summary>
+        public override Task ExecuteResultAsync(ActionContext context)
+        {
+            var httpContext = context.HttpContext;
+            var query = httpContext.Request.Query;
+            var format = query["format"];
+            using (var writer = new StreamWriter(context.HttpContext.Response.Body))
+            {
+                var contentType = ExecuteResult(writer, format);
+                httpContext.Response.ContentType = contentType;
+            }
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Writes the email preview in the given format.
+        /// </summary>
+        /// <returns>The content type for the HTTP response.</returns>
+        public string ExecuteResult(TextWriter writer, string format = null)
+        {
+            var result = Renderer.Render(Email);
+            var mailMessage = Parser.Parse(result, Email);
+
+            // no special requests; render what's in the template
+            if (string.IsNullOrEmpty(format))
+            {
+                if (!mailMessage.IsBodyHtml)
+                {
+                    writer.WriteAsync(result);
+                    return TextContentType;
+                }
+
+                var template = Extract(result);
+                template.Write(writer);
+                return HtmlContentType;
+            }
+
+            // Check if alternative 
+            var alternativeContentType = CheckAlternativeViews(writer, mailMessage, format);
+
+            if (!string.IsNullOrEmpty(alternativeContentType))
+                return alternativeContentType;
+
+            if (format == "text")
+            {
+                if(mailMessage.IsBodyHtml)
+                    throw new NotSupportedException("No text view available for this email");
+
+                writer.Write(result);
+                return TextContentType;
+            }
+
+            if (format == "html")
+            {
+                if (!mailMessage.IsBodyHtml)
+                    throw new NotSupportedException("No html view available for this email");
+
+                var template = Extract(result);
+                template.Write(writer);
+                return HtmlContentType;
+            }
+
+            throw new NotSupportedException(string.Format("Unsupported format {0}", format));
+        }
+#else
         /// <summary>
         /// When called by the action invoker, renders the view to the response.
         /// </summary>
@@ -80,7 +163,7 @@ namespace Postal
 
             if (format == "text")
             {
-                if(mailMessage.IsBodyHtml)
+                if (mailMessage.IsBodyHtml)
                     throw new NotSupportedException("No text view available for this email");
 
                 writer.Write(result);
@@ -99,6 +182,7 @@ namespace Postal
 
             throw new NotSupportedException(string.Format("Unsupported format {0}", format));
         }
+#endif
 
         static string CheckAlternativeViews(TextWriter writer, MailMessage mailMessage, string format)
         {

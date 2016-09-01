@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+#if ASPNET5
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+#else
 using System.Web.Mvc;
+#endif
 
 namespace Postal
 {
@@ -10,8 +16,33 @@ namespace Postal
     /// </summary>
     public class EmailService : IEmailService
     {
+#if ASPNET5
+        public HttpRequest Request { get; set; }
+#else
         public System.Web.HttpRequestBase Request { get; set; }
+#endif
 
+#if ASPNET5
+        /// <summary>Creates a new <see cref="EmailService"/>, using the given view engines.</summary>
+        /// <param name="viewEngines">The view engines to use when creating email views.</param>
+        /// <param name="createSmtpClient">A function that creates a <see cref="SmtpClient"/>. If null, a default creation function is used.</param>
+        public EmailService(IServiceProvider serviceProvider, Func<SmtpClient> createSmtpClient = null)
+        {
+            emailViewRenderer = new EmailViewRenderer(serviceProvider);
+            emailParser = new EmailParser(emailViewRenderer);
+            this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="EmailService"/>.
+        /// </summary>
+        public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser, Func<SmtpClient> createSmtpClient)
+        {
+            this.emailViewRenderer = emailViewRenderer;
+            this.emailParser = emailParser;
+            this.createSmtpClient = createSmtpClient;
+        }
+#else
         /// <summary>
         /// Creates a new cref="EmailService"/, using the default view engines.
         /// </summary>
@@ -38,6 +69,7 @@ namespace Postal
             this.emailParser = emailParser;
             this.createSmtpClient = createSmtpClient;
         }
+#endif
 
         readonly IEmailViewRenderer emailViewRenderer;
         readonly IEmailParser emailParser;
