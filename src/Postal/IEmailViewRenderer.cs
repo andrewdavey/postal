@@ -14,7 +14,7 @@ namespace Postal
         /// <param name="viewName">Optional, the name of the view. If null, the ViewName of the email will be used.</param>
         /// <returns>The string result of rendering the email.</returns>
 #if ASPNET5
-        string Render(Email email, string viewName = null, Microsoft.AspNetCore.Http.HttpRequest request = null);
+        string Render(Email email, Microsoft.AspNetCore.Http.Features.IHttpRequestFeature requsetFeature, string viewName = null);
 #else
         string Render(Email email, string viewName = null, System.Web.HttpRequestBase request = null);
 #endif

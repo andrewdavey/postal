@@ -17,10 +17,22 @@ namespace Postal
         /// <summary>
         /// Creates a new <see cref="EmailParser"/>.
         /// </summary>
+        /// 
+#if ASPNET5
+        private readonly Microsoft.AspNetCore.Http.Features.IHttpRequestFeature _requsetFeature;
+
+        public EmailParser(IEmailViewRenderer alternativeViewRenderer, Microsoft.AspNetCore.Http.Features.IHttpRequestFeature requsetFeature)
+        {
+            this.alternativeViewRenderer = alternativeViewRenderer;
+            _requsetFeature = requsetFeature;
+        }
+
+#else
         public EmailParser(IEmailViewRenderer alternativeViewRenderer)
         {
             this.alternativeViewRenderer = alternativeViewRenderer;
         }
+#endif
 
         readonly IEmailViewRenderer alternativeViewRenderer;
 
@@ -139,8 +151,11 @@ namespace Postal
         AlternateView CreateAlternativeView(Email email, string alternativeViewName)
         {
             var fullViewName = GetAlternativeViewName(email, alternativeViewName);
+#if ASPNET5
+            var output = alternativeViewRenderer.Render(email, _requsetFeature);
+#else
             var output = alternativeViewRenderer.Render(email, fullViewName);
-
+#endif
             string contentType;
             string body;
             using (var reader = new StringReader(output))

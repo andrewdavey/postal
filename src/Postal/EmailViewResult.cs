@@ -6,7 +6,7 @@ using System.Text;
 #if ASPNET5
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.Extensions.DependencyInjection;
 #else
 using System.Web.Mvc;
 #endif
@@ -31,9 +31,10 @@ namespace Postal
 #if ASPNET5
         public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser, IServiceProvider serviceProvider)
         {
+            var requestFeature = serviceProvider.GetRequiredService<Microsoft.AspNetCore.Http.Features.IHttpRequestFeature>();
             Email = email;
             Renderer = renderer ?? new EmailViewRenderer(serviceProvider);
-            Parser = parser ?? new EmailParser(Renderer);
+            Parser = parser ?? new EmailParser(Renderer, requestFeature);
         }
 #else
         public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser)
@@ -59,11 +60,12 @@ namespace Postal
         public override Task ExecuteResultAsync(ActionContext context)
         {
             var httpContext = context.HttpContext;
+            var requestFeature = httpContext.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpRequestFeature>();
             var query = httpContext.Request.Query;
             var format = query["format"];
             using (var writer = new StreamWriter(context.HttpContext.Response.Body))
             {
-                var contentType = ExecuteResult(writer, format);
+                var contentType = ExecuteResult(writer, requestFeature, format);
                 httpContext.Response.ContentType = contentType;
             }
             return Task.CompletedTask;
@@ -73,9 +75,9 @@ namespace Postal
         /// Writes the email preview in the given format.
         /// </summary>
         /// <returns>The content type for the HTTP response.</returns>
-        public string ExecuteResult(TextWriter writer, string format = null)
+        public string ExecuteResult(TextWriter writer, Microsoft.AspNetCore.Http.Features.IHttpRequestFeature requestFeature, string format = null)
         {
-            var result = Renderer.Render(Email);
+            var result = Renderer.Render(Email, requestFeature);
             var mailMessage = Parser.Parse(result, Email);
 
             // no special requests; render what's in the template

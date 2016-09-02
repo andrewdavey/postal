@@ -64,13 +64,17 @@ namespace Postal
         /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
         /// <returns>The rendered email view output.</returns>
 #if ASPNET5
-        public string Render(Email email, string viewName, HttpRequest request)
+        public string Render(Email email, IHttpRequestFeature requsetFeature, string viewName = null)
 #else
         public string Render(Email email, string viewName = null, HttpRequestBase request = null)
 #endif
         {
             viewName = viewName ?? email.ViewName;
+#if ASPNET5
+            var controllerContext = CreateControllerContext(email.AreaName, requsetFeature);
+#else
             var controllerContext = CreateControllerContext(email.AreaName, request);
+#endif
             var view = CreateView(viewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder);
             return viewOutput;
@@ -82,7 +86,7 @@ namespace Postal
         /// <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
         /// <returns></returns>
 #if ASPNET5
-        ControllerContext CreateControllerContext(string areaName, HttpRequest request)
+        ControllerContext CreateControllerContext(string areaName, IHttpRequestFeature requsetFeature)
         {
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
@@ -94,13 +98,12 @@ namespace Postal
             var actionDescriptor = new ActionDescriptor();
             actionDescriptor.RouteValues = routeData.Values.ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
             FeatureCollection featureCollection = new FeatureCollection();
-            featureCollection.Set<IHttpRequestFeature>(new HttpRequestFeature()
-            {
-                Method = "GET",
-                Protocol = request.Protocol,
-                PathBase = request.PathBase.Value,
-                Scheme = request.Scheme
-            });
+            var requsetFeature_local = new HttpRequestFeature();
+            requsetFeature_local.Method = "GET";
+            requsetFeature_local.Protocol = requsetFeature.Protocol;
+            requsetFeature_local.PathBase = requsetFeature.PathBase;
+            requsetFeature_local.Scheme = requsetFeature.Scheme;
+            featureCollection.Set<IHttpRequestFeature>(requsetFeature_local);
             featureCollection.Set<IHttpResponseFeature>(new HttpResponseFeature());
             var httpContext = new DefaultHttpContext(featureCollection);
             var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);

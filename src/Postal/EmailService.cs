@@ -17,7 +17,7 @@ namespace Postal
     public class EmailService : IEmailService
     {
 #if ASPNET5
-        public HttpRequest Request { get; set; }
+        public Microsoft.AspNetCore.Http.Features.IHttpRequestFeature RequsetFeature { get; set; }
 #else
         public System.Web.HttpRequestBase Request { get; set; }
 #endif
@@ -29,7 +29,6 @@ namespace Postal
         public EmailService(IServiceProvider serviceProvider, Func<SmtpClient> createSmtpClient = null)
         {
             emailViewRenderer = new EmailViewRenderer(serviceProvider);
-            emailParser = new EmailParser(emailViewRenderer);
             this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }
 
@@ -72,7 +71,7 @@ namespace Postal
 #endif
 
         readonly IEmailViewRenderer emailViewRenderer;
-        readonly IEmailParser emailParser;
+        IEmailParser emailParser;
         readonly Func<SmtpClient> createSmtpClient;
 
         /// <summary>
@@ -147,7 +146,12 @@ namespace Postal
         /// <returns>A <see cref="MailMessage"/> containing the rendered email.</returns>
         public MailMessage CreateMailMessage(Email email)
         {
+#if ASPNET5
+            var rawEmailString = emailViewRenderer.Render(email, RequsetFeature);
+            emailParser = new EmailParser(emailViewRenderer, RequsetFeature);
+#else
             var rawEmailString = emailViewRenderer.Render(email, request: Request);
+#endif
             var mailMessage = emailParser.Parse(rawEmailString, email);
             return mailMessage;
         }
