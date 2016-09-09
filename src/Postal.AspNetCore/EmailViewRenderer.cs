@@ -86,7 +86,7 @@ namespace Postal
         /// <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
         /// <returns></returns>
 #if ASPNET5
-        ActionContext CreateControllerContext(string areaName, HttpRequest request)
+        ActionContext CreateControllerContext(string areaName, IHttpRequestFeature requsetFeature)
         {
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
             routeData.Values["controller"] = EmailViewDirectoryName;
@@ -100,9 +100,9 @@ namespace Postal
             FeatureCollection featureCollection = new FeatureCollection();
             var requsetFeature_local = new HttpRequestFeature();
             requsetFeature_local.Method = "GET";
-            requsetFeature_local.Protocol = request.Protocol;
-            requsetFeature_local.PathBase = request.PathBase;
-            requsetFeature_local.Scheme = request.Scheme;
+            requsetFeature_local.Protocol = requsetFeature.Protocol;
+            requsetFeature_local.PathBase = requsetFeature.PathBase;
+            requsetFeature_local.Scheme = requsetFeature.Scheme;
             featureCollection.Set<IHttpRequestFeature>(requsetFeature_local);
             featureCollection.Set<IHttpResponseFeature>(new HttpResponseFeature());
             var httpContext = new DefaultHttpContext(featureCollection);
@@ -242,7 +242,9 @@ namespace Postal
         }
 #endif
 
+#if !ASPNET5
         // StubController so we can create a ControllerContext.
         class StubController : Controller { }
+#endif
     }
 }
