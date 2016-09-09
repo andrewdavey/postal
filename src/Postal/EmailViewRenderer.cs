@@ -100,9 +100,9 @@ namespace Postal
             FeatureCollection featureCollection = new FeatureCollection();
             var requsetFeature_local = new HttpRequestFeature();
             requsetFeature_local.Method = "GET";
-            requsetFeature_local.Protocol = requsetFeature.Protocol;
-            requsetFeature_local.PathBase = requsetFeature.PathBase;
-            requsetFeature_local.Scheme = requsetFeature.Scheme;
+            requsetFeature_local.Protocol = request.Protocol;
+            requsetFeature_local.PathBase = request.PathBase;
+            requsetFeature_local.Scheme = request.Scheme;
             featureCollection.Set<IHttpRequestFeature>(requsetFeature_local);
             featureCollection.Set<IHttpResponseFeature>(new HttpResponseFeature());
             var httpContext = new DefaultHttpContext(featureCollection);
