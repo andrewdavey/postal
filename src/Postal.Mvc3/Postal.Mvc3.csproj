@@ -76,52 +76,52 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Postal\AssemblyInfo.cs">
+    <Compile Include="..\Postal.AspNetCore\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\Email.cs">
+    <Compile Include="..\Postal.AspNetCore\Email.cs">
       <Link>Email.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\EmailParser.cs">
+    <Compile Include="..\Postal.AspNetCore\EmailParser.cs">
       <Link>EmailParser.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\EmailService.cs">
+    <Compile Include="..\Postal.AspNetCore\EmailService.cs">
       <Link>EmailService.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\EmailViewRenderer.cs">
+    <Compile Include="..\Postal.AspNetCore\EmailViewRenderer.cs">
       <Link>EmailViewRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\EmailViewResult.cs">
+    <Compile Include="..\Postal.AspNetCore\EmailViewResult.cs">
       <Link>EmailViewResult.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\FileSystemRazorView.cs">
+    <Compile Include="..\Postal.AspNetCore\FileSystemRazorView.cs">
       <Link>FileSystemRazorView.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\FileSystemRazorViewEngine.cs">
+    <Compile Include="..\Postal.AspNetCore\FileSystemRazorViewEngine.cs">
       <Link>FileSystemRazorViewEngine.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\HtmlExtensions.cs">
+    <Compile Include="..\Postal.AspNetCore\HtmlExtensions.cs">
       <Link>HtmlExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\IEmailParser.cs">
+    <Compile Include="..\Postal.AspNetCore\IEmailParser.cs">
       <Link>IEmailParser.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\IEmailService.cs">
+    <Compile Include="..\Postal.AspNetCore\IEmailService.cs">
       <Link>IEmailService.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\IEmailViewRenderer.cs">
+    <Compile Include="..\Postal.AspNetCore\IEmailViewRenderer.cs">
       <Link>IEmailViewRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\ImageEmbedder.cs">
+    <Compile Include="..\Postal.AspNetCore\ImageEmbedder.cs">
       <Link>ImageEmbedder.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\ParserUtils.cs">
+    <Compile Include="..\Postal.AspNetCore\ParserUtils.cs">
       <Link>ParserUtils.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\ResourceRazorView.cs">
+    <Compile Include="..\Postal.AspNetCore\ResourceRazorView.cs">
       <Link>ResourceRazorView.cs</Link>
     </Compile>
-    <Compile Include="..\Postal\ResourceRazorViewEngine.cs">
+    <Compile Include="..\Postal.AspNetCore\ResourceRazorViewEngine.cs">
       <Link>ResourceRazorViewEngine.cs</Link>
     </Compile>
   </ItemGroup>
