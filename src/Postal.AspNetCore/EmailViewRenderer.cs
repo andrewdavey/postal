@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 #if ASPNET5
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +77,7 @@ namespace Postal
             var controllerContext = CreateControllerContext(email.AreaName, request);
 #endif
             var view = CreateView(viewName, controllerContext);
-            var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder);
+            var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder).Result;
             return viewOutput;
         }
 
@@ -100,12 +101,13 @@ namespace Postal
             FeatureCollection featureCollection = new FeatureCollection();
             var requsetFeature_local = new HttpRequestFeature();
             requsetFeature_local.Method = "GET";
-            requsetFeature_local.Protocol = requsetFeature.Protocol;
-            requsetFeature_local.PathBase = requsetFeature.PathBase;
-            requsetFeature_local.Scheme = requsetFeature.Scheme;
+            requsetFeature_local.Protocol = requsetFeature?.Protocol;
+            requsetFeature_local.PathBase = requsetFeature?.PathBase;
+            requsetFeature_local.Scheme = requsetFeature?.Scheme;
             featureCollection.Set<IHttpRequestFeature>(requsetFeature_local);
             featureCollection.Set<IHttpResponseFeature>(new HttpResponseFeature());
             var httpContext = new DefaultHttpContext(featureCollection);
+            httpContext.RequestServices = serviceProvider;
             var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
             actionContext.RouteData = routeData;
             
@@ -210,7 +212,7 @@ namespace Postal
 #endif
 
 #if ASPNET5
-        string RenderView(IView view, ViewDataDictionary viewData, ActionContext actionContext, ImageEmbedder imageEmbedder)
+        async Task<string> RenderView(IView view, ViewDataDictionary viewData, ActionContext actionContext, ImageEmbedder imageEmbedder)
         {
             //https://github.com/aspnet/Mvc/blob/master/src/Microsoft.AspNetCore.Mvc.ViewFeatures/ViewFeatures/ViewExecutor.cs
             var response = actionContext.HttpContext.Response;
@@ -221,8 +223,9 @@ namespace Postal
                 var tempData = tempDataDictionaryFactory.GetTempData(actionContext.HttpContext);
                 var viewContext = new ViewContext(actionContext, view, viewData, tempData, writer, viewOptions.Value.HtmlHelperOptions);
                 viewData[ImageEmbedder.ViewDataKey] = imageEmbedder;
-                view.RenderAsync(viewContext);
+                await view.RenderAsync(viewContext);
                 viewData.Remove(ImageEmbedder.ViewDataKey);
+                await writer.FlushAsync();
                 return writer.GetStringBuilder().ToString();
             }
         }
