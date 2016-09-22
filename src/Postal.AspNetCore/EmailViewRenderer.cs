@@ -65,7 +65,7 @@ namespace Postal
         /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
         /// <returns>The rendered email view output.</returns>
 #if ASPNET5
-        public string Render(Email email, IHttpRequestFeature requsetFeature, string viewName = null)
+        public virtual string Render(Email email, IHttpRequestFeature requsetFeature, string viewName = null)
 #else
         public string Render(Email email, string viewName = null, HttpRequestBase request = null)
 #endif
