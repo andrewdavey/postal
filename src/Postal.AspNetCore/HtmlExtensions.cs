@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 #if ASPNET5
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
@@ -24,7 +25,7 @@ namespace Postal
         /// <param name="alt">The content for the &lt;img alt&gt; attribute.</param>
         /// <returns>An HTML &lt;img&gt; tag.</returns>
 #if ASPNET5
-        public static IHtmlContent EmbedImage(this HtmlHelper html, string imagePathOrUrl, string alt = "")
+        public static IHtmlContent EmbedImage(this IHtmlHelper html, string imagePathOrUrl, string alt = "")
         {
             if (string.IsNullOrWhiteSpace(imagePathOrUrl)) throw new ArgumentException("Path or URL required", "imagePathOrUrl");
 
