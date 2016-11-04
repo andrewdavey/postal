@@ -29,7 +29,9 @@ namespace Postal
 
                 var key = match.Groups[1].Value.ToLowerInvariant();
                 var value = match.Groups[2].Value.TrimEnd();
-                useKeyAndValue(key, value);
+                if (!string.IsNullOrWhiteSpace(value)) {
+                  useKeyAndValue(key, value);
+                }
             } while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()));
         }
     }
