@@ -2,7 +2,7 @@
   "copyright": "Copyright © Andrew Davey 2014",
   "description": "Create emails from ASP.NET MVC views",
   "title": "Postal for ASP.NET Core",
-  "version": "1.0.2-beta",
+  "version": "1.0.3-beta",
   "authors": [
     "Andrew Davey"
   ],
