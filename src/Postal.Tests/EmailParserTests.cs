@@ -352,6 +352,26 @@ message";
         }
 
         [Fact]
+        public void Can_parse_empty_header_fields() 
+        {
+          var input = @"To: test@test.com
+From: test2@test.com
+CC: 
+Bcc:
+Reply-To:  
+Subject: test
+
+message";
+
+          var parser = new EmailParser(Mock.Of<IEmailViewRenderer>());
+          var email = new Email("Test");
+          using (var message = parser.Parse(input, email)) {
+            message.To.Count.ShouldEqual(1);
+            message.To[0].Address.ShouldEqual("test@test.com");
+        }
+    }
+
+        [Fact]
         public void Can_parse_reply_to()
         {
             var input = @"To: test@test.com
