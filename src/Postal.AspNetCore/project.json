@@ -2,15 +2,15 @@
   "copyright": "Copyright © Andrew Davey 2014",
   "description": "Create emails from ASP.NET MVC views",
   "title": "Postal for ASP.NET Core",
-  "version": "1.0.3-beta",
+  "version": "1.0.5-beta",
   "authors": [
     "Andrew Davey"
   ],
 
   "dependencies": {
-    "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
-    "RazorEngine": "4.4.0-rc1"
+    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.0",
+    "RazorEngine": "4.4.3-rc1"
   },
   "buildOptions": {
     "define": [ "ASPNET5" ],
