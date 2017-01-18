@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
 #if ASPNET5
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

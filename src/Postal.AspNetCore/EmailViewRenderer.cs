@@ -58,35 +58,46 @@ namespace Postal
         /// </summary>
         public string EmailViewDirectoryName { get; set; }
 
+#if ASPNET5
+        /// <summary>
+        /// Renders an email view.
+        /// </summary>
+        /// <param name="email">The email to render.</param>
+        /// <param name="requsetFeature">IHttpRequestFeature</param>
+        /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
+        /// <returns>The rendered email view output.</returns>
+        public virtual string Render(Email email, IHttpRequestFeature requsetFeature, string viewName = null)
+#else
         /// <summary>
         /// Renders an email view.
         /// </summary>
         /// <param name="email">The email to render.</param>
         /// <param name="viewName">Optional email view name override. If null then the email's ViewName property is used instead.</param>
+        /// <param name="request">Optional HttpRequestBase.</param>
         /// <returns>The rendered email view output.</returns>
-#if ASPNET5
-        public virtual string Render(Email email, IHttpRequestFeature requsetFeature, string viewName = null)
-#else
         public string Render(Email email, string viewName = null, HttpRequestBase request = null)
 #endif
         {
             viewName = viewName ?? email.ViewName;
 #if ASPNET5
             var controllerContext = CreateControllerContext(email.AreaName, requsetFeature);
-#else
-            var controllerContext = CreateControllerContext(email.AreaName, request);
-#endif
             var view = CreateView(viewName, controllerContext);
             var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder).Result;
+#else
+            var controllerContext = CreateControllerContext(email.AreaName, request);
+            var view = CreateView(viewName, controllerContext);
+            var viewOutput = RenderView(view, email.ViewData, controllerContext, email.ImageEmbedder);
+#endif
             return viewOutput;
         }
 
+#if ASPNET5
         /// <summary>
         /// 
         /// </summary>
         /// <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
+        /// <param name="requsetFeature">IHttpRequestFeature</param>
         /// <returns></returns>
-#if ASPNET5
         ActionContext CreateControllerContext(string areaName, IHttpRequestFeature requsetFeature)
         {
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
@@ -114,6 +125,12 @@ namespace Postal
             return actionContext;
         }
 #else
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="areaName">The name of the area containing the Emails view folder if applicable</param>
+        /// <param name="request">Optional HttpRequestBase</param>
+        /// <returns></returns>
         ControllerContext CreateControllerContext(string areaName, HttpRequestBase request = null)
         {
             // A dummy HttpContextBase that is enough to allow the view to be rendered.
