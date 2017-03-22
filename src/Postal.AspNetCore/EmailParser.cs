@@ -19,12 +19,12 @@ namespace Postal
         /// </summary>
         /// 
 #if ASPNET5
-        private readonly Microsoft.AspNetCore.Http.Features.IHttpRequestFeature _requsetFeature;
+        private readonly RequestUrl _url;
 
-        public EmailParser(IEmailViewRenderer alternativeViewRenderer, Microsoft.AspNetCore.Http.Features.IHttpRequestFeature requsetFeature)
+        public EmailParser(IEmailViewRenderer alternativeViewRenderer, RequestUrl url)
         {
             this.alternativeViewRenderer = alternativeViewRenderer;
-            _requsetFeature = requsetFeature;
+            _url = url;
         }
 
 #else
@@ -152,7 +152,7 @@ namespace Postal
         {
             var fullViewName = GetAlternativeViewName(email, alternativeViewName);
 #if ASPNET5
-            var output = alternativeViewRenderer.Render(email, _requsetFeature);
+            var output = alternativeViewRenderer.Render(email, _url);
 #else
             var output = alternativeViewRenderer.Render(email, fullViewName);
 #endif

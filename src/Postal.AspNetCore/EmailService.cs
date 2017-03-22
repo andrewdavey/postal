@@ -17,7 +17,23 @@ namespace Postal
     public class EmailService : IEmailService
     {
 #if ASPNET5
-        public Microsoft.AspNetCore.Http.Features.IHttpRequestFeature RequsetFeature { get; set; }
+        private Microsoft.AspNetCore.Http.Features.IHttpRequestFeature _requsetFeature;
+
+        [Obsolete("Please use RequestUrl property")]
+        public Microsoft.AspNetCore.Http.Features.IHttpRequestFeature RequsetFeature
+        {
+            get
+            {
+                return _requsetFeature;
+            }
+            set
+            {
+                _requsetFeature = value;
+                RequestUrl = new RequestUrl() { PathBase = value.PathBase, Protocol = value.Protocol, Scheme = value.Scheme };
+            }
+        }
+
+        public RequestUrl RequestUrl { get; set; }
 #else
         public System.Web.HttpRequestBase Request { get; set; }
 #endif
@@ -147,8 +163,8 @@ namespace Postal
         public MailMessage CreateMailMessage(Email email)
         {
 #if ASPNET5
-            var rawEmailString = emailViewRenderer.Render(email, RequsetFeature);
-            emailParser = new EmailParser(emailViewRenderer, RequsetFeature);
+            var rawEmailString = emailViewRenderer.Render(email, RequestUrl);
+            emailParser = new EmailParser(emailViewRenderer, RequestUrl);
 #else
             var rawEmailString = emailViewRenderer.Render(email, request: Request);
 #endif

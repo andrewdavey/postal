@@ -24,17 +24,20 @@ namespace Postal
         IEmailViewRenderer Renderer { get; set; }
         IEmailParser Parser { get; set; }
         Email Email { get; set; }
+#if ASPNET5
+        private RequestUrl _requestUrl;
+#endif
 
         /// <summary>
         /// Creates a new <see cref="EmailViewResult"/>.
         /// </summary>
 #if ASPNET5
-        public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser, IServiceProvider serviceProvider)
+        public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser, IServiceProvider serviceProvider, RequestUrl url)
         {
-            var requestFeature = serviceProvider.GetRequiredService<Microsoft.AspNetCore.Http.Features.IHttpRequestFeature>();
             Email = email;
             Renderer = renderer ?? new EmailViewRenderer(serviceProvider);
-            Parser = parser ?? new EmailParser(Renderer, requestFeature);
+            Parser = parser ?? new EmailParser(Renderer, url);
+            _requestUrl = url;
         }
 #else
         public EmailViewResult(Email email, IEmailViewRenderer renderer, IEmailParser parser)
@@ -65,7 +68,7 @@ namespace Postal
             var format = query["format"];
             using (var writer = new StreamWriter(context.HttpContext.Response.Body))
             {
-                var contentType = ExecuteResult(writer, requestFeature, format);
+                var contentType = ExecuteResult(writer, _requestUrl, format);
                 httpContext.Response.ContentType = contentType;
             }
             return Task.CompletedTask;
@@ -75,9 +78,9 @@ namespace Postal
         /// Writes the email preview in the given format.
         /// </summary>
         /// <returns>The content type for the HTTP response.</returns>
-        public string ExecuteResult(TextWriter writer, Microsoft.AspNetCore.Http.Features.IHttpRequestFeature requestFeature, string format = null)
+        public string ExecuteResult(TextWriter writer, RequestUrl url, string format = null)
         {
-            var result = Renderer.Render(Email, requestFeature);
+            var result = Renderer.Render(Email, url);
             var mailMessage = Parser.Parse(result, Email);
 
             // no special requests; render what's in the template
@@ -102,7 +105,7 @@ namespace Postal
 
             if (format == "text")
             {
-                if(mailMessage.IsBodyHtml)
+                if (mailMessage.IsBodyHtml)
                     throw new NotSupportedException("No text view available for this email");
 
                 writer.Write(result);
