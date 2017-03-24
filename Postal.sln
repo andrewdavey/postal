@@ -1,15 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Tests", "src\Postal.Tests\Postal.Tests.csproj", "{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{DDA63F90-0BB7-4438-ACE7-03E71A69950B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSample", "src\Samples\ConsoleSample\ConsoleSample.csproj", "{2C24E942-E0E1-4116-838B-ACD25653D5B2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceSample", "src\Samples\ResourceSample\ResourceSample.csproj", "{AB26BB59-F976-4361-A041-21C7EF1F2AE5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F70EF96E-BECF-4500-BF12-6D982CE1C39B}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,6 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F70EF96E
 		build\Web.config.transform = build\Web.config.transform
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{852A858B-75CD-423F-94EC-BA22529E7095}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Tests", "src\Postal.Tests\Postal.Tests.csproj", "{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSample", "src\Samples\ConsoleSample\ConsoleSample.csproj", "{2C24E942-E0E1-4116-838B-ACD25653D5B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceSample", "src\Samples\ResourceSample\ResourceSample.csproj", "{AB26BB59-F976-4361-A041-21C7EF1F2AE5}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSample", "src\Samples\WebSample\WebSample.csproj", "{20E5601B-354D-4393-951C-C3BCC970EAAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc3", "src\Postal.Mvc3\Postal.Mvc3.csproj", "{FC488BE2-1C99-468A-85F3-12FBB539CFE9}"
@@ -31,14 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc5", "src\Postal.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc5.4.6", "src\Postal.Mvc5.4.6\Postal.Mvc5.4.6.csproj", "{CA00867C-D9BC-42D9-B04A-BF1957324882}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0D93EE58-0279-4330-8D1F-7195086A8ABC}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{852A858B-75CD-423F-94EC-BA22529E7095}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Postal.AspNetCore", "src\Postal.AspNetCore\Postal.AspNetCore.xproj", "{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postal.AspNetCore", "src\Postal.AspNetCore\Postal.AspNetCore.csproj", "{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,8 +82,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8F7B0DA6-277A-40A8-9C2A-6100112D35F6} = {852A858B-75CD-423F-94EC-BA22529E7095}
 		{DDA63F90-0BB7-4438-ACE7-03E71A69950B} = {852A858B-75CD-423F-94EC-BA22529E7095}
+		{8F7B0DA6-277A-40A8-9C2A-6100112D35F6} = {852A858B-75CD-423F-94EC-BA22529E7095}
 		{2C24E942-E0E1-4116-838B-ACD25653D5B2} = {DDA63F90-0BB7-4438-ACE7-03E71A69950B}
 		{AB26BB59-F976-4361-A041-21C7EF1F2AE5} = {DDA63F90-0BB7-4438-ACE7-03E71A69950B}
 		{20E5601B-354D-4393-951C-C3BCC970EAAC} = {DDA63F90-0BB7-4438-ACE7-03E71A69950B}
