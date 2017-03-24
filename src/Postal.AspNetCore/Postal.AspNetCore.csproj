@@ -16,10 +16,13 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
     <Version>1.0.7-beta</Version>
+    <IncludeSource>True</IncludeSource>
+    <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="AssemblyInfo.cs" />
+    <None Remove="packages.config" />
     <None Include="App.config" />
   </ItemGroup>
 
