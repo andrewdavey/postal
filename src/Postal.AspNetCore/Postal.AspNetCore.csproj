@@ -18,6 +18,7 @@
     <Version>1.0.7-beta</Version>
     <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/hermanho/postal</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
