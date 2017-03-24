@@ -105,7 +105,10 @@ namespace Postal
 
             // if populated will add searching the named Area for the view
             if (!string.IsNullOrWhiteSpace(areaName))
-                routeData.DataTokens["Area"] = areaName;
+            {
+                routeData.Values["area"] = areaName;
+                routeData.DataTokens["area"] = areaName;
+            }
 
             var actionDescriptor = new ActionDescriptor();
             actionDescriptor.RouteValues = routeData.Values.ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
@@ -188,7 +191,7 @@ namespace Postal
             List<string> searchedList = null;
             for (var i = 0; i < viewEngines.Count; i++)
             {
-                var result = viewEngines[i].FindView(context, viewName, false);
+                var result = viewEngines[i].FindView(context, viewName, true);
                 if (result.Success)
                 {
                     return result.View;
