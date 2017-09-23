@@ -4,9 +4,9 @@
     <Description>Create emails from ASP.NET MVC views</Description>
     <Copyright>Copyright © Andrew Davey 2014</Copyright>
     <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
-    <VersionPrefix>1.0.5-beta</VersionPrefix>
+    <VersionPrefix>2.0.0-beta</VersionPrefix>
     <Authors>Andrew Davey</Authors>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFrameworks>netcoreapp2.0;net462</TargetFrameworks>
     <DefineConstants>$(DefineConstants);ASPNET5</DefineConstants>
     <AssemblyName>Postal.AspNetCore</AssemblyName>
     <PackageId>Postal.AspNetCore</PackageId>
@@ -15,27 +15,31 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
-    <Version>1.0.7-beta</Version>
+    <Version>2.0.0-beta</Version>
     <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/hermanho/postal</PackageProjectUrl>
+
+    <CommitHash></CommitHash>
+    <GenerateCommitHashAttribute>true</GenerateCommitHashAttribute>
+    <GeneratedCommitHashAttributeFile></GeneratedCommitHashAttributeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="AssemblyInfo.cs" />
     <None Remove="packages.config" />
-    <None Include="App.config" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
+   <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.1.2" />
-    <PackageReference Include="RazorEngine" Version="4.4.3-rc1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\RazorEngine\src\source\RazorEngine.Core\RazorEngine.Core.NetCore.csproj" />
   </ItemGroup>
 
 </Project>

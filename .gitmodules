@@ -1,0 +1,4 @@
+[submodule "RazorEngine"]
+	path = RazorEngine
+	url = https://github.com/hermanho/RazorEngine/
+	branch = updateToNetCore
