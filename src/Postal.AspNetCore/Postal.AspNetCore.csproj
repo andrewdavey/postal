@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Create emails from ASP.NET MVC views</Description>
+    <Description>
+      Create emails from ASP.NET MVC views
+      Fork from https://github.com/andrewdavey/postal
+      NetCore support https://github.com/hermanho/postal
+    </Description>
     <Copyright>Copyright © Andrew Davey 2014</Copyright>
     <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
     <VersionPrefix>2.0.0-beta</VersionPrefix>
@@ -15,11 +19,10 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
-    <Version>2.0.0-beta</Version>
-    <IncludeSource>True</IncludeSource>
+    <Version>2.0.2-beta</Version>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/hermanho/postal</PackageProjectUrl>
-
+    <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
     <CommitHash></CommitHash>
     <GenerateCommitHashAttribute>true</GenerateCommitHashAttribute>
     <GeneratedCommitHashAttributeFile></GeneratedCommitHashAttributeFile>
@@ -27,15 +30,14 @@
 
   <ItemGroup>
     <Compile Remove="AssemblyInfo.cs" />
-    <None Remove="packages.config" />
   </ItemGroup>
 
   <ItemGroup>
-   <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.0.0" />
+   <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
