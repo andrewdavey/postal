@@ -8,9 +8,9 @@
     </Description>
     <Copyright>Copyright © Andrew Davey 2014</Copyright>
     <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
-    <VersionPrefix>2.0.0-beta</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
     <Authors>Andrew Davey</Authors>
-    <TargetFrameworks>netcoreapp2.0;net462</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);ASPNET5</DefineConstants>
     <AssemblyName>Postal.AspNetCore</AssemblyName>
     <PackageId>Postal.AspNetCore</PackageId>
@@ -19,7 +19,7 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
-    <Version>2.0.2-beta</Version>
+    <Version>2.0.3</Version>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/hermanho/postal</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
@@ -33,11 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-   <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.0.1" />
+   <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
