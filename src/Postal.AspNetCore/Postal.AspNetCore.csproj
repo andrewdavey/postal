@@ -19,7 +19,7 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
-    <Version>2.0.3</Version>
+    <Version>2.1.0</Version>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/hermanho/postal</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
