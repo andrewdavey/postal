@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace Postal
@@ -11,32 +11,32 @@ namespace Postal
         public void Can_parse_header()
         {
             var header= ParseHeader("hello: world");
-            header.Key.ShouldEqual("hello");
-            header.Value.ShouldEqual("world");
+            header.Key.ShouldBe("hello");
+            header.Value.ShouldBe("world");
         }
 
         [Fact]
         public void White_space_is_removed()
         {
             var header = ParseHeader(" hello :   world  ");
-            header.Key.ShouldEqual("hello");
-            header.Value.ShouldEqual("world");
+            header.Key.ShouldBe("hello");
+            header.Value.ShouldBe("world");
         }
 
         [Fact]
         public void Skips_initial_blank_lines() 
         {
             var header = ParseHeader("\n\nfirst: test");
-            header.Key.ShouldEqual("first");
-            header.Value.ShouldEqual("test");
+            header.Key.ShouldBe("first");
+            header.Value.ShouldBe("test");
         }
 
         [Fact]
         public void Can_parse_header_with_hyphen()
         {
             var header = ParseHeader("reply-to: foo@test.com");
-            header.Key.ShouldEqual("reply-to");
-            header.Value.ShouldEqual("foo@test.com");
+            header.Key.ShouldBe("reply-to");
+            header.Value.ShouldBe("foo@test.com");
         }
 
         KeyValuePair<string, string> ParseHeader(string line)

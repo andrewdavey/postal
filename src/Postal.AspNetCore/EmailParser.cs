@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Postal
 {
@@ -18,21 +19,10 @@ namespace Postal
         /// Creates a new <see cref="EmailParser"/>.
         /// </summary>
         /// 
-#if ASPNET5
-        private readonly RequestUrl _url;
-
-        public EmailParser(IEmailViewRenderer alternativeViewRenderer, RequestUrl url)
-        {
-            this.alternativeViewRenderer = alternativeViewRenderer;
-            _url = url;
-        }
-
-#else
         public EmailParser(IEmailViewRenderer alternativeViewRenderer)
         {
             this.alternativeViewRenderer = alternativeViewRenderer;
         }
-#endif
 
         readonly IEmailViewRenderer alternativeViewRenderer;
 
@@ -42,18 +32,22 @@ namespace Postal
         /// <param name="emailViewOutput">The email view output.</param>
         /// <param name="email">The <see cref="Email"/> used to generate the output.</param>
         /// <returns>A <see cref="MailMessage"/> containing the email headers and content.</returns>
-        public MailMessage Parse(string emailViewOutput, Email email)
+        public async Task<MailMessage> ParseAsync(string emailViewOutput, Email email)
         {
             var message = new MailMessage();
-            InitializeMailMessage(message, emailViewOutput, email);
+            await InitializeMailMessageAsync(message, emailViewOutput, email);
             return message;
         }
 
-        void InitializeMailMessage(MailMessage message, string emailViewOutput, Email email)
+        private async Task InitializeMailMessageAsync(MailMessage message, string emailViewOutput, Email email)
         {
+            if (string.IsNullOrWhiteSpace(emailViewOutput))
+            {
+                throw new ArgumentNullException(nameof(emailViewOutput));
+            }
             using (var reader = new StringReader(emailViewOutput))
             {
-                ParserUtils.ParseHeaders(reader, (key, value) => ProcessHeader(key, value, message, email));
+                await ParserUtils.ParseHeadersAsync(reader, (key, value) => ProcessHeaderAsync(key, value, message, email));
                 AssignCommonHeaders(message, email);
                 if (message.AlternateViews.Count == 0)
                 {
@@ -77,7 +71,7 @@ namespace Postal
             }
         }
 
-        void AssignCommonHeaders(MailMessage message, Email email)
+        private void AssignCommonHeaders(MailMessage message, Email email)
         {
             if (message.To.Count == 0)
             {
@@ -115,7 +109,7 @@ namespace Postal
             }
         }
 
-        void AssignCommonHeader<T>(Email email, string header, Action<T> assign)
+        private void AssignCommonHeader<T>(Email email, string header, Action<T> assign)
             where T : class
         {
             object value;
@@ -126,13 +120,13 @@ namespace Postal
             }
         }
 
-        void ProcessHeader(string key, string value, MailMessage message, Email email)
+        private async Task ProcessHeaderAsync(string key, string value, MailMessage message, Email email)
         {
             if (IsAlternativeViewsHeader(key))
             {
                 foreach (var view in CreateAlternativeViews(value, email))
                 {
-                    message.AlternateViews.Add(view);
+                    message.AlternateViews.Add(await view);
                 }
             }
             else
@@ -141,21 +135,16 @@ namespace Postal
             }
         }
 
-        IEnumerable<AlternateView> CreateAlternativeViews(string deliminatedViewNames, Email email)
+        private IEnumerable<Task<AlternateView>> CreateAlternativeViews(string deliminatedViewNames, Email email)
         {
             var viewNames = deliminatedViewNames.Split(new[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            return from viewName in viewNames 
-                   select CreateAlternativeView(email, viewName);
+            return viewNames.Select(v => CreateAlternativeView(email, v)).ToList();
         }
 
-        AlternateView CreateAlternativeView(Email email, string alternativeViewName)
+        private async Task<AlternateView> CreateAlternativeView(Email email, string alternativeViewName)
         {
             var fullViewName = GetAlternativeViewName(email, alternativeViewName);
-#if ASPNET5
-            var output = alternativeViewRenderer.Render(email, _url);
-#else
-            var output = alternativeViewRenderer.Render(email, fullViewName);
-#endif
+            var output = await alternativeViewRenderer.RenderAsync(email, fullViewName);
             string contentType;
             string body;
             using (var reader = new StringReader(output))
@@ -194,7 +183,7 @@ namespace Postal
             return alternativeView;
         }
 
-        static string GetAlternativeViewName(Email email, string alternativeViewName)
+        private static string GetAlternativeViewName(Email email, string alternativeViewName)
         {
             if (email.ViewName.StartsWith("~"))
             {
@@ -207,7 +196,7 @@ namespace Postal
             }
         }
 
-        MemoryStream CreateStreamOfBody(string body)
+        private MemoryStream CreateStreamOfBody(string body)
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
@@ -217,7 +206,7 @@ namespace Postal
             return stream;
         }
 
-        string ParseHeadersForContentType(StringReader reader)
+        private string ParseHeadersForContentType(StringReader reader)
         {
             string contentType = null;
             ParserUtils.ParseHeaders(reader, (key, value) =>
@@ -230,12 +219,12 @@ namespace Postal
             return contentType;
         }
 
-        bool IsAlternativeViewsHeader(string headerName)
+        private bool IsAlternativeViewsHeader(string headerName)
         {
             return headerName.Equals("views", StringComparison.OrdinalIgnoreCase);
         }
 
-        void AssignEmailHeaderToMailMessage(string key, string value, MailMessage message)
+        private void AssignEmailHeaderToMailMessage(string key, string value, MailMessage message)
         {
             switch (key)
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Xunit;
-using Should;
+using Shouldly;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.IO;
@@ -36,7 +36,7 @@ namespace Postal
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
             var resource = embedder.ReferenceImage("test.png");
-            resource.ContentType.ShouldEqual(new ContentType("image/png"));
+            resource.ContentType.ShouldBe(new ContentType("image/png"));
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Postal
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
             var resource = embedder.ReferenceImage("http://test.com/test.png");
-            resource.ContentType.ShouldEqual(new ContentType("image/png"));
+            resource.ContentType.ShouldBe(new ContentType("image/png"));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Postal
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
             var resource = embedder.ReferenceImage("test.jpeg");
-            resource.ContentType.ShouldEqual(new ContentType("image/jpeg"));
+            resource.ContentType.ShouldBe(new ContentType("image/jpeg"));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Postal
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
             var resource = embedder.ReferenceImage("test.jpg");
-            resource.ContentType.ShouldEqual(new ContentType("image/jpeg"));
+            resource.ContentType.ShouldBe(new ContentType("image/jpeg"));
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace Postal
         {
             var embedder = new ImageEmbedder(StubLinkedResource);
             var resource = embedder.ReferenceImage("test.gif");
-            resource.ContentType.ShouldEqual(new ContentType("image/gif"));
+            resource.ContentType.ShouldBe(new ContentType("image/gif"));
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace Postal
                 File.WriteAllBytes(filename, new byte[] { 42 });
                 using (var resource = embedder.ReferenceImage(filename))
                 {
-                    resource.ContentStream.Length.ShouldEqual(1);
+                    resource.ContentStream.Length.ShouldBe(1);
                 }
             }
             finally
@@ -96,7 +96,7 @@ namespace Postal
             var embedder = new ImageEmbedder();
             using (var resource = embedder.ReferenceImage("http://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png"))
             {
-                resource.ContentStream.Length.ShouldNotEqual(0);
+                resource.ContentStream.Length.ShouldNotBe(0);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Postal
             {
                 embedder.AddImagesToView(view);
 
-                view.LinkedResources.Count.ShouldEqual(1);
+                view.LinkedResources.Count.ShouldBe(1);
                 view.LinkedResources[0].ShouldBeSameAs(cid);
             }
         }

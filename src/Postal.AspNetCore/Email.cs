@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Net.Mail;
 using System.Threading.Tasks;
-#if ASPNET5
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.DependencyInjection;
-#else
-using System.Web.Mvc;
-#endif
 
 namespace Postal
 {
@@ -19,40 +14,36 @@ namespace Postal
     /// ViewBag property of a Controller. Any dynamic property access is mapped to the
     /// view data dictionary.
     /// </summary>
-#if ASPNET5
     public class Email : DynamicObject
-#else
-    public class Email : DynamicObject, IViewDataContainer
-#endif
     {
-
-#if ASPNET5
-        private IServiceProvider _serviceProvider;
-#endif
+        /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
+        /// <remarks>Used when defining strongly typed Email classes.</remarks>
+        protected Email()
+        {
+            Attachments = new List<Attachment>();
+            ViewName = DeriveViewNameFromClassName();
+            ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
+            ViewData.Model = this;
+            ImageEmbedder = new ImageEmbedder();
+        }
 
         /// <summary>
         /// Creates a new Email, that will render the given view.
         /// </summary>
         /// <param name="viewName">The name of the view to render</param>
-#if ASPNET5
-        public Email(string viewName, IServiceProvider serviceProvider)
-#else
-        public Email(string viewName)
-#endif
+        public Email(string viewName) : this(viewName, new EmptyModelMetadataProvider())
+        {
+        }
+
+        public Email(string viewName, IModelMetadataProvider modelMetadataProvider)
         {
             if (viewName == null) throw new ArgumentNullException(nameof(viewName));
             if (string.IsNullOrWhiteSpace(viewName)) throw new ArgumentException("View name cannot be empty.", "viewName");
 
             Attachments = new List<Attachment>();
             ViewName = viewName;
-#if ASPNET5
-            _serviceProvider = serviceProvider;
-            var modelMetadataProvider = _serviceProvider.GetRequiredService<IModelMetadataProvider>();
-            ViewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary());
+            ViewData = new ViewDataDictionary(modelMetadataProvider, new ModelStateDictionary());
             ViewData.Model = this;
-#else
-            ViewData = new ViewDataDictionary(this);
-#endif
             ImageEmbedder = new ImageEmbedder();
         }
 
@@ -61,28 +52,9 @@ namespace Postal
         /// </summary>
         /// <param name="viewName">The name of the view to render</param>
         /// <param name="areaName">The name of the area containing the view to render</param>
-#if ASPNET5
-        public Email(string viewName, string areaName, IServiceProvider serviceProvider) : this(viewName, serviceProvider)
-#else
-        public Email(string viewName, string areaName) : this(viewName)
-#endif
+        public Email(string viewName, string areaName, IModelMetadataProvider modelMetadataProvider) : this(viewName, modelMetadataProvider)
         {
             AreaName = areaName;
-        }
-
-        /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
-        /// <remarks>Used when defining strongly typed Email classes.</remarks>
-        protected Email()
-        {
-            Attachments = new List<Attachment>();
-            ViewName = DeriveViewNameFromClassName();
-#if ASPNET5
-            ViewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary());
-            ViewData.Model = this;
-#else
-            ViewData = new ViewDataDictionary(this);
-#endif
-            ImageEmbedder = new ImageEmbedder();
         }
 
         /// <summary>
@@ -116,49 +88,13 @@ namespace Postal
             Attachments.Add(attachment);
         }
 
-#if ASPNET5
-        /// <summary>
-        /// Convenience method that sends this email via a default EmailService. 
-        /// </summary>
-        public void Send(IServiceProvider serviceProvider)
-        {
-            CreateEmailService(serviceProvider).Send(this);
-        }
-
         /// <summary>
         /// Convenience method that sends this email asynchronously via a default EmailService. 
         /// </summary>
-        public Task SendAsync(IServiceProvider serviceProvider)
+        public Task SendAsync(IEmailService emailService)
         {
-            return CreateEmailService(serviceProvider).SendAsync(this);
+            return emailService.SendAsync(this);
         }
-
-        /// <summary>
-        /// A function that returns an instance of <see cref="IEmailService"/>.
-        /// </summary>
-        public static Func<IServiceProvider, IEmailService> CreateEmailService = (s) => new EmailService(s);
-#else
-        /// <summary>
-        /// Convenience method that sends this email via a default EmailService. 
-        /// </summary>
-        public void Send()
-        {
-            CreateEmailService().Send(this);
-        }
-
-        /// <summary>
-        /// Convenience method that sends this email asynchronously via a default EmailService. 
-        /// </summary>
-        public Task SendAsync()
-        {
-            return CreateEmailService().SendAsync(this);
-        }
-
-        /// <summary>
-        /// A function that returns an instance of <see cref="IEmailService"/>.
-        /// </summary>
-        public static Func<IEmailService> CreateEmailService = () => new EmailService();
-#endif
 
         // Any dynamic property access is delegated to view data dictionary.
         // This makes for sweet looking syntax - thank you C#4!

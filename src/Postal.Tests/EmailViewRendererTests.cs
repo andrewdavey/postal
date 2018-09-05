@@ -1,8 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Web.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace Postal
@@ -10,39 +15,49 @@ namespace Postal
     public class EmailViewRendererTests
     {
         [Fact]
-        public void Render_returns_email_string_created_by_view()
+        public async Task Render_returns_email_string_created_by_view()
         {
-            var viewEngines = new Mock<ViewEngineCollection>();
+            var viewEngine = new Mock<IRazorViewEngine>();
             var view = new FakeView();
-            viewEngines.Setup(e => e.FindView(It.IsAny<ControllerContext>(), "Test", null))
-                       .Returns(new ViewEngineResult(view, Mock.Of<IViewEngine>()));
-            var renderer = new EmailViewRenderer(viewEngines.Object);
+            viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
+                       .Returns(ViewEngineResult.Found("Test", view));
 
-            var actualEmailString = renderer.Render(new Email("Test"));
+            var serviceProvider = new Mock<IServiceProvider>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object);
+            var renderer = new EmailViewRender(templateService);
 
-            actualEmailString.ShouldEqual("Fake");
+            var actualEmailString = await renderer.RenderAsync(new Email("Test"));
+
+            actualEmailString.ShouldBe("Fake");
+
+            viewEngine.Verify();
         }
 
         class FakeView : IView
         {
-            public void Render(ViewContext viewContext, TextWriter writer)
+            public string Path => throw new NotImplementedException();
+
+            public Task RenderAsync(ViewContext context)
             {
-                writer.Write("Fake");
+                return context.Writer.WriteAsync("Fake");
             }
         }
 
         [Fact]
-        public void Render_throws_exception_when_email_view_not_found()
+        public async Task Render_throws_exception_when_email_view_not_found()
         {
-            var viewEngines = new Mock<ViewEngineCollection>();
-            viewEngines.Setup(e => e.FindView(It.IsAny<ControllerContext>(), "Test", It.IsAny<string>()))
-                       .Returns(new ViewEngineResult(new[] { "Test" }));
-            var renderer = new EmailViewRenderer(viewEngines.Object);
+            var viewEngine = new Mock<IRazorViewEngine>();
+            viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
+                       .Returns(ViewEngineResult.NotFound("Test", new[] { "Test" }));
+            var serviceProvider = new Mock<IServiceProvider>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object);
+            var renderer = new EmailViewRender(templateService);
 
-            Assert.Throws<Exception>(delegate
-            {
-                renderer.Render(new Email("Test"));
-            });
+            await Assert.ThrowsAsync<TemplateServiceException>(() => renderer.RenderAsync(new Email("Test")));
+
+            viewEngine.Verify();
         }
 
     }
