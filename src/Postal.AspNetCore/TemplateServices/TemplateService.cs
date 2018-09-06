@@ -11,72 +11,75 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-public class TemplateService : ITemplateService
+namespace Postal.AspNetCore
 {
-    private IRazorViewEngine _viewEngine;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ITempDataProvider _tempDataProvider;
-
-    public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider)
+    public class TemplateService : ITemplateService
     {
-        _viewEngine = viewEngine;
-        _serviceProvider = serviceProvider;
-        _tempDataProvider = tempDataProvider;
-    }
+        private IRazorViewEngine _viewEngine;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ITempDataProvider _tempDataProvider;
 
-    public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData, ActionDescriptor actionDescriptor,
-        string viewName, TViewModel viewModel, Dictionary<string, object> additonalViewDictionary = null, bool isMainPage = true)
-    {
-        var httpContext = new DefaultHttpContext
+        public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider)
         {
-            RequestServices = _serviceProvider
-        };
+            _viewEngine = viewEngine;
+            _serviceProvider = serviceProvider;
+            _tempDataProvider = tempDataProvider;
+        }
 
-        var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
-
-        using (var outputWriter = new StringWriter())
+        public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData, ActionDescriptor actionDescriptor,
+            string viewName, TViewModel viewModel, Dictionary<string, object> additonalViewDictionary = null, bool isMainPage = true)
         {
-            var viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
-            var viewDictionary = new ViewDataDictionary<TViewModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+            var httpContext = new DefaultHttpContext
             {
-                Model = viewModel
+                RequestServices = _serviceProvider
             };
-            if (additonalViewDictionary != null)
+
+            var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
+
+            using (var outputWriter = new StringWriter())
             {
-                foreach (var kv in additonalViewDictionary)
+                var viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
+                var viewDictionary = new ViewDataDictionary<TViewModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                 {
-                    if (!viewDictionary.ContainsKey(kv.Key))
+                    Model = viewModel
+                };
+                if (additonalViewDictionary != null)
+                {
+                    foreach (var kv in additonalViewDictionary)
                     {
-                        viewDictionary.Add(kv);
-                    }
-                    else
-                    {
-                        viewDictionary[kv.Key] = kv.Value;
+                        if (!viewDictionary.ContainsKey(kv.Key))
+                        {
+                            viewDictionary.Add(kv);
+                        }
+                        else
+                        {
+                            viewDictionary[kv.Key] = kv.Value;
+                        }
                     }
                 }
+
+                var tempDataDictionary = new TempDataDictionary(httpContext, _tempDataProvider);
+
+                if (!viewResult.Success)
+                {
+                    throw new TemplateServiceException($"Failed to render template {viewName} because it was not found.");
+                }
+
+                try
+                {
+                    var viewContext = new ViewContext(actionContext, viewResult.View, viewDictionary,
+                        tempDataDictionary, outputWriter, new HtmlHelperOptions());
+
+                    await viewResult.View.RenderAsync(viewContext);
+                }
+                catch (Exception ex)
+                {
+                    throw new TemplateServiceException("Failed to render template due to a razor engine failure", ex);
+                }
+
+                await outputWriter.FlushAsync();
+                return outputWriter.ToString();
             }
-
-            var tempDataDictionary = new TempDataDictionary(httpContext, _tempDataProvider);
-
-            if (!viewResult.Success)
-            {
-                throw new TemplateServiceException($"Failed to render template {viewName} because it was not found.");
-            }
-
-            try
-            {
-                var viewContext = new ViewContext(actionContext, viewResult.View, viewDictionary,
-                    tempDataDictionary, outputWriter, new HtmlHelperOptions());
-
-                await viewResult.View.RenderAsync(viewContext);
-            }
-            catch (Exception ex)
-            {
-                throw new TemplateServiceException("Failed to render template due to a razor engine failure", ex);
-            }
-
-            await outputWriter.FlushAsync();
-            return outputWriter.ToString();
         }
     }
 }

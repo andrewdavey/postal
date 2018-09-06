@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Postal.AspNetCore;
 
 namespace Postal
 {
