@@ -25,18 +25,18 @@ namespace Postal.AspNetCore
         private readonly ILogger<EmailViewResultExecutor> _logger;
         private readonly IHttpResponseStreamWriterFactory _httpResponseStreamWriterFactory;
 
-        IEmailViewRenderer Renderer { get; set; }
+        IEmailViewRender Render { get; set; }
         IEmailParser Parser { get; set; }
 
         public EmailViewResultExecutor(ILoggerFactory loggerFactory,
             IHttpResponseStreamWriterFactory httpResponseStreamWriterFactory,
-            IEmailViewRenderer renderer,
+            IEmailViewRender render,
             IEmailParser parser = null)
         {
             _logger = loggerFactory.CreateLogger<EmailViewResultExecutor>();
             _httpResponseStreamWriterFactory = httpResponseStreamWriterFactory;
-            Renderer = renderer;
-            Parser = parser ?? new EmailParser(Renderer);
+            Render = render;
+            Parser = parser ?? new EmailParser(Render);
         }
 
         public async Task ExecuteAsync(ActionContext context, EmailViewResult result)
@@ -89,7 +89,7 @@ namespace Postal.AspNetCore
         /// <returns>The content type for the HTTP response.</returns>
         internal async Task<string> WriteEmailAsync(Email email, TextWriter writer, string format = null)
         {
-            var result = await Renderer.RenderAsync(email);
+            var result = await Render.RenderAsync(email);
             var mailMessage = await Parser.ParseAsync(result, email);
 
             // no special requests; render what's in the template

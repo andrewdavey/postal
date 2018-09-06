@@ -15,21 +15,21 @@ namespace Postal
         /// <summary>Creates a new <see cref="EmailService"/>, using the given view engines.</summary>
         public static EmailService Create(IServiceProvider serviceProvider, Func<SmtpClient> createSmtpClient = null)
         {
-            EmailViewRender emailViewRenderer = serviceProvider.GetRequiredService<EmailViewRender>();
-            return new EmailService(emailViewRenderer, createSmtpClient: createSmtpClient);
+            EmailViewRender emailViewRender = serviceProvider.GetRequiredService<EmailViewRender>();
+            return new EmailService(emailViewRender, createSmtpClient: createSmtpClient);
         }
 
         /// <summary>
         /// Creates a new <see cref="EmailService"/>.
         /// </summary>
-        public EmailService(IEmailViewRenderer emailViewRenderer, IEmailParser emailParser = null, Func<SmtpClient> createSmtpClient = null)
+        public EmailService(IEmailViewRender emailViewRenderer, IEmailParser emailParser = null, Func<SmtpClient> createSmtpClient = null)
         {
             this.emailViewRenderer = emailViewRenderer;
             this.emailParser = emailParser;
             this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
         }
 
-        readonly IEmailViewRenderer emailViewRenderer;
+        readonly IEmailViewRender emailViewRenderer;
         IEmailParser emailParser;
         readonly Func<SmtpClient> createSmtpClient;
         

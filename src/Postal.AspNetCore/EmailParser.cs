@@ -19,12 +19,12 @@ namespace Postal
         /// Creates a new <see cref="EmailParser"/>.
         /// </summary>
         /// 
-        public EmailParser(IEmailViewRenderer alternativeViewRenderer)
+        public EmailParser(IEmailViewRender alternativeViewRenderer)
         {
             this.alternativeViewRenderer = alternativeViewRenderer;
         }
 
-        readonly IEmailViewRenderer alternativeViewRenderer;
+        readonly IEmailViewRender alternativeViewRenderer;
 
         /// <summary>
         /// Parses the email view output into a <see cref="MailMessage"/>.

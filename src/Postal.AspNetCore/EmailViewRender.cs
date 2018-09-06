@@ -10,7 +10,7 @@ namespace Postal
     /// <summary>
     /// Renders <see cref="Email"/> view's into raw strings using the MVC ViewEngine infrastructure.
     /// </summary>
-    public class EmailViewRender : IEmailViewRenderer
+    public class EmailViewRender : IEmailViewRender
     {
         /// <summary>
         /// Creates a new <see cref="EmailViewRender"/> that uses the given view engines.
