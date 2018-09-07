@@ -15,7 +15,7 @@ test_script:
   - cd ../../
 after_test:
   - mkdir .\artifacts
-  - dotnet pack .\src\Postal.AspNetCore -c Release -o .\artifacts --version-suffix={build}
+  - dotnet pack .\src\Postal.AspNetCore -c Release -o ..\..\artifacts --version-suffix=%APPVEYOR_BUILD_NUMBER%
 artifacts:
 - path: .\artifacts\**\*.nupkg
   name: NuGet
