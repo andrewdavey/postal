@@ -12,6 +12,7 @@ before_test:
 test_script:
   - cd ./src/Postal.Tests/
   - dotnet test -c Release
+  - cd ../../
 after_test:
   - mkdir .\artifacts
   - dotnet pack .\src\Postal.AspNetCore -c Release -o .\artifacts --version-suffix={build}
