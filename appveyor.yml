@@ -13,7 +13,11 @@ test_script:
   - cd ./src/Postal.Tests/
   - dotnet test -c Release
 after_test:
-
+  - mkdir .\artifacts
+  - dotnet pack .\src\Postal.AspNetCore -c Release -o .\artifacts --version-suffix={build}
+artifacts:
+- path: .\artifacts\**\*.nupkg
+  name: NuGet
 deploy:
 - provider: NuGet
   server: https://www.myget.org/F/herman-github/api/v2/package
