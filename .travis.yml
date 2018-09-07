@@ -1,6 +1,6 @@
 ﻿language: csharp
 mono: none
-dotnet: 2.1.3
+dotnet: 2.1.401
 solution: solution-name.sln
 install:
   - dotnet restore
