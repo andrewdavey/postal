@@ -13,3 +13,12 @@ test_script:
   - cd ./src/Postal.Tests/
   - dotnet test -c Release
 after_test:
+
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/herman-github/api/v2/package
+  api_key:
+    secure: IlPpRIxl4Y9yCxtT5ic0pYcCtcSDg1MTO1YKtl2AORyc+zRxYUKsDob9plsEy8mE
+  skip_symbols: false
+  on:
+    branch: master
