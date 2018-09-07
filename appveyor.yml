@@ -24,6 +24,6 @@ deploy:
   server: https://www.myget.org/F/herman-github/api/v2/package
   api_key:
     secure: IlPpRIxl4Y9yCxtT5ic0pYcCtcSDg1MTO1YKtl2AORyc+zRxYUKsDob9plsEy8mE
-  skip_symbols: false
+  skip_symbols: true
   on:
     branch: master
