@@ -1,0 +1,15 @@
+﻿version: 2.1.0-build{build}
+image: Visual Studio 2017
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+install:
+before_build:
+  - dotnet restore
+build_script:
+  - dotnet build -c Release
+before_test:
+test_script:
+  - cd ./src/Postal.Tests/
+  - dotnet test -c Release
+after_test:
