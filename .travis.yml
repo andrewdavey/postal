@@ -8,4 +8,3 @@ script:
   - dotnet build -c Release Postal.sln
   - cd ./src/Postal.Tests
   - dotnet test -c Release
-  - kill %1
