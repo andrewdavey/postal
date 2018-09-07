@@ -23,12 +23,12 @@ namespace Postal
     public class EmailViewResultTests
     {
         //https://github.com/aspnet/Mvc/blob/a67d9363e22be8ef63a1a62539991e1da3a6e30e/test/Microsoft.AspNetCore.Mvc.ViewFeatures.Test/ViewResultTest.cs
-        private ActionContext GetActionContext(IEmailViewRenderer render, IEmailParser parser = null)
+        private ActionContext GetActionContext(IEmailViewRender render, IEmailParser parser = null)
         {
             return new ActionContext(GetHttpContext(render, parser), new RouteData(), new ActionDescriptor());
         }
 
-        private HttpContext GetHttpContext(IEmailViewRenderer render, IEmailParser parser = null)
+        private HttpContext GetHttpContext(IEmailViewRender render, IEmailParser parser = null)
         {
             var options = Options.Create(new MvcViewOptions());
 
@@ -48,9 +48,9 @@ namespace Postal
             return httpContext;
         }
 
-        private IEmailViewRenderer GetRender(Email email, string template, string textTemplate = null, string htmlTemplate = null)
+        private IEmailViewRender GetRender(Email email, string template, string textTemplate = null, string htmlTemplate = null)
         {
-            var renderer = new Mock<IEmailViewRenderer>();
+            var renderer = new Mock<IEmailViewRender>();
 
             renderer.Setup(r => r.RenderAsync(email)).Returns(Task.FromResult(template));
             if (!string.IsNullOrEmpty(textTemplate))

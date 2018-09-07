@@ -21,7 +21,7 @@ Subject: Test Subject
 
 <p>Hello, World!</p>";
             var email = new Email("Test");
-            var renderer = new Mock<IEmailViewRenderer>();
+            var renderer = new Mock<IEmailViewRender>();
             renderer.Setup(r => r.RenderAsync(email)).Returns(Task.FromResult(html));
             var parser = new Mock<IEmailParser>();
             var service = new EmailService(renderer.Object, parser.Object, () => null);
@@ -56,7 +56,7 @@ Subject: Test Subject
                     smtp.Host = "localhost"; // HACK: required by SmtpClient, but not actually used!
 
                     var email = new Email("Test");
-                    var renderer = new Mock<IEmailViewRenderer>();
+                    var renderer = new Mock<IEmailViewRender>();
                     renderer.Setup(r => r.RenderAsync(email)).Returns(Task.FromResult(html));
                     var parser = new Mock<IEmailParser>();
                     var service = new EmailService(renderer.Object, parser.Object, () => smtp);
