@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.1.3](https://github.com/hermanho/postal/tree/f15bbc2993c1812e9cff3fca01fd717c44a675c8) (2018-09-14)
+
+**Fixing:**
+- Fix ViewDataDictionary / ViewBag do not pass to ViewContext
+
 ## [v2.1.2](https://github.com/hermanho/postal/tree/063b4e21f002406f10f4a0a8a06155d333ecbb20) (2018-09-06)
 
 **Implemented enhancements:**
