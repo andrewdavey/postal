@@ -27,7 +27,7 @@ namespace Postal.AspNetCore
         }
 
         public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData, ActionDescriptor actionDescriptor,
-            string viewName, TViewModel viewModel, Dictionary<string, object> additonalViewDictionary = null, bool isMainPage = true)
+            string viewName, TViewModel viewModel, Dictionary<string, object> additonalViewDictionary = null, bool isMainPage = true) where TViewModel: IViewData
         {
             var httpContext = new DefaultHttpContext
             {
@@ -39,10 +39,7 @@ namespace Postal.AspNetCore
             using (var outputWriter = new StringWriter())
             {
                 var viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
-                var viewDictionary = new ViewDataDictionary<TViewModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-                {
-                    Model = viewModel
-                };
+                var viewDictionary = new ViewDataDictionary<TViewModel>(viewModel.ViewData, viewModel);
                 if (additonalViewDictionary != null)
                 {
                     foreach (var kv in additonalViewDictionary)

@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Postal.AspNetCore;
 
 namespace Postal
 {
@@ -14,7 +15,7 @@ namespace Postal
     /// ViewBag property of a Controller. Any dynamic property access is mapped to the
     /// view data dictionary.
     /// </summary>
-    public class Email : DynamicObject
+    public class Email : DynamicObject, IViewData
     {
         /// <summary>Create an Email where the ViewName is derived from the name of the class.</summary>
         /// <remarks>Used when defining strongly typed Email classes.</remarks>
