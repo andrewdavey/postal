@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Postal.AspNetCore;
 
-namespace Postal
+namespace Postal.AspNetCore
 {
     public static class ServiceCollectionExtensions
     {
