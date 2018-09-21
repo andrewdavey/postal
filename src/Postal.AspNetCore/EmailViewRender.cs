@@ -54,19 +54,21 @@ namespace Postal
             //var view = CreateView(viewName, controllerContext);
 
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
+            if (email.Route != null)
+            {
+                routeData.Routers.Add(email.Route);
+            }
             routeData.Values["controller"] = EmailViewDirectoryName;
             if (!string.IsNullOrWhiteSpace(email.AreaName))
             {
                 routeData.Values["area"] = email.AreaName;
                 routeData.DataTokens["area"] = email.AreaName;
             }
-            var actionDescriptor = new ActionDescriptor();
-            actionDescriptor.RouteValues = routeData.Values.ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
 
             Dictionary<string, object> viewData = new Dictionary<string, object>();
             viewData[ImageEmbedder.ViewDataKey] = email.ImageEmbedder;
             viewData.Remove(ImageEmbedder.ViewDataKey);
-            var viewOutput = await _templateService.RenderTemplateAsync(routeData, actionDescriptor, viewName, email, viewData, true);
+            var viewOutput = await _templateService.RenderTemplateAsync(routeData, viewName, email, viewData, true);
             return viewOutput;
         }
     }

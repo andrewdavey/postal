@@ -8,5 +8,6 @@ namespace Postal.AspNetCore
     public interface IViewData
     {
         ViewDataDictionary ViewData { get; set; }
+        Microsoft.AspNetCore.Http.PathString PathBase { get; set; }
     }
 }

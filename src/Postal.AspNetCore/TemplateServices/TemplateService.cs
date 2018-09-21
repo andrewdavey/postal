@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Postal.AspNetCore
@@ -26,14 +27,19 @@ namespace Postal.AspNetCore
             _tempDataProvider = tempDataProvider;
         }
 
-        public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData, ActionDescriptor actionDescriptor,
-            string viewName, TViewModel viewModel, Dictionary<string, object> additonalViewDictionary = null, bool isMainPage = true) where TViewModel: IViewData
+        public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData,
+            string viewName, TViewModel viewModel, Dictionary<string, object> additonalViewDictionary = null, bool isMainPage = true) where TViewModel : IViewData
         {
             var httpContext = new DefaultHttpContext
             {
                 RequestServices = _serviceProvider
             };
+            httpContext.Request.PathBase = viewModel.PathBase;
 
+            var actionDescriptor = new ActionDescriptor
+            {
+                RouteValues = routeData.Values.ToDictionary(kv => kv.Key, kv => kv.Value.ToString())
+            };
             var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
 
             using (var outputWriter = new StringWriter())

@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Routing;
 using Postal.AspNetCore;
 
 namespace Postal
@@ -129,5 +130,8 @@ namespace Postal
             if (viewName.EndsWith("Email")) viewName = viewName.Substring(0, viewName.Length - "Email".Length);
             return viewName;
         }
+
+        public IRouter Route { get; set; }
+        public Microsoft.AspNetCore.Http.PathString PathBase { get; set; }
     }
 }

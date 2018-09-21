@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>
       Create emails from ASP.NET MVC views
@@ -7,7 +7,7 @@
     </Description>
     <Copyright>Copyright © Andrew Davey 2014</Copyright>
     <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
-    <VersionPrefix>2.1.4</VersionPrefix>
+    <VersionPrefix>2.1.5</VersionPrefix>
     <Authors>Andrew Davey</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);ASPNET5</DefineConstants>
