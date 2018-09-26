@@ -34,11 +34,20 @@ namespace Postal.AspNetCore
             {
                 RequestServices = _serviceProvider
             };
-            httpContext.Request.Host = viewModel.RequestPath.Host;
-            httpContext.Request.Scheme = viewModel.RequestPath.Scheme;
-            //include fqdn
-            httpContext.Request.PathBase = $"{viewModel.RequestPath.Scheme}://{viewModel.RequestPath.Host}{viewModel.RequestPath.PathBase}";
-
+            if (viewModel.RequestPath != null)
+            {
+                httpContext.Request.Host = viewModel.RequestPath.Host;
+                httpContext.Request.Scheme = viewModel.RequestPath.Scheme;
+                if (viewModel.RequestPath.Scheme != null && viewModel.RequestPath.Host != null)
+                {
+                    //include fqdn
+                    httpContext.Request.PathBase = $"{viewModel.RequestPath.Scheme}://{viewModel.RequestPath.Host}{viewModel.RequestPath.PathBase}";
+                }
+                else
+                {
+                    httpContext.Request.PathBase = viewModel.RequestPath.PathBase;
+                }
+            }
 
             var actionDescriptor = new ActionDescriptor
             {
