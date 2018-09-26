@@ -132,6 +132,6 @@ namespace Postal
         }
 
         public IRouter Route { get; set; }
-        public Microsoft.AspNetCore.Http.PathString PathBase { get; set; }
+        public RequestPath RequestPath { get; set; }
     }
 }

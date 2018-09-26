@@ -34,7 +34,11 @@ namespace Postal.AspNetCore
             {
                 RequestServices = _serviceProvider
             };
-            httpContext.Request.PathBase = viewModel.PathBase;
+            httpContext.Request.Host = viewModel.RequestPath.Host;
+            httpContext.Request.Scheme = viewModel.RequestPath.Scheme;
+            //include fqdn
+            httpContext.Request.PathBase = $"{viewModel.RequestPath.Scheme}://{viewModel.RequestPath.Host}{viewModel.RequestPath.PathBase}";
+
 
             var actionDescriptor = new ActionDescriptor
             {
