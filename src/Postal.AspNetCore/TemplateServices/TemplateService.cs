@@ -36,9 +36,9 @@ namespace Postal.AspNetCore
             };
             if (viewModel.RequestPath != null)
             {
-                httpContext.Request.Host = viewModel.RequestPath.Host;
+                httpContext.Request.Host = HostString.FromUriComponent(viewModel.RequestPath.Host);
                 httpContext.Request.Scheme = viewModel.RequestPath.Scheme;
-                httpContext.Request.PathBase = viewModel.RequestPath.PathBase;
+                httpContext.Request.PathBase = PathString.FromUriComponent(viewModel.RequestPath.PathBase);
             }
 
             var actionDescriptor = new ActionDescriptor

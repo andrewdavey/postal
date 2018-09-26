@@ -8,8 +8,8 @@ namespace Postal
 {
     public class RequestPath
     {
-        public PathString PathBase { get; set; }
-        public HostString Host { get; set; }
+        public string PathBase { get; set; }
+        public string Host { get; set; }
         public bool IsHttps { get; set; }
         public string Scheme { get; set; }
         public string Method { get; set; }
