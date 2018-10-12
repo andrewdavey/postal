@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.6](https://github.com/hermanho/postal/tree/687f429d4105e05e42cc15c100ad89708355c91a) (2018-10-12)
+
+**Implemented enhancements:**
+- Allow pass RequestPath in TemplateService and Razor
+
+**Fixing:**
+- Fix ViewDataDictionary / ViewBag do not pass to ViewContext
+
 ## [v2.1.3](https://github.com/hermanho/postal/tree/f15bbc2993c1812e9cff3fca01fd717c44a675c8) (2018-09-14)
 
 **Fixing:**
