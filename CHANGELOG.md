@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.1.6](https://github.com/hermanho/postal/tree/687f429d4105e05e42cc15c100ad89708355c91a) (2018-10-12)
+## [v2.1.5](https://github.com/hermanho/postal/tree/687f429d4105e05e42cc15c100ad89708355c91a) (2018-10-12)
 
 **Implemented enhancements:**
 - Allow pass RequestPath in TemplateService and Razor
