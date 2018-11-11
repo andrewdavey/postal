@@ -15,3 +15,6 @@ _fork from https://github.com/andrewdavey/postal_ with asp.net core support
 
 ## Nuget
 https://www.nuget.org/packages/Postal.AspNetCore/
+
+## Sample
+https://github.com/hermanho/postal.aspnetcore.samples
