@@ -66,9 +66,9 @@ namespace Postal
             }
 
             Dictionary<string, object> viewData = new Dictionary<string, object>();
-            viewData[ImageEmbedder.ViewDataKey] = email.ImageEmbedder;
-            viewData.Remove(ImageEmbedder.ViewDataKey);
+            viewData[ImageEmbedder.ViewDataKey] = email.ImageEmbedder;            
             var viewOutput = await _templateService.RenderTemplateAsync(routeData, viewName, email, viewData, true);
+            viewData.Remove(ImageEmbedder.ViewDataKey);
             return viewOutput;
         }
     }
