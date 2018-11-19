@@ -1,4 +1,4 @@
-# Postal [![Build status](https://ci.appveyor.com/api/projects/status/4qcwy63wku61eqhb?svg=true)](https://ci.appveyor.com/project/hermanho/postal) [![Build Status](https://travis-ci.org/hermanho/postal.svg?branch=master)](https://travis-ci.org/hermanho/postal) [![NuGet](https://img.shields.io/nuget/vpre/Postal.AspNetCore.svg)](https://www.nuget.org/packages/Postal.AspNetCore/) 
+# Postal [![Build status](https://ci.appveyor.com/api/projects/status/ot5k3bmm2tb2900v?svg=true)](https://ci.appveyor.com/project/hermanho/postal-aspnetcore) [![Build Status](https://travis-ci.com/hermanho/postal.aspnetcore.svg?branch=master)](https://travis-ci.com/hermanho/postal) [![NuGet](https://img.shields.io/nuget/vpre/Postal.AspNetCore.svg)](https://www.nuget.org/packages/Postal.AspNetCore/) 
 
 
 A handy email sending library for ASP.NET MVC.
