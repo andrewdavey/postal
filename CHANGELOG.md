@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.1.6](https://github.com/hermanho/postal/tree/0e76040601) (2018-11-20)
+
+**Fixing:**
+- Fix bugs in ImageEmbedder. ([@amitmittal](https://github.com/amitmittal) in [#2](https://github.com/hermanho/postal.aspnetcore/pull/2))
+
 ## [v2.1.5](https://github.com/hermanho/postal/tree/687f429d4105e05e42cc15c100ad89708355c91a) (2018-10-12)
 
 **Implemented enhancements:**
