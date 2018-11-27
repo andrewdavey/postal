@@ -48,16 +48,23 @@ after_test:
   - mkdir .\artifacts
   - dotnet pack .\src\Postal.AspNetCore -o ..\..\artifacts --configuration Release /p:Version="%APPVEYOR_BUILD_VERSION%"
 artifacts:
-- path: .\artifacts\**\*.nupkg
-  name: NuGet
+  - path: .\artifacts\**\*.nupkg
+    name: NuGet
 deploy:
-- provider: NuGet
-  server: https://www.myget.org/F/herman-github/api/v2/package
-  api_key:
-    secure: IlPpRIxl4Y9yCxtT5ic0pYcCtcSDg1MTO1YKtl2AORyc+zRxYUKsDob9plsEy8mE
-  skip_symbols: true
-  on:
-    branch: master
+  - provider: NuGet
+    server: https://www.myget.org/F/herman-github/api/v2/package
+    api_key:
+      secure: IlPpRIxl4Y9yCxtT5ic0pYcCtcSDg1MTO1YKtl2AORyc+zRxYUKsDob9plsEy8mE
+    skip_symbols: true
+    on:
+      branch: master
+  - provider: NuGet
+    server: https://www.myget.org/F/herman-github/api/v2/package
+    api_key:
+      secure: IlPpRIxl4Y9yCxtT5ic0pYcCtcSDg1MTO1YKtl2AORyc+zRxYUKsDob9plsEy8mE
+    skip_symbols: true
+    on:
+      appveyor_repo_tag: true
 after_deploy:
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:APPVEYOR_REPO_TAG_NAME) {
