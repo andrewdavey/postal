@@ -1,4 +1,5 @@
-﻿language: csharp
+﻿dist: xenial
+language: csharp
 mono: none
 dotnet: 2.2.100
 solution: solution-name.sln
