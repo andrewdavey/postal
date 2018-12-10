@@ -6,6 +6,7 @@ environment:
 pull_requests:
   do_not_increment_build_number: true
 install:
+  - ps: ./install-sdk.ps1
   - ps: |
       git config --global core.autocrlf input
       
