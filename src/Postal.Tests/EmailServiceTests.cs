@@ -98,7 +98,8 @@ Subject: Test Subject
         public void Dependency_injection_default()
         {
             var serviceCollection = new ServiceCollection();
-
+            var viewEngine = new Mock<IRazorViewEngine>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
             serviceCollection.AddPostal();
 
             var services = serviceCollection.BuildServiceProvider();
