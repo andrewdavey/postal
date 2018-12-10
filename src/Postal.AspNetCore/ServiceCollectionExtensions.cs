@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Postal.AspNetCore;
 
 namespace Postal.AspNetCore
@@ -9,14 +10,11 @@ namespace Postal.AspNetCore
     {
         public static IServiceCollection AddPostal(this IServiceCollection services)
         {
-            if (services.Any(sd => sd.ServiceType == typeof(IEmailService)))
-                return services;
-
-            services.AddScoped<IActionResultExecutor<EmailViewResult>, EmailViewResultExecutor>();
-            services.AddScoped<ITemplateService, TemplateService>();
-            services.AddScoped<IEmailParser, EmailParser>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IEmailViewRender, EmailViewRender>();
+            services.TryAddScoped<IActionResultExecutor<EmailViewResult>, EmailViewResultExecutor>();
+            services.TryAddScoped<ITemplateService, TemplateService>();
+            services.TryAddScoped<IEmailParser, EmailParser>();
+            services.TryAddScoped<IEmailService, EmailService>();
+            services.TryAddScoped<IEmailViewRender, EmailViewRender>();
             return services;
         }
     }

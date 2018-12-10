@@ -3,6 +3,8 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Postal.AspNetCore;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Postal.Tests")]
 namespace Postal
@@ -13,26 +15,38 @@ namespace Postal
     public class EmailService : IEmailService
     {
         /// <summary>Creates a new <see cref="EmailService"/>, using the given view engines.</summary>
+        [Obsolete]
         public static EmailService Create(IServiceProvider serviceProvider, Func<SmtpClient> createSmtpClient = null)
         {
-            EmailViewRender emailViewRender = serviceProvider.GetRequiredService<EmailViewRender>();
-            return new EmailService(emailViewRender, createSmtpClient: createSmtpClient);
+            var emailViewRender = serviceProvider.GetRequiredService<IEmailViewRender>();
+            var emailParser = serviceProvider.GetRequiredService<IEmailParser>();
+            var options = Options.Create(new EmailServiceOptions() { CreateSmtpClient = createSmtpClient });
+            return new EmailService(emailViewRender, emailParser, options);
         }
 
         /// <summary>
         /// Creates a new <see cref="EmailService"/>.
         /// </summary>
-        public EmailService(IEmailViewRender emailViewRenderer, IEmailParser emailParser = null, Func<SmtpClient> createSmtpClient = null)
+        public EmailService(IEmailViewRender emailViewRenderer, IEmailParser emailParser, IOptions<EmailServiceOptions> options)
         {
             this.emailViewRenderer = emailViewRenderer;
             this.emailParser = emailParser;
-            this.createSmtpClient = createSmtpClient ?? (() => new SmtpClient());
+            this.options = options.Value;
         }
 
-        readonly IEmailViewRender emailViewRenderer;
-        IEmailParser emailParser;
-        readonly Func<SmtpClient> createSmtpClient;
+        protected readonly IEmailViewRender emailViewRenderer;
+        protected IEmailParser emailParser;
+        protected EmailServiceOptions options;
         
+        //for unit testing
+        internal Func<SmtpClient> CreateSmtpClient
+        {
+            get
+            {
+                return options.CreateSmtpClient;
+            }
+        }
+
         /// <summary>
         /// Send an email asynchronously, using an <see cref="SmtpClient"/>.
         /// </summary>
@@ -45,7 +59,7 @@ namespace Postal
             var mailMessage = await CreateMailMessageAsync(email);
             try
             {
-                var smtp = createSmtpClient();
+                var smtp = options.CreateSmtpClient();
                 try
                 {
                     //var taskCompletionSource = new TaskCompletionSource<object>();

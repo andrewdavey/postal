@@ -6,6 +6,14 @@ using System.IO;
 using System;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Postal.AspNetCore;
+using Microsoft.Extensions.Options;
+using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Postal
 {
@@ -24,7 +32,11 @@ Subject: Test Subject
             var renderer = new Mock<IEmailViewRender>();
             renderer.Setup(r => r.RenderAsync(email)).Returns(Task.FromResult(html));
             var parser = new Mock<IEmailParser>();
-            var service = new EmailService(renderer.Object, parser.Object, () => null);
+            var emailOptions = new EmailServiceOptions();
+            emailOptions.CreateSmtpClient = () => null;
+            var options = new Mock<IOptions<EmailServiceOptions>>();
+            options.SetupGet(o => o.Value).Returns(emailOptions);
+            var service = new EmailService(renderer.Object, parser.Object, options.Object);
             var expectedMailMessage = new MailMessage();
             parser.Setup(p => p.ParseAsync(It.IsAny<string>(), email)).Returns(Task.FromResult(expectedMailMessage));
 
@@ -34,6 +46,7 @@ Subject: Test Subject
 
             parser.Verify();
             renderer.Verify();
+            options.Verify();
         }
 
         [Fact]
@@ -58,8 +71,12 @@ Subject: Test Subject
                     var email = new Email("Test");
                     var renderer = new Mock<IEmailViewRender>();
                     renderer.Setup(r => r.RenderAsync(email)).Returns(Task.FromResult(html));
+                    var emailOptions = new EmailServiceOptions();
+                    emailOptions.CreateSmtpClient = () => smtp;
+                    var options = new Mock<IOptions<EmailServiceOptions>>();
+                    options.SetupGet(o => o.Value).Returns(emailOptions);
                     var parser = new Mock<IEmailParser>();
-                    var service = new EmailService(renderer.Object, parser.Object, () => smtp);
+                    var service = new EmailService(renderer.Object, parser.Object, options.Object);
                     parser.Setup(p => p.ParseAsync(It.IsAny<string>(), It.IsAny<Email>()))
                           .Returns(Task.FromResult(new MailMessage("test@test.com", "test@test.com")));
 
@@ -75,6 +92,136 @@ Subject: Test Subject
             {
                 Directory.Delete(dir, true);
             }
+        }
+
+        [Fact]
+        public void Dependency_injection_default()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddPostal();
+
+            var services = serviceCollection.BuildServiceProvider();
+            var emailService = services.GetRequiredService<IEmailService>();
+
+            var emailOption = services.GetRequiredService<IOptions<EmailServiceOptions>>();
+
+            emailService.ShouldBeOfType<EmailService>();
+            var smtpClient = ((EmailService)emailService).CreateSmtpClient;
+            smtpClient.ShouldBe(emailOption.Value.CreateSmtpClient);
+        }
+
+        [Fact]
+        public void Dependency_injection_smtpOtions1()
+        {
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new Dictionary<string, string>()
+            {
+                { "Host", "abc" },
+                { "Port","12345"},
+                { "FromAddress","qwerty"},
+                { "UserName","zxcvbn"},
+                { "Password","asdfgh"}
+            });
+            var _configuration = configBuilder.Build();
+            var serviceCollection = new ServiceCollection();
+            var viewEngine = new Mock<IRazorViewEngine>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            serviceCollection.AddSingleton(viewEngine.Object);
+            serviceCollection.AddSingleton(tempDataProvider.Object);
+
+            serviceCollection.Configure<EmailServiceOptions>(_configuration);
+            serviceCollection.AddPostal();
+
+            var services = serviceCollection.BuildServiceProvider();
+            var emailService = services.GetRequiredService<IEmailService>();
+
+            var emailOption = services.GetRequiredService<IOptions<EmailServiceOptions>>().Value;
+
+            EmailServiceOptions emailOptionField = GetInstanceField(typeof(EmailService), emailService, "options") as EmailServiceOptions;
+            emailOption.Host.ShouldBe("abc");
+            emailOption.Port.ShouldBe(12345);
+            emailOption.FromAddress.ShouldBe("qwerty");
+            emailOption.UserName.ShouldBe("zxcvbn");
+            emailOption.Password.ShouldBe("asdfgh");
+
+            emailOptionField.Host.ShouldBe("abc");
+            emailOptionField.Port.ShouldBe(12345);
+            emailOptionField.FromAddress.ShouldBe("qwerty");
+            emailOptionField.UserName.ShouldBe("zxcvbn");
+            emailOptionField.Password.ShouldBe("asdfgh");
+        }
+
+        [Fact]
+        public void Dependency_injection_smtpOtions2()
+        {
+            var serviceCollection = new ServiceCollection();
+            var viewEngine = new Mock<IRazorViewEngine>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            serviceCollection.AddSingleton(viewEngine.Object);
+            serviceCollection.AddSingleton(tempDataProvider.Object);
+
+            serviceCollection.Configure<EmailServiceOptions>(o =>
+            {
+                o.Host = "abc";
+                o.Port = 12345;
+                o.FromAddress = "qwerty";
+                o.UserName = "zxcvbn";
+                o.Password = "asdfgh";
+                o.CreateSmtpClient = () => new FactExcetpionForSmtpClient();
+            });
+
+            serviceCollection.AddPostal();
+
+            var services = serviceCollection.BuildServiceProvider();
+            var emailService = services.GetRequiredService<IEmailService>();
+
+            EmailServiceOptions emailOptionField = GetInstanceField(typeof(EmailService), emailService, "options") as EmailServiceOptions;
+            emailOptionField.Host.ShouldBe("abc");
+            emailOptionField.Port.ShouldBe(12345);
+            emailOptionField.FromAddress.ShouldBe("qwerty");
+            emailOptionField.UserName.ShouldBe("zxcvbn");
+            emailOptionField.Password.ShouldBe("asdfgh");
+        }
+
+        [Fact]
+        public void Dependency_injection_smtpOtions3()
+        {
+            var serviceCollection = new ServiceCollection();
+            var viewEngine = new Mock<IRazorViewEngine>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            serviceCollection.AddSingleton(viewEngine.Object);
+            serviceCollection.AddSingleton(tempDataProvider.Object);
+
+            serviceCollection.Configure<EmailServiceOptions>(o =>
+            {
+                o.CreateSmtpClient = () => throw new FactExcetpionForSmtpCreation();
+            });
+
+            serviceCollection.AddPostal();
+
+            var services = serviceCollection.BuildServiceProvider();
+            var emailService = services.GetRequiredService<IEmailService>();
+
+            Assert.ThrowsAsync<FactExcetpionForSmtpCreation>(() => emailService.SendAsync(new Email("testView")));
+        }
+
+        private static object GetInstanceField(Type type, object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                | BindingFlags.Static;
+            FieldInfo field = type.GetField(fieldName, bindFlags);
+            return field.GetValue(instance);
+        }
+
+        class FactExcetpionForSmtpClient : SmtpClient
+        {
+
+        }
+
+        class FactExcetpionForSmtpCreation : Exception
+        {
+
         }
     }
 }
