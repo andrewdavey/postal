@@ -98,6 +98,7 @@ Subject: Test Subject
         public void Dependency_injection_default()
         {
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -128,6 +129,7 @@ Subject: Test Subject
             });
             var _configuration = configBuilder.Build();
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -159,6 +161,7 @@ Subject: Test Subject
         public void Dependency_injection_smtpOtions2()
         {
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -185,12 +188,15 @@ Subject: Test Subject
             emailOptionField.FromAddress.ShouldBe("qwerty");
             emailOptionField.UserName.ShouldBe("zxcvbn");
             emailOptionField.Password.ShouldBe("asdfgh");
+            
+            emailOptionField.CreateSmtpClient().ShouldBeOfType<FactExcetpionForSmtpClient>();
         }
 
         [Fact]
         public void Dependency_injection_smtpOtions3()
         {
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -207,6 +213,8 @@ Subject: Test Subject
             var emailService = services.GetRequiredService<IEmailService>();
 
             Assert.ThrowsAsync<FactExcetpionForSmtpCreation>(() => emailService.SendAsync(new Email("testView")));
+            EmailServiceOptions emailOptionField = GetInstanceField(typeof(EmailService), emailService, "options") as EmailServiceOptions;
+            Assert.Throws<FactExcetpionForSmtpCreation>(() => emailOptionField.CreateSmtpClient());
         }
 
         private static object GetInstanceField(Type type, object instance, string fieldName)
