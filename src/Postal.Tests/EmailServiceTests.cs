@@ -100,6 +100,8 @@ Subject: Test Subject
             var serviceCollection = new ServiceCollection();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            serviceCollection.AddSingleton(viewEngine.Object);
+            serviceCollection.AddSingleton(tempDataProvider.Object);
             serviceCollection.AddPostal();
 
             var services = serviceCollection.BuildServiceProvider();
