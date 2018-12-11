@@ -3,7 +3,7 @@
     <Description>
       Create emails from ASP.NET MVC views
       Fork from https://github.com/andrewdavey/postal
-      NetCore support https://github.com/hermanho/postal
+      NetCore support https://github.com/hermanho/postal.aspnetcore
     </Description>
     <Copyright>Copyright © Andrew Davey 2014</Copyright>
     <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
@@ -17,10 +17,10 @@
     <PackageIconUrl>http://aboutcode.net/postal/favicon.ico</PackageIconUrl>
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
+    <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
     <IncludeSymbols>True</IncludeSymbols>
-    <PackageProjectUrl>https://github.com/hermanho/postal</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/hermanho/postal</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/hermanho/postal.aspnetcore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
     <CommitHash></CommitHash>
     <GenerateCommitHashAttribute>true</GenerateCommitHashAttribute>
     <GeneratedCommitHashAttributeFile></GeneratedCommitHashAttributeFile>
