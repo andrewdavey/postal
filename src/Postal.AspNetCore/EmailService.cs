@@ -37,7 +37,7 @@ namespace Postal
         protected readonly IEmailViewRender emailViewRenderer;
         protected IEmailParser emailParser;
         protected EmailServiceOptions options;
-        
+
         //for unit testing
         internal Func<SmtpClient> CreateSmtpClient
         {
@@ -56,47 +56,25 @@ namespace Postal
         {
             // Wrap the SmtpClient's awkward async API in the much nicer Task pattern.
             // However, we must be careful to dispose of the resources we create correctly.
-            var mailMessage = await CreateMailMessageAsync(email);
-            try
+            using (var mailMessage = await CreateMailMessageAsync(email))
             {
-                var smtp = options.CreateSmtpClient();
-                try
+                using (var smtp = options.CreateSmtpClient())
                 {
-                    //var taskCompletionSource = new TaskCompletionSource<object>();
-
-                    //smtp.SendCompleted += (o, e) =>
-                    //{
-                    //    smtp.Dispose();
-                    //    mailMessage.Dispose();
-
-                    //    if (e.Error != null)
-                    //    {
-                    //        taskCompletionSource.TrySetException(e.Error);
-                    //    }
-                    //    else if (e.Cancelled)
-                    //    {
-                    //        taskCompletionSource.TrySetCanceled();
-                    //    }
-                    //    else // Success
-                    //    {
-                    //        taskCompletionSource.TrySetResult(null);
-                    //    }
-                    //};
-
-                    //smtp.SendAsync(mailMessage, null);
-                    //await taskCompletionSource.Task;
                     await smtp.SendMailAsync(mailMessage);
                 }
-                catch
-                {
-                    smtp.Dispose();
-                    throw;
-                }
             }
-            catch
+        }
+
+        /// <summary>
+        /// Send an email asynchronously, using an <see cref="SmtpClient"/>.
+        /// </summary>
+        /// <param name="email">The email to send.</param>
+        /// <returns>A <see cref="Task"/> that completes once the email has been sent.</returns>
+        public async Task SendAsync(MailMessage mailMessage)
+        {
+            using (var smtp = options.CreateSmtpClient())
             {
-                mailMessage.Dispose();
-                throw;
+                await smtp.SendMailAsync(mailMessage);
             }
         }
 
