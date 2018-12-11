@@ -8,12 +8,19 @@ namespace Postal
     /// </summary>
     public interface IEmailService
     {
+
         /// <summary>
-        /// Creates and sends a <see cref="MailMessage"/> asynchronously using <see cref="SmtpClient"/>.
-        /// This uses the default configuration for mail defined in web.config.
+        /// Send an email asynchronously, using an <see cref="SmtpClient"/>.
         /// </summary>
         /// <param name="email">The email to send.</param>
-        /// <returns>A <see cref="Task"/> that can be used to await completion of sending the email.</returns>
+        /// <returns>A <see cref="Task"/> that completes once the email has been sent.</returns>
+        Task SendAsync(MailMessage email);
+
+        /// <summary>
+        /// Send an email asynchronously, using an <see cref="SmtpClient"/>.
+        /// </summary>
+        /// <param name="email">The email to send.</param>
+        /// <returns>A <see cref="Task"/> that completes once the email has been sent.</returns>
         Task SendAsync(Email email);
 
         /// <summary>
