@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.2.1](https://github.com/hermanho/postal.aspnetcore.aspnetcore/tree/v2.2.1) (2018-12-11)
+## [v2.2.1.1](https://github.com/hermanho/postal.aspnetcore.aspnetcore/tree/v2.2.1.1) (2018-12-11)
 
 **Implemented enhancements:**
 - Decouple "Func\<SmtpClient\>" into "IOptions\<EmailServiceOptions\>" in EmailService constructor for dependency injection
