@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Postal.AspNetCore;
+using Microsoft.Extensions.Logging;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Postal.Tests")]
 namespace Postal
@@ -21,22 +22,26 @@ namespace Postal
             var emailViewRender = serviceProvider.GetRequiredService<IEmailViewRender>();
             var emailParser = serviceProvider.GetRequiredService<IEmailParser>();
             var options = Options.Create(new EmailServiceOptions() { CreateSmtpClient = createSmtpClient });
-            return new EmailService(emailViewRender, emailParser, options);
+            var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger<EmailService>();
+            return new EmailService(emailViewRender, emailParser, options, logger);
         }
 
         /// <summary>
         /// Creates a new <see cref="EmailService"/>.
         /// </summary>
-        public EmailService(IEmailViewRender emailViewRenderer, IEmailParser emailParser, IOptions<EmailServiceOptions> options)
+        public EmailService(IEmailViewRender emailViewRenderer, IEmailParser emailParser, IOptions<EmailServiceOptions> options, ILogger<EmailService> logger)
         {
             this.emailViewRenderer = emailViewRenderer;
             this.emailParser = emailParser;
             this.options = options.Value;
+            this.logger = logger;
         }
 
         protected readonly IEmailViewRender emailViewRenderer;
         protected IEmailParser emailParser;
         protected EmailServiceOptions options;
+        protected ILogger<EmailService> logger;
 
         //for unit testing
         internal Func<SmtpClient> CreateSmtpClient
@@ -58,10 +63,7 @@ namespace Postal
             // However, we must be careful to dispose of the resources we create correctly.
             using (var mailMessage = await CreateMailMessageAsync(email))
             {
-                using (var smtp = options.CreateSmtpClient())
-                {
-                    await smtp.SendMailAsync(mailMessage);
-                }
+                await SendAsync(mailMessage);
             }
         }
 
@@ -74,6 +76,8 @@ namespace Postal
         {
             using (var smtp = options.CreateSmtpClient())
             {
+                this.logger.LogDebug($"Smtp created: host: {smtp.Host}, port: {smtp.Port}, enableSsl: {smtp.EnableSsl}");
+                this.logger.LogInformation($"Smtp send email from {mailMessage.From} to {mailMessage.To}");
                 await smtp.SendMailAsync(mailMessage);
             }
         }
