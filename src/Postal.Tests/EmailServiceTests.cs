@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Logging;
 
 namespace Postal
 {
@@ -36,7 +37,8 @@ Subject: Test Subject
             emailOptions.CreateSmtpClient = () => null;
             var options = new Mock<IOptions<EmailServiceOptions>>();
             options.SetupGet(o => o.Value).Returns(emailOptions);
-            var service = new EmailService(renderer.Object, parser.Object, options.Object);
+            var logger = new Mock<ILogger<EmailService>>();
+            var service = new EmailService(renderer.Object, parser.Object, options.Object, logger.Object);
             var expectedMailMessage = new MailMessage();
             parser.Setup(p => p.ParseAsync(It.IsAny<string>(), email)).Returns(Task.FromResult(expectedMailMessage));
 
@@ -76,7 +78,8 @@ Subject: Test Subject
                     var options = new Mock<IOptions<EmailServiceOptions>>();
                     options.SetupGet(o => o.Value).Returns(emailOptions);
                     var parser = new Mock<IEmailParser>();
-                    var service = new EmailService(renderer.Object, parser.Object, options.Object);
+                    var logger = new Mock<ILogger<EmailService>>();
+                    var service = new EmailService(renderer.Object, parser.Object, options.Object, logger.Object);
                     parser.Setup(p => p.ParseAsync(It.IsAny<string>(), It.IsAny<Email>()))
                           .Returns(Task.FromResult(new MailMessage("test@test.com", "test@test.com")));
 

@@ -76,7 +76,7 @@ namespace Postal
         {
             using (var smtp = options.CreateSmtpClient())
             {
-                this.logger.LogDebug($"Smtp created: host: {smtp.Host}, port: {smtp.Port}, enableSsl: {smtp.EnableSsl}");
+                this.logger.LogDebug($"Smtp created: host: {smtp.Host}, port: {smtp.Port}, enableSsl: {smtp.EnableSsl}, defaultCredentials: {smtp.UseDefaultCredentials}");
                 this.logger.LogInformation($"Smtp send email from {mailMessage.From} to {mailMessage.To}");
                 await smtp.SendMailAsync(mailMessage);
             }
