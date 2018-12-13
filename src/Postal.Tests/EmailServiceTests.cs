@@ -135,6 +135,8 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var logger = new Mock<ILogger<EmailService>>();
+            serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
 
@@ -167,6 +169,8 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var logger = new Mock<ILogger<EmailService>>();
+            serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
 
@@ -202,6 +206,8 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var logger = new Mock<ILogger<EmailService>>();
+            serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
 
