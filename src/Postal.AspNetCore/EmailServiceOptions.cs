@@ -13,7 +13,8 @@ namespace Postal.AspNetCore
         {
             CreateSmtpClient = () => new SmtpClient(Host, Port)
             {
-                Credentials = new NetworkCredential(UserName, Password),
+                UseDefaultCredentials = string.IsNullOrWhiteSpace(UserName),
+                Credentials = string.IsNullOrWhiteSpace(UserName) ? null : new NetworkCredential(UserName, Password),
                 EnableSsl = EnableSSL
             };
         }
