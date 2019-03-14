@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,15 +18,19 @@ namespace Postal.AspNetCore
 {
     public class TemplateService : ITemplateService
     {
+        public static readonly string ViewExtension = ".cshtml";
+
         private IRazorViewEngine _viewEngine;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITempDataProvider _tempDataProvider;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider)
+        public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider, IHostingEnvironment hostingEnvironment)
         {
             _viewEngine = viewEngine;
             _serviceProvider = serviceProvider;
             _tempDataProvider = tempDataProvider;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData,
@@ -49,7 +55,17 @@ namespace Postal.AspNetCore
 
             using (var outputWriter = new StringWriter())
             {
-                var viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
+                Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult viewResult = null;
+                if (IsApplicationRelativePath(viewName) || IsRelativePath(viewName))
+                {
+                    viewResult = _viewEngine.GetView(_hostingEnvironment.WebRootPath, viewName, isMainPage);
+                }
+                else
+                {
+                    viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
+                }
+
+
                 var viewDictionary = new ViewDataDictionary<TViewModel>(viewModel.ViewData, viewModel);
                 if (additonalViewDictionary != null)
                 {
@@ -70,7 +86,7 @@ namespace Postal.AspNetCore
 
                 if (!viewResult.Success)
                 {
-                    throw new TemplateServiceException($"Failed to render template {viewName} because it was not found.");
+                    throw new TemplateServiceException($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", viewResult.SearchedLocations) }");
                 }
 
                 try
@@ -88,6 +104,21 @@ namespace Postal.AspNetCore
                 await outputWriter.FlushAsync();
                 return outputWriter.ToString();
             }
+        }
+
+        // https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.Razor/src/RazorViewEngine.cs#L478
+        private static bool IsApplicationRelativePath(string name)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(name));
+            return name[0] == '~' || name[0] == '/';
+        }
+
+        private static bool IsRelativePath(string name)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(name));
+
+            // Though ./ViewName looks like a relative path, framework searches for that view using view locations.
+            return name.EndsWith(ViewExtension, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

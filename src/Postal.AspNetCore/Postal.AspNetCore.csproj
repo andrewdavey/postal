@@ -10,7 +10,6 @@
     <VersionPrefix>2.2.2</VersionPrefix>
     <Authors>Andrew Davey</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DefineConstants>$(DefineConstants);ASPNET5</DefineConstants>
     <AssemblyName>Postal.AspNetCore</AssemblyName>
     <PackageId>Postal.AspNetCore</PackageId>
     <PackageTags>Email;Postal;aspnetcore</PackageTags>
@@ -18,15 +17,12 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
-    <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/hermanho/postal.aspnetcore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
-    <CommitHash></CommitHash>
-    <GenerateCommitHashAttribute>true</GenerateCommitHashAttribute>
-    <GeneratedCommitHashAttributeFile></GeneratedCommitHashAttributeFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

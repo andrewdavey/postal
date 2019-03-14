@@ -3,14 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
-#if ASPNET5
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-#else
-using System.Web.Mvc;
-#endif
 
 namespace Postal
 {
