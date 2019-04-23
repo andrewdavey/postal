@@ -7,10 +7,9 @@
     </Description>
     <Copyright>Copyright © Andrew Davey 2014</Copyright>
     <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
-    <VersionPrefix>2.2.2</VersionPrefix>
+    <VersionPrefix>2.3.0</VersionPrefix>
     <Authors>Andrew Davey</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DefineConstants>$(DefineConstants);ASPNET5</DefineConstants>
     <AssemblyName>Postal.AspNetCore</AssemblyName>
     <PackageId>Postal.AspNetCore</PackageId>
     <PackageTags>Email;Postal;aspnetcore</PackageTags>
@@ -18,20 +17,19 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
-    <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/hermanho/postal.aspnetcore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
-    <CommitHash></CommitHash>
-    <GenerateCommitHashAttribute>true</GenerateCommitHashAttribute>
-    <GeneratedCommitHashAttributeFile></GeneratedCommitHashAttributeFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.2.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

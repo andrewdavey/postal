@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Postal
 {
@@ -104,10 +105,13 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var hostingEnvironment = new Mock<IHostingEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
+
             serviceCollection.AddPostal();
 
             var services = serviceCollection.BuildServiceProvider();
@@ -137,10 +141,12 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var hostingEnvironment = new Mock<IHostingEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
 
             serviceCollection.Configure<EmailServiceOptions>(_configuration);
             serviceCollection.AddPostal();
@@ -171,10 +177,12 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var hostingEnvironment = new Mock<IHostingEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
@@ -208,10 +216,12 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+            var hostingEnvironment = new Mock<IHostingEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
