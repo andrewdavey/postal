@@ -1,0 +1,40 @@
+<Project>
+  <PropertyGroup>
+    <MsBuildAllProjects>$(MsBuildAllProjects);$(MsBuildThisFileFullPath)</MsBuildAllProjects>
+    <VersionPrefix>2.4.0</VersionPrefix>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TODAY>$([System.DateTime]::Now.ToString("yyyyMMdd-hhmmss"))</TODAY>
+    <BUILD_SOURCEVERSION_SHORT Condition=" '$(BUILD_SOURCEVERSION)' != '' ">$(BUILD_SOURCEVERSION.Substring(0,7))</BUILD_SOURCEVERSION_SHORT>
+    <InformationalVersion  Condition=" '$(BUILD_SOURCEVERSION_SHORT)' != '' ">$(InformationalVersion)git:$(BUILD_SOURCEVERSION_SHORT)</InformationalVersion>
+  </PropertyGroup>  
+  <Choose>
+    <When Condition=" '$(Prerelease)' != '' ">
+      <PropertyGroup>
+        <!-- Prerelease version numbers are MAJOR.MINOR.0-pre-build###### -->
+        <VersionSuffix>$(Prerelease)-build$(BUILD_BUILDID.PadLeft(2, '0'))</VersionSuffix>
+        <VersionSuffix Condition=" '$(BUILD_SOURCEVERSION_SHORT)' != '' ">$(Prerelease)-$(BUILD_SOURCEVERSION_SHORT)</VersionSuffix>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Release)' == 'true' ">
+      <PropertyGroup>
+        <!-- Release version numbers are MAJOR.MINOR.# -->
+        <VersionPrefix>$(VersionPrefix).$(BUILD_BUILDID.PadLeft(2, '0'))</VersionPrefix>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(BUILD_SOURCEBRANCH.StartsWith('refs/tags/v'))">
+      <PropertyGroup>
+        <!-- Release version numbers are MAJOR.MINOR.# -->       
+        <VersionSuffix></VersionSuffix>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <!-- append the build number if it is available -->
+        <VersionSuffix Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(VersionSuffix)$(BUILD_BUILDNUMBER)</VersionSuffix>
+        <VersionSuffix Condition=" '$(BUILD_SOURCEVERSION_SHORT)' != '' ">$(VersionSuffix)-$(BUILD_SOURCEVERSION_SHORT)</VersionSuffix>
+        <VersionSuffix Condition=" '$(VersionSuffix)' == '' and '$(SYSTEM_DEFINITIONID)' != ''">build$(TODAY)</VersionSuffix>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+</Project>

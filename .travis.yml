@@ -1,11 +1,45 @@
-﻿dist: xenial
+﻿dist: bionic
 language: csharp
 mono: none
-dotnet: 2.2.100
-solution: solution-name.sln
+solution: Postal.sln
+env:
+  global:
+    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    - DOTNET_CLI_TELEMETRY_OPTOUT=1
 install:
-  - dotnet restore
+  - apt-get install nuget -y
+  - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 2.2.402
+  - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 3.0.100
+  - export PATH="$PATH:$HOME/.dotnet"
+  - dotnet --list-sdks
 script:
+  - dotnet restore
   - dotnet build -c Release Postal.sln
-  - cd ./src/Postal.Tests/
   - dotnet test -c Release
+  - dotnet pack src/Postal.AspNetCore/Postal.AspNetCore.csproj -c Release
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - nuget source add -Name "GitHub" -Source "https://nuget.pkg.github.com/hermanho/index.json" -UserName hermanho -Password $GH_TOKEN
+      - nuget push src/Postal.AspNetCore/bin/Release/*.nupkg -Source "GitHub"
+      - dotnet nuget push src/Postal.AspNetCore/bin/Release/*.nupkg --source https://www.myget.org/F/herman-github/api/v2/package --api-key $NUGET_API_KEY
+    on:
+      branch: master
+      condition: '"x${NUGET_API_KEY}" != "x" && "x${GH_TOKEN}" != "x"'
+  - provider: script
+    skip_cleanup: true
+    script:
+      - nuget source add -Name "GitHub" -Source "https://nuget.pkg.github.com/hermanho/index.json" -UserName hermanho -Password $GH_TOKEN
+      - nuget push src/Postal.AspNetCore/bin/Release/*.nupkg -Source "GitHub"
+      - dotnet nuget push src/Postal.AspNetCore/bin/Release/*.nupkg --source https://www.myget.org/F/herman-github/api/v2/package --api-key $NUGET_API_KEY
+    on:
+      condition: '"x${NUGET_API_KEY}" != "x" && "x${GH_TOKEN}" != "x"'
+      tags: true
+branches:
+  only:
+    # Pushes and PR to the master branch
+    - master
+    # Ruby regex to match tags. Required, or travis won't trigger deploys when
+    # a new tag is pushed. Version tags should be of the form: v0.1.0
+    - /^v\d+\.\d+\.\d+.*$/
