@@ -19,19 +19,13 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script:
-      - nuget source add -Name "GitHub" -Source "https://nuget.pkg.github.com/hermanho/index.json" -UserName hermanho -Password $GH_TOKEN
-      - nuget push src/Postal.AspNetCore/bin/Release/*.nupkg -Source "GitHub"
-      - dotnet nuget push src/Postal.AspNetCore/bin/Release/*.nupkg --source https://www.myget.org/F/herman-github/api/v2/package --api-key $NUGET_API_KEY
+    script: bash scripts/travis-deploy.sh
     on:
       branch: master
       condition: '"x${NUGET_API_KEY}" != "x" && "x${GH_TOKEN}" != "x"'
   - provider: script
     skip_cleanup: true
-    script:
-      - nuget source add -Name "GitHub" -Source "https://nuget.pkg.github.com/hermanho/index.json" -UserName hermanho -Password $GH_TOKEN
-      - nuget push src/Postal.AspNetCore/bin/Release/*.nupkg -Source "GitHub"
-      - dotnet nuget push src/Postal.AspNetCore/bin/Release/*.nupkg --source https://www.myget.org/F/herman-github/api/v2/package --api-key $NUGET_API_KEY
+    script: bash scripts/travis-deploy.sh
     on:
       condition: '"x${NUGET_API_KEY}" != "x" && "x${GH_TOKEN}" != "x"'
       tags: true
