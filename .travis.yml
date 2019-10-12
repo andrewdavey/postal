@@ -12,6 +12,8 @@ install:
   - export PATH="$PATH:$HOME/.dotnet"
   - dotnet --list-sdks
 script:
+  - export BUILD_SOURCEVERSION=$TRAVIS_COMMIT
+  - export BUILD_BUILDID=$TRAVIS_BUILD_NUMBER
   - dotnet restore
   - dotnet build -c Release Postal.sln
   - dotnet test -c Release
