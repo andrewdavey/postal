@@ -22,7 +22,7 @@
         <VersionPrefix>$(VersionPrefix).$(BUILD_BUILDID.PadLeft(2, '0'))</VersionPrefix>
       </PropertyGroup>
     </When>
-    <When Condition="$(BUILD_SOURCEBRANCH.StartsWith('refs/tags/v'))">
+    <When Condition=" '$(TRAVIS_TAG)' != ''  and $(TRAVIS_TAG.StartsWith('v'))">
       <PropertyGroup>
         <!-- Release version numbers are MAJOR.MINOR.# -->       
         <VersionSuffix></VersionSuffix>
