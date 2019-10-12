@@ -14,6 +14,8 @@ install:
 script:
   - export BUILD_SOURCEVERSION=$TRAVIS_COMMIT
   - export BUILD_BUILDID=$TRAVIS_BUILD_NUMBER
+  - echo $BUILD_SOURCEVERSION
+  - echo $BUILD_BUILDID
   - dotnet restore
   - dotnet build -c Release Postal.sln
   - dotnet test -c Release
