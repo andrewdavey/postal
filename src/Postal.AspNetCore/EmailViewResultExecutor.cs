@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -53,29 +52,18 @@ namespace Postal.AspNetCore
 
             var response = context.HttpContext.Response;
 
-            string resolvedContentType;
-            Encoding resolvedContentTypeEncoding;
-            ResponseContentTypeHelper.ResolveContentTypeAndEncoding(
-                result.ContentType,
-                response.ContentType,
-                DefaultContentType,
-                out resolvedContentType,
-                out resolvedContentTypeEncoding);
-
-            response.ContentType = resolvedContentType;
-
             if (result.StatusCode != null)
             {
                 response.StatusCode = result.StatusCode.Value;
             }
 
-            _emailViewResultExecuting(_logger, resolvedContentType, null);
+            _emailViewResultExecuting(_logger, response.ContentType, null);
 
             var httpContext = context.HttpContext;
             var requestFeature = httpContext.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpRequestFeature>();
             var query = httpContext.Request.Query;
             var format = query["format"];
-            using (var textWriter = _httpResponseStreamWriterFactory.CreateWriter(response.Body, resolvedContentTypeEncoding))
+            using (var textWriter = _httpResponseStreamWriterFactory.CreateWriter(response.Body, Encoding.UTF8))
             {
                 var contentType = await WriteEmailAsync(result.Email, textWriter, format);
                 await textWriter.FlushAsync();
