@@ -23,9 +23,18 @@ namespace Postal.AspNetCore
         private IRazorViewEngine _viewEngine;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITempDataProvider _tempDataProvider;
+#if NETCOREAPP3_0
+        private readonly IWebHostEnvironment _hostingEnvironment;
+#else
         private readonly IHostingEnvironment _hostingEnvironment;
+#endif
 
+#if NETCOREAPP3_0
+        public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider, IWebHostEnvironment hostingEnvironment)
+#else
         public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider, IHostingEnvironment hostingEnvironment)
+
+#endif
         {
             _viewEngine = viewEngine;
             _serviceProvider = serviceProvider;

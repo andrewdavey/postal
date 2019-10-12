@@ -25,7 +25,11 @@ namespace Postal
 
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
@@ -48,14 +52,18 @@ namespace Postal
 
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("~/Views/TestFolder/Test"));
 
             actualEmailString.ShouldBe("Fake");
-            
+
             viewEngine.Verify();
         }
 
@@ -89,7 +97,11 @@ namespace Postal
                        .Returns(ViewEngineResult.NotFound("Test", new[] { "Test" })).Verifiable();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
@@ -97,7 +109,7 @@ namespace Postal
 
             viewEngine.Verify();
         }
-        
+
         [Fact]
         public async Task Render_throws_exception_when_email_view_retrievepath_not_found()
         {
@@ -107,7 +119,11 @@ namespace Postal
 
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
@@ -134,7 +150,11 @@ namespace Postal
 
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
@@ -163,7 +183,11 @@ namespace Postal
 
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 

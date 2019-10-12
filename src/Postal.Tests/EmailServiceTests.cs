@@ -105,7 +105,11 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -141,7 +145,11 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -177,7 +185,11 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
@@ -216,7 +228,11 @@ Subject: Test Subject
             serviceCollection.AddOptions();
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
+#if NETCOREAPP3_0
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+#else
             var hostingEnvironment = new Mock<IHostingEnvironment>();
+#endif
             var logger = new Mock<ILogger<EmailService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
