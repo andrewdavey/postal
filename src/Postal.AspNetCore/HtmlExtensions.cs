@@ -26,12 +26,10 @@ namespace Postal
             if (IsFileName(imagePathOrUrl))
             {
                 var webRootPath =
-#if NETCOREAPP3_0
-    html.ViewContext.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath;
-#elif NETSTANDARD2_0
-    html.ViewContext.HttpContext.RequestServices.GetRequiredService<IHostingEnvironment>().WebRootPath;
+#if NETSTANDARD2_0
+                html.ViewContext.HttpContext.RequestServices.GetRequiredService<IHostingEnvironment>().WebRootPath;
 #else
-#error unknown target framework
+                html.ViewContext.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath;
 #endif
                 imagePathOrUrl = webRootPath + System.IO.Path.DirectorySeparatorChar + imagePathOrUrl.Replace('/', System.IO.Path.DirectorySeparatorChar).Replace('\\', System.IO.Path.DirectorySeparatorChar);
             }
