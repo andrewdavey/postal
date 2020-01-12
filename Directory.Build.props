@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <MsBuildAllProjects>$(MsBuildAllProjects);$(MsBuildThisFileFullPath)</MsBuildAllProjects>
-    <VersionPrefix>2.4.0</VersionPrefix>
+    <VersionPrefix>2.5.0</VersionPrefix>
   </PropertyGroup>
   <PropertyGroup>
     <TODAY>$([System.DateTime]::Now.ToString("yyyyMMdd-hhmmss"))</TODAY>
