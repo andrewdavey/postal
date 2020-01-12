@@ -31,9 +31,9 @@
     <Otherwise>
       <PropertyGroup>
         <!-- append the build number if it is available -->
-        <VersionSuffix Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(VersionSuffix)$(BUILD_BUILDNUMBER)</VersionSuffix>
+        <VersionSuffix Condition=" '$(TRAVIS_BUILD_NUMBER)' != '' ">$(VersionSuffix)$(TRAVIS_BUILD_NUMBER)</VersionSuffix>
         <VersionSuffix Condition=" '$(BUILD_SOURCEVERSION_SHORT)' != '' ">$(VersionSuffix)-$(BUILD_SOURCEVERSION_SHORT)</VersionSuffix>
-        <VersionSuffix Condition=" '$(VersionSuffix)' == '' and '$(SYSTEM_DEFINITIONID)' != ''">build$(TODAY)</VersionSuffix>
+        <VersionSuffix Condition=" '$(VersionSuffix)' == '' ">build$(TODAY)</VersionSuffix>
       </PropertyGroup>
     </Otherwise>
   </Choose>
