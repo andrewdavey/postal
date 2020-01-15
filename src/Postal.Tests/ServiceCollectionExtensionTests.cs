@@ -18,7 +18,7 @@ namespace Postal
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddPostal(connectionString);
+            serviceCollection.ConfigurePostal(connectionString);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
