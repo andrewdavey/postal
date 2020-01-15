@@ -11,16 +11,29 @@ namespace Postal.AspNetCore
     {
         public EmailServiceOptions()
         {
-            CreateSmtpClient = () => new SmtpClient(Host, Port)
+            CreateSmtpClient = () =>
             {
-                UseDefaultCredentials = string.IsNullOrWhiteSpace(UserName),
-                Credentials = string.IsNullOrWhiteSpace(UserName) ? null : new NetworkCredential(UserName, Password),
-                EnableSsl = EnableSSL
+                if (Port.HasValue)
+                {
+                    return new SmtpClient(Host, Port.Value)
+                    {
+                        UseDefaultCredentials = string.IsNullOrWhiteSpace(UserName),
+                        Credentials = string.IsNullOrWhiteSpace(UserName) ? null : new NetworkCredential(UserName, Password),
+                        EnableSsl = EnableSSL
+                    };
+                }
+
+                return new SmtpClient(Host)
+                {
+                    UseDefaultCredentials = string.IsNullOrWhiteSpace(UserName),
+                    Credentials = string.IsNullOrWhiteSpace(UserName) ? null : new NetworkCredential(UserName, Password),
+                    EnableSsl = EnableSSL
+                };
             };
         }
 
         public string Host { get; set; }
-        public int Port { get; set; }
+        public int? Port { get; set; }
         public bool EnableSSL { get; set; }
         public string FromAddress { get; set; }
         public string UserName { get; set; }
