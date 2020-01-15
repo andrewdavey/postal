@@ -20,7 +20,7 @@ namespace Postal.AspNetCore
             return services;
         }
 
-        public static IServiceCollection AddPostal(this IServiceCollection services, string smtpConnectionString)
+        public static IServiceCollection ConfigurePostal(this IServiceCollection services, string smtpConnectionString)
         {
             var match = Regex.Match(smtpConnectionString, @"^smtp:\/\/((?<username>[^:@]+):(?<password>[^:@]+)@)?(?<host>[^:@,\/?#]+)(:(?<port>\d+))?(\?(?<option>[^&]+=[^&]+)(&(?<option>[^&]+=[^&]+))*)?$");
 
@@ -62,7 +62,6 @@ namespace Postal.AspNetCore
                 }
             }
 
-            services.AddPostal();
             services.Configure<EmailServiceOptions>(options =>
             {
                 options.Host = host;
