@@ -1,23 +1,37 @@
 # Changelog
 
-## [v2.2.1.1](https://github.com/hermanho/postal.aspnetcore.aspnetcore/tree/v2.2.1.1) (2018-12-11)
+## [v2.6.0](https://github.com/hermanho/postal.aspnetcore/tree/v2.6.0) (2020-01-16)
+
+**Implemented enhancements:**
+- Support Connection String when configure EmailServiceOptions ([@the-avid-engineer](https://github.com/the-avid-engineer) in [#11](https://github.com/hermanho/postal.aspnetcore/pull/11))
+
+## [v2.5.0](https://github.com/hermanho/postal.aspnetcore/tree/v2.5.0) (2020-01-13)
+
+**Support netcoreapp3.1**
+
+## [v2.3.0](https://github.com/hermanho/postal.aspnetcore/tree/v2.3.0) (2019-03-18)
+
+**Implemented enhancements:**
+- Support all templates under the views folder
+
+## [v2.2.1.1](https://github.com/hermanho/postal.aspnetcore/tree/v2.2.1.1) (2018-12-11)
 
 **Implemented enhancements:**
 - Decouple "Func\<SmtpClient\>" into "IOptions\<EmailServiceOptions\>" in EmailService constructor for dependency injection
 - Allow SendAsync with MailMessage in EmailService
 
-## [v2.1.7](https://github.com/hermanho/postal.aspnetcore.aspnetcore/tree/v2.1.7) (2018-11-30)
+## [v2.1.7](https://github.com/hermanho/postal.aspnetcore/tree/v2.1.7) (2018-11-30)
 
 **Implemented enhancements:**
-- Support for style attribute in image attachment ([@amitmittal](https://github.com/amitmittal) in [#5](https://github.com/hermanho/postal.aspnetcore.aspnetcore/pull/5))
+- Support for style attribute in image attachment ([@amitmittal](https://github.com/amitmittal) in [#5](https://github.com/hermanho/postal.aspnetcore/pull/5))
 
 **Fixing:**
-- Fix bugs in image attachment. ([@amitmittal](https://github.com/amitmittal) in [#5](https://github.com/hermanho/postal.aspnetcore.aspnetcore/pull/5))
+- Fix bugs in image attachment. ([@amitmittal](https://github.com/amitmittal) in [#5](https://github.com/hermanho/postal.aspnetcore/pull/5))
 
-## [v2.1.6](https://github.com/hermanho/postal.aspnetcore.aspnetcore/tree/v2.1.6) (2018-11-20)
+## [v2.1.6](https://github.com/hermanho/postal.aspnetcore/tree/v2.1.6) (2018-11-20)
 
 **Fixing:**
-- Fix bugs in ImageEmbedder. ([@amitmittal](https://github.com/amitmittal) in [#2](https://github.com/hermanho/postal.aspnetcore.aspnetcore/pull/2))
+- Fix bugs in ImageEmbedder. ([@amitmittal](https://github.com/amitmittal) in [#2](https://github.com/hermanho/postal.aspnetcore/pull/2))
 
 ## [v2.1.5](https://github.com/hermanho/postal.aspnetcore/tree/v2.1.5) (2018-10-12)
 
