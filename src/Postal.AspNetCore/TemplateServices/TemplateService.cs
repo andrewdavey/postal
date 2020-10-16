@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,6 +19,7 @@ namespace Postal.AspNetCore
     {
         public static readonly string ViewExtension = ".cshtml";
 
+        private ILogger<TemplateService> _logger;
         private IRazorViewEngine _viewEngine;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITempDataProvider _tempDataProvider;
@@ -29,6 +31,7 @@ namespace Postal.AspNetCore
 
 #if NETSTANDARD2_0
         public TemplateService(
+            ILogger<TemplateService> logger,
             IRazorViewEngine viewEngine,
             IServiceProvider serviceProvider,
             ITempDataProvider tempDataProvider,
@@ -36,6 +39,7 @@ namespace Postal.AspNetCore
             )
 #else
         public TemplateService(
+            ILogger<TemplateService> logger,
             IRazorViewEngine viewEngine,
             IServiceProvider serviceProvider,
             ITempDataProvider tempDataProvider,
@@ -43,6 +47,7 @@ namespace Postal.AspNetCore
             )
 #endif
         {
+            _logger = logger;
             _viewEngine = viewEngine;
             _serviceProvider = serviceProvider;
             _tempDataProvider = tempDataProvider;
@@ -61,6 +66,11 @@ namespace Postal.AspNetCore
                 httpContext.Request.Host = HostString.FromUriComponent(viewModel.RequestPath.Host);
                 httpContext.Request.Scheme = viewModel.RequestPath.Scheme;
                 httpContext.Request.PathBase = PathString.FromUriComponent(viewModel.RequestPath.PathBase);
+
+                _logger.LogDebug($"RequestPath != null");
+                _logger.LogTrace($"\tHost: {viewModel.RequestPath.Host} -> {httpContext.Request.Host}");
+                _logger.LogTrace($"\tScheme: {viewModel.RequestPath.Scheme}");
+                _logger.LogTrace($"\tPathBase: {viewModel.RequestPath.PathBase} -> {httpContext.Request.PathBase}");
             }
 
             var actionDescriptor = new ActionDescriptor
@@ -74,21 +84,25 @@ namespace Postal.AspNetCore
                 Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult viewResult = null;
                 if (IsApplicationRelativePath(viewName) || IsRelativePath(viewName))
                 {
+                    _logger.LogDebug($"Relative path");
 #if NETSTANDARD2_0  
                     viewResult = _viewEngine.GetView(_hostingEnvironment.WebRootPath, viewName, isMainPage);
 #else
                     if (_hostingEnvironment is Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment)
                     {
+                        _logger.LogDebug($"_hostingEnvironment is IWebHostEnvironment -> GetView from WebRootPath: {webHostEnvironment.WebRootPath}");
                         viewResult = _viewEngine.GetView(webHostEnvironment.WebRootPath, viewName, isMainPage);
                     }
                     else
                     {
+                        _logger.LogDebug($"_hostingEnvironment is IHostEnvironment -> GetView from ContentRootPath: {_hostingEnvironment.ContentRootPath}");
                         viewResult = _viewEngine.GetView(_hostingEnvironment.ContentRootPath, viewName, isMainPage);
                     }
 #endif
                 }
                 else
                 {
+                    _logger.LogDebug($"Not a relative path");
                     viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
                 }
 
@@ -96,6 +110,7 @@ namespace Postal.AspNetCore
                 var viewDictionary = new ViewDataDictionary<TViewModel>(viewModel.ViewData, viewModel);
                 if (additonalViewDictionary != null)
                 {
+                    _logger.LogDebug($"additonalViewDictionary count: {additonalViewDictionary.Count}");
                     foreach (var kv in additonalViewDictionary)
                     {
                         if (!viewDictionary.ContainsKey(kv.Key))
@@ -113,6 +128,7 @@ namespace Postal.AspNetCore
 
                 if (!viewResult.Success)
                 {
+                    _logger.LogError($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", viewResult.SearchedLocations) }");
                     throw new TemplateServiceException($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", viewResult.SearchedLocations) }");
                 }
 
@@ -125,6 +141,7 @@ namespace Postal.AspNetCore
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex, "Failed to render template due to a razor engine failure");
                     throw new TemplateServiceException("Failed to render template due to a razor engine failure", ex);
                 }
 

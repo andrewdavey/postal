@@ -36,6 +36,13 @@ namespace Postal
             this.emailParser = emailParser;
             this.options = options.Value;
             this.logger = logger;
+
+            logger.LogDebug($"EmailService options:");
+            logger.LogDebug($"\tHost: {this.options.Host}");
+            logger.LogDebug($"\tPort: {this.options.Port}");
+            logger.LogDebug($"\tEnableSSL: {this.options.EnableSSL}");
+            logger.LogDebug($"\tFromAddress: {this.options.FromAddress}");
+            logger.LogDebug($"\tUserName: {this.options.UserName}");
         }
 
         protected readonly IEmailViewRender emailViewRenderer;
