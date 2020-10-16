@@ -238,6 +238,35 @@ Subject: Test Subject
             Assert.Throws<FactExcetpionForSmtpCreation>(() => emailOptionField.CreateSmtpClient());
         }
 
+        [Fact]
+        public void Dependency_injection_generic_host()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
+            var viewEngine = new Mock<IRazorViewEngine>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            var hostingEnvironment = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment>();
+            var logger = new Mock<ILogger<EmailService>>();
+            serviceCollection.AddSingleton(logger.Object);
+            serviceCollection.AddSingleton(viewEngine.Object);
+            serviceCollection.AddSingleton(tempDataProvider.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
+
+            serviceCollection.Configure<EmailServiceOptions>(o =>
+            {
+                o.CreateSmtpClient = () => throw new FactExcetpionForSmtpCreation();
+            });
+
+            serviceCollection.AddPostal();
+
+            var services = serviceCollection.BuildServiceProvider();
+            var emailService = services.GetRequiredService<IEmailService>();
+
+            Assert.ThrowsAsync<FactExcetpionForSmtpCreation>(() => emailService.SendAsync(new Email("testView")));
+            EmailServiceOptions emailOptionField = GetInstanceField(typeof(EmailService), emailService, "options") as EmailServiceOptions;
+            Assert.Throws<FactExcetpionForSmtpCreation>(() => emailOptionField.CreateSmtpClient());
+        }
+
         private static object GetInstanceField(Type type, object instance, string fieldName)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic

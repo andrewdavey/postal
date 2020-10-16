@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -24,15 +22,25 @@ namespace Postal.AspNetCore
         private readonly IServiceProvider _serviceProvider;
         private readonly ITempDataProvider _tempDataProvider;
 #if NETSTANDARD2_0
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
 #else
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly Microsoft.Extensions.Hosting.IHostEnvironment _hostingEnvironment;
 #endif
 
 #if NETSTANDARD2_0
-        public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider, IHostingEnvironment hostingEnvironment)
+        public TemplateService(
+            IRazorViewEngine viewEngine,
+            IServiceProvider serviceProvider,
+            ITempDataProvider tempDataProvider,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment
+            )
 #else
-        public TemplateService(IRazorViewEngine viewEngine, IServiceProvider serviceProvider, ITempDataProvider tempDataProvider, IWebHostEnvironment hostingEnvironment)
+        public TemplateService(
+            IRazorViewEngine viewEngine,
+            IServiceProvider serviceProvider,
+            ITempDataProvider tempDataProvider,
+            Microsoft.Extensions.Hosting.IHostEnvironment hostingEnvironment
+            )
 #endif
         {
             _viewEngine = viewEngine;
@@ -66,7 +74,18 @@ namespace Postal.AspNetCore
                 Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult viewResult = null;
                 if (IsApplicationRelativePath(viewName) || IsRelativePath(viewName))
                 {
+#if NETSTANDARD2_0  
                     viewResult = _viewEngine.GetView(_hostingEnvironment.WebRootPath, viewName, isMainPage);
+#else
+                    if (_hostingEnvironment is Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment)
+                    {
+                        viewResult = _viewEngine.GetView(webHostEnvironment.WebRootPath, viewName, isMainPage);
+                    }
+                    else
+                    {
+                        viewResult = _viewEngine.GetView(_hostingEnvironment.ContentRootPath, viewName, isMainPage);
+                    }
+#endif
                 }
                 else
                 {

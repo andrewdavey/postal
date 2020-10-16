@@ -173,5 +173,26 @@ namespace Postal
 
             viewEngine.Verify();
         }
+
+        [Fact]
+        public async Task Render_returns_email_string_created_by_view_generic_host()
+        {
+            var viewEngine = new Mock<IRazorViewEngine>();
+            var view = new FakeView();
+            viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
+                       .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
+
+            var serviceProvider = new Mock<IServiceProvider>();
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            var hostingEnvironment = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment>();
+            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            var renderer = new EmailViewRender(templateService);
+
+            var actualEmailString = await renderer.RenderAsync(new Email("Test"));
+
+            actualEmailString.ShouldBe("Fake");
+
+            viewEngine.Verify();
+        }
     }
 }
