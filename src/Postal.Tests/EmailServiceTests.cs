@@ -110,7 +110,8 @@ Subject: Test Subject
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
 
             serviceCollection.AddPostal();
 
@@ -146,7 +147,9 @@ Subject: Test Subject
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
+
 
             serviceCollection.Configure<EmailServiceOptions>(_configuration);
             serviceCollection.AddPostal();
@@ -182,7 +185,9 @@ Subject: Test Subject
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
+
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
@@ -221,7 +226,8 @@ Subject: Test Subject
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
@@ -250,7 +256,8 @@ Subject: Test Subject
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton(hostingEnvironment.Object);
+            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
+
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
