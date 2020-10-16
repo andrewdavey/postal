@@ -12,8 +12,8 @@
     <AssemblyName>Postal.AspNetCore</AssemblyName>
     <PackageId>Postal.AspNetCore</PackageId>
     <PackageTags>Email;Postal;aspnetcore</PackageTags>
-    <PackageIconUrl>http://aboutcode.net/postal/favicon.ico</PackageIconUrl>
-    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageIcon>favicon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
     <PackageProjectUrl>https://github.com/hermanho/postal.aspnetcore</PackageProjectUrl>
@@ -29,6 +29,9 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="favicon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
