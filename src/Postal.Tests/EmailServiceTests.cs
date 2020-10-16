@@ -107,7 +107,9 @@ Subject: Test Subject
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
+            var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
+            serviceCollection.AddSingleton(logger2.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
             serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
@@ -144,7 +146,9 @@ Subject: Test Subject
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
+            var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
+            serviceCollection.AddSingleton(logger2.Object); serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
             serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
@@ -182,7 +186,9 @@ Subject: Test Subject
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
+            var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
+            serviceCollection.AddSingleton(logger2.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
             serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
@@ -223,7 +229,9 @@ Subject: Test Subject
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
+            var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
+            serviceCollection.AddSingleton(logger2.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
             serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
@@ -253,7 +261,9 @@ Subject: Test Subject
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment>();
             var logger = new Mock<ILogger<EmailService>>();
+            var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
+            serviceCollection.AddSingleton(logger2.Object); 
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
             serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);

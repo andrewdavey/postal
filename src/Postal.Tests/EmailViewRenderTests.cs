@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Postal.AspNetCore;
 using Shouldly;
@@ -23,10 +24,11 @@ namespace Postal
             viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
 
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("Test"));
@@ -46,10 +48,11 @@ namespace Postal
             viewEngine.Setup(e => e.GetView(It.IsAny<string>(), "~/Views/TestFolder/Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.Found("~/Views/TestFolder/Test", view)).Verifiable();
 
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("~/Views/TestFolder/Test"));
@@ -87,10 +90,12 @@ namespace Postal
             var viewEngine = new Mock<IRazorViewEngine>();
             viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.NotFound("Test", new[] { "Test" })).Verifiable();
+
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             await Assert.ThrowsAsync<TemplateServiceException>(() => renderer.RenderAsync(new Email("Test")));
@@ -105,10 +110,11 @@ namespace Postal
             viewEngine.Setup(e => e.GetView(It.IsAny<string>(), "~/Views/TestFolder/Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.NotFound("~/Views/TestFolder/Test", new[] { "Test" })).Verifiable();
 
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             await Assert.ThrowsAsync<TemplateServiceException>(() => renderer.RenderAsync(new Email("~/Views/TestFolder/Test")));
@@ -132,10 +138,11 @@ namespace Postal
             viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
 
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(email);
@@ -161,10 +168,11 @@ namespace Postal
             viewEngine.Setup(e => e.GetView(It.IsAny<string>(), "~/Views/TestFolder/Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.Found("~/Views/TestFolder/Test", view)).Verifiable();
 
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(email);
@@ -182,10 +190,11 @@ namespace Postal
             viewEngine.Setup(e => e.FindView(It.IsAny<ActionContext>(), "Test", It.IsAny<bool>()))
                        .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
 
+            var logger = new Mock<ILogger<TemplateService>>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment>();
-            ITemplateService templateService = new TemplateService(viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("Test"));

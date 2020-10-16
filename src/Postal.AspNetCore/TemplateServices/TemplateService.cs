@@ -19,8 +19,8 @@ namespace Postal.AspNetCore
     {
         public static readonly string ViewExtension = ".cshtml";
 
-        private ILogger<TemplateService> _logger;
-        private IRazorViewEngine _viewEngine;
+        private readonly ILogger<TemplateService> _logger;
+        private readonly IRazorViewEngine _viewEngine;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITempDataProvider _tempDataProvider;
 #if NETSTANDARD2_0
