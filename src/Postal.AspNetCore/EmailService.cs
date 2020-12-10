@@ -99,6 +99,10 @@ namespace Postal
             var rawEmailString = await emailViewRenderer.RenderAsync(email);
             emailParser = new EmailParser(emailViewRenderer);
             var mailMessage = await emailParser.ParseAsync(rawEmailString, email);
+            if (mailMessage.From == null || mailMessage.From.Address == null)
+            {
+                mailMessage.From = new MailAddress(this.options.FromAddress);
+            }
             return mailMessage;
         }
     }
