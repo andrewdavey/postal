@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.7.1](https://github.com/hermanho/postal.aspnetcore/tree/v2.7.1) (2020-12-12)
+
+**Fixing:**
+- Fix no header in email template will throw exception
+
 ## [v2.6.0](https://github.com/hermanho/postal.aspnetcore/tree/v2.6.0) (2020-01-16)
 
 **Implemented enhancements:**
