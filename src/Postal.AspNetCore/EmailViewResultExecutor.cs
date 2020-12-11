@@ -143,7 +143,7 @@ namespace Postal.AspNetCore
                 }
             }
 
-            return null;
+            return new TemplateParts("", template);
         }
 
         class TemplateParts
