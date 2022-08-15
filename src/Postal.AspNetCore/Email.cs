@@ -131,7 +131,7 @@ namespace Postal
             return viewName;
         }
 
-        public IRouter Route { get; set; }
+        public IList<IRouter> Routers { get; set; }
         public RequestPath RequestPath { get; set; }
     }
 }

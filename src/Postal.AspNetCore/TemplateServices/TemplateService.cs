@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
@@ -23,35 +24,30 @@ namespace Postal.AspNetCore
         private readonly IRazorViewEngine _viewEngine;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITempDataProvider _tempDataProvider;
-#if NETSTANDARD2_0
-        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
-#else
         private readonly Microsoft.Extensions.Hosting.IHostEnvironment _hostingEnvironment;
-#endif
+        private readonly IRazorPageActivator _pageActivator;
+        private readonly System.Text.Encodings.Web.HtmlEncoder _htmlEncoder;
+        private readonly DiagnosticListener _diagnosticListener;
 
-#if NETSTANDARD2_0
         public TemplateService(
             ILogger<TemplateService> logger,
+            IRazorPageActivator pageActivator,
             IRazorViewEngine viewEngine,
             IServiceProvider serviceProvider,
             ITempDataProvider tempDataProvider,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment
+            Microsoft.Extensions.Hosting.IHostEnvironment hostingEnvironment,
+            System.Text.Encodings.Web.HtmlEncoder htmlEncoder,
+            DiagnosticListener diagnosticListener
             )
-#else
-        public TemplateService(
-            ILogger<TemplateService> logger,
-            IRazorViewEngine viewEngine,
-            IServiceProvider serviceProvider,
-            ITempDataProvider tempDataProvider,
-            Microsoft.Extensions.Hosting.IHostEnvironment hostingEnvironment
-            )
-#endif
         {
             _logger = logger;
             _viewEngine = viewEngine;
             _serviceProvider = serviceProvider;
             _tempDataProvider = tempDataProvider;
             _hostingEnvironment = hostingEnvironment;
+            _pageActivator = pageActivator;
+            _htmlEncoder = htmlEncoder;
+            _diagnosticListener = diagnosticListener;
         }
 
         public async Task<string> RenderTemplateAsync<TViewModel>(RouteData routeData,
@@ -77,17 +73,16 @@ namespace Postal.AspNetCore
             {
                 RouteValues = routeData.Values.ToDictionary(kv => kv.Key, kv => kv.Value.ToString())
             };
+
             var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
 
             using (var outputWriter = new StringWriter())
             {
                 Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult viewResult = null;
+                RazorPageResult? razorPageResult = null;
                 if (IsApplicationRelativePath(viewName) || IsRelativePath(viewName))
                 {
                     _logger.LogDebug($"Relative path");
-#if NETSTANDARD2_0  
-                    viewResult = _viewEngine.GetView(_hostingEnvironment.WebRootPath, viewName, isMainPage);
-#else
                     if (_hostingEnvironment is Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment)
                     {
                         _logger.LogDebug($"_hostingEnvironment is IWebHostEnvironment -> GetView from WebRootPath: {webHostEnvironment.WebRootPath}");
@@ -98,14 +93,13 @@ namespace Postal.AspNetCore
                         _logger.LogDebug($"_hostingEnvironment is IHostEnvironment -> GetView from ContentRootPath: {_hostingEnvironment.ContentRootPath}");
                         viewResult = _viewEngine.GetView(_hostingEnvironment.ContentRootPath, viewName, isMainPage);
                     }
-#endif
                 }
                 else
                 {
                     _logger.LogDebug($"Not a relative path");
                     viewResult = _viewEngine.FindView(actionContext, viewName, isMainPage);
+                    razorPageResult = _viewEngine.FindPage(actionContext, viewName);
                 }
-
 
                 var viewDictionary = new ViewDataDictionary<TViewModel>(viewModel.ViewData, viewModel);
                 if (additonalViewDictionary != null)
@@ -126,18 +120,44 @@ namespace Postal.AspNetCore
 
                 var tempDataDictionary = new TempDataDictionary(httpContext, _tempDataProvider);
 
-                if (!viewResult.Success)
+                if (!viewResult.Success && razorPageResult != null && razorPageResult?.Page == null)
                 {
-                    _logger.LogError($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", viewResult.SearchedLocations) }");
-                    throw new TemplateServiceException($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", viewResult.SearchedLocations) }");
+                    var searchedLocations = viewResult.SearchedLocations.Union(razorPageResult?.SearchedLocations);
+                    _logger.LogError($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", searchedLocations)}");
+                    throw new TemplateServiceException($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", searchedLocations)}");
                 }
 
                 try
                 {
-                    var viewContext = new ViewContext(actionContext, viewResult.View, viewDictionary,
-                        tempDataDictionary, outputWriter, new HtmlHelperOptions());
+                    if (viewResult.Success)
+                    {
+                        var viewContext = new ViewContext(actionContext, viewResult.View, viewDictionary,
+                            tempDataDictionary, outputWriter, new HtmlHelperOptions());
 
-                    await viewResult.View.RenderAsync(viewContext);
+                        await viewResult.View.RenderAsync(viewContext);
+                    }
+                    else if (razorPageResult?.Page != null)
+                    {
+                        var page = razorPageResult?.Page;
+                        var razorView = new RazorView(
+                            _viewEngine,
+                            _pageActivator,
+                            new List<IRazorPage>(),
+                            page,
+                            _htmlEncoder,
+                            _diagnosticListener
+                        );
+
+                        var viewContext = new ViewContext(actionContext, razorView, viewDictionary,
+                            tempDataDictionary, outputWriter, new HtmlHelperOptions());
+
+                        await viewResult.View.RenderAsync(viewContext);
+                        var pageNormal = ((Page)page);
+                        pageNormal.PageContext = new PageContext();
+                        pageNormal.ViewContext = viewContext;
+                        _pageActivator.Activate(pageNormal, viewContext);
+                        await page.ExecuteAsync();
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Postal.AspNetCore;
@@ -11,6 +12,7 @@ using Shouldly;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Postal
 {
@@ -25,10 +27,23 @@ namespace Postal
                        .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            );
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("Test"));
@@ -49,10 +64,23 @@ namespace Postal
                        .Returns(ViewEngineResult.Found("~/Views/TestFolder/Test", view)).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            );
             var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("~/Views/TestFolder/Test"));
@@ -92,10 +120,23 @@ namespace Postal
                        .Returns(ViewEngineResult.NotFound("Test", new[] { "Test" })).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            );
             var renderer = new EmailViewRender(templateService);
 
             await Assert.ThrowsAsync<TemplateServiceException>(() => renderer.RenderAsync(new Email("Test")));
@@ -111,11 +152,23 @@ namespace Postal
                        .Returns(ViewEngineResult.NotFound("~/Views/TestFolder/Test", new[] { "Test" })).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
-            var renderer = new EmailViewRender(templateService);
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            ); var renderer = new EmailViewRender(templateService);
 
             await Assert.ThrowsAsync<TemplateServiceException>(() => renderer.RenderAsync(new Email("~/Views/TestFolder/Test")));
 
@@ -139,11 +192,23 @@ namespace Postal
                        .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
-            var renderer = new EmailViewRender(templateService);
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            ); var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(email);
 
@@ -169,11 +234,23 @@ namespace Postal
                        .Returns(ViewEngineResult.Found("~/Views/TestFolder/Test", view)).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
-            var renderer = new EmailViewRender(templateService);
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            ); var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(email);
 
@@ -191,11 +268,23 @@ namespace Postal
                        .Returns(ViewEngineResult.Found("Test", view)).Verifiable();
 
             var logger = new Mock<ILogger<TemplateService>>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
-            var hostingEnvironment = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment>();
-            ITemplateService templateService = new TemplateService(logger.Object, viewEngine.Object, serviceProvider.Object, tempDataProvider.Object, hostingEnvironment.Object);
-            var renderer = new EmailViewRender(templateService);
+            var hostingEnvironment = new Mock<IWebHostEnvironment>();
+            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
+            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+
+            ITemplateService templateService = new TemplateService(
+                logger.Object,
+                razorPageActivator.Object,
+                viewEngine.Object,
+                serviceProvider.Object,
+                tempDataProvider.Object,
+                hostingEnvironment.Object,
+                htmlEncoder.Object,
+                diagnosticListener.Object
+            ); var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("Test"));
 

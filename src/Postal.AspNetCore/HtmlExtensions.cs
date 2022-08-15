@@ -25,12 +25,7 @@ namespace Postal
 
             if (IsFileName(imagePathOrUrl))
             {
-                var webRootPath =
-#if NETSTANDARD2_0
-                html.ViewContext.HttpContext.RequestServices.GetRequiredService<IHostingEnvironment>().WebRootPath;
-#else
-                html.ViewContext.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath;
-#endif
+                var webRootPath = html.ViewContext.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath;
                 imagePathOrUrl = webRootPath + System.IO.Path.DirectorySeparatorChar + imagePathOrUrl.Replace('/', System.IO.Path.DirectorySeparatorChar).Replace('\\', System.IO.Path.DirectorySeparatorChar);
             }
             var imageEmbedder = (ImageEmbedder)html.ViewData[ImageEmbedder.ViewDataKey];

@@ -54,11 +54,15 @@ namespace Postal
             //var view = CreateView(viewName, controllerContext);
 
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
-            if (email.Route != null)
+            if (email.Routers != null && email.Routers.Count > 0)
             {
-                routeData.Routers.Add(email.Route);
+                foreach (var r in email.Routers)
+                {
+                    routeData.Routers.Add(r);
+                }
             }
             routeData.Values["controller"] = EmailViewDirectoryName;
+            routeData.Values["page"] = EmailViewDirectoryName;
             if (!string.IsNullOrWhiteSpace(email.AreaName))
             {
                 routeData.Values["area"] = email.AreaName;
