@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.WebEncoders.Testing;
+using System.Text.Encodings.Web;
 
 namespace Postal
 {
@@ -106,14 +108,18 @@ Subject: Test Subject
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var logger = new Mock<ILogger<EmailService>>();
             var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(logger2.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
             serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(razorPageActivator.Object);
+            serviceCollection.AddSingleton<HtmlEncoder>(new HtmlTestEncoder());
+            serviceCollection.AddSingleton(new System.Diagnostics.DiagnosticListener("Postal.Tests"));
 
             serviceCollection.AddPostal();
 
@@ -145,15 +151,18 @@ Subject: Test Subject
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var logger = new Mock<ILogger<EmailService>>();
             var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(logger2.Object); serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
             serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
-
+            serviceCollection.AddSingleton(razorPageActivator.Object);
+            serviceCollection.AddSingleton<HtmlEncoder>(new HtmlTestEncoder());
+            serviceCollection.AddSingleton(new System.Diagnostics.DiagnosticListener("Postal.Tests"));
 
             serviceCollection.Configure<EmailServiceOptions>(_configuration);
             serviceCollection.AddPostal();
@@ -185,15 +194,18 @@ Subject: Test Subject
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var logger = new Mock<ILogger<EmailService>>();
             var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(logger2.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
             serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
-
+            serviceCollection.AddSingleton(razorPageActivator.Object);
+            serviceCollection.AddSingleton<HtmlEncoder>(new HtmlTestEncoder());
+            serviceCollection.AddSingleton(new System.Diagnostics.DiagnosticListener("Postal.Tests"));
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
@@ -228,14 +240,18 @@ Subject: Test Subject
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var logger = new Mock<ILogger<EmailService>>();
             var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(logger2.Object);
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton<IWebHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
             serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(razorPageActivator.Object);
+            serviceCollection.AddSingleton<HtmlEncoder>(new HtmlTestEncoder());
+            serviceCollection.AddSingleton(new System.Diagnostics.DiagnosticListener("Postal.Tests"));
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {
@@ -260,14 +276,17 @@ Subject: Test Subject
             var viewEngine = new Mock<IRazorViewEngine>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<Microsoft.Extensions.Hosting.IHostEnvironment>();
+            var razorPageActivator = new Mock<IRazorPageActivator>();
             var logger = new Mock<ILogger<EmailService>>();
             var logger2 = new Mock<ILogger<TemplateService>>();
             serviceCollection.AddSingleton(logger.Object);
             serviceCollection.AddSingleton(logger2.Object); 
             serviceCollection.AddSingleton(viewEngine.Object);
             serviceCollection.AddSingleton(tempDataProvider.Object);
-            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostEnvironment>(hostingEnvironment.Object);
-
+            serviceCollection.AddSingleton(hostingEnvironment.Object);
+            serviceCollection.AddSingleton(razorPageActivator.Object);
+            serviceCollection.AddSingleton<HtmlEncoder>(new HtmlTestEncoder());
+            serviceCollection.AddSingleton(new System.Diagnostics.DiagnosticListener("Postal.Tests"));
 
             serviceCollection.Configure<EmailServiceOptions>(o =>
             {

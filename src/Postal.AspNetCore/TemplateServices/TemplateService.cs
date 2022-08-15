@@ -120,9 +120,13 @@ namespace Postal.AspNetCore
 
                 var tempDataDictionary = new TempDataDictionary(httpContext, _tempDataProvider);
 
-                if (!viewResult.Success && razorPageResult != null && razorPageResult?.Page == null)
+                if (!viewResult.Success && (razorPageResult == null || (razorPageResult != null && razorPageResult?.Page == null)))
                 {
-                    var searchedLocations = viewResult.SearchedLocations.Union(razorPageResult?.SearchedLocations);
+                    var searchedLocations = viewResult.SearchedLocations;
+                    if (razorPageResult?.SearchedLocations != null)
+                    {
+                        searchedLocations = viewResult.SearchedLocations.Union(razorPageResult?.SearchedLocations);
+                    }
                     _logger.LogError($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", searchedLocations)}");
                     throw new TemplateServiceException($"Failed to render template {viewName} because it was not found. \r\nThe following locations are searched: \r\n{string.Join("\r\n", searchedLocations)}");
                 }

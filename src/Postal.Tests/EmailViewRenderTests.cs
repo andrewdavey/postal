@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.WebEncoders.Testing;
 using Moq;
 using Postal.AspNetCore;
 using Shouldly;
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Postal
 {
@@ -31,8 +31,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -41,8 +40,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             );
             var renderer = new EmailViewRender(templateService);
 
@@ -68,8 +67,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -78,8 +76,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             );
             var renderer = new EmailViewRender(templateService);
 
@@ -124,8 +122,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -134,8 +131,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             );
             var renderer = new EmailViewRender(templateService);
 
@@ -156,8 +153,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -166,8 +162,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             ); var renderer = new EmailViewRender(templateService);
 
             await Assert.ThrowsAsync<TemplateServiceException>(() => renderer.RenderAsync(new Email("~/Views/TestFolder/Test")));
@@ -179,7 +175,7 @@ namespace Postal
         public async Task Render_returns_email_string_with_img_created_by_view()
         {
             var email = new Email("Test");
-            var cid = email.ImageEmbedder.ReferenceImage("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+            var cid = email.ImageEmbedder.ReferenceImageAsync("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
 
             var mvcViewOptions = new Mock<Microsoft.Extensions.Options.IOptions<MvcViewOptions>>();
 
@@ -196,8 +192,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -206,8 +201,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             ); var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(email);
@@ -221,7 +216,7 @@ namespace Postal
         public async Task Render_returns_email_string_with_img_created_by_view_retrievepath()
         {
             var email = new Email("~/Views/TestFolder/Test");
-            var cid = email.ImageEmbedder.ReferenceImage("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+            var cid = email.ImageEmbedder.ReferenceImageAsync("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
 
             var mvcViewOptions = new Mock<Microsoft.Extensions.Options.IOptions<MvcViewOptions>>();
 
@@ -238,8 +233,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -248,8 +242,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             ); var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(email);
@@ -272,8 +266,7 @@ namespace Postal
             var serviceProvider = new Mock<IServiceProvider>();
             var tempDataProvider = new Mock<ITempDataProvider>();
             var hostingEnvironment = new Mock<IWebHostEnvironment>();
-            var htmlEncoder = new Mock<System.Text.Encodings.Web.HtmlEncoder>();
-            var diagnosticListener = new Mock<System.Diagnostics.DiagnosticListener>();
+            var diagnosticListener = new System.Diagnostics.DiagnosticListener("Postal.Tests");
 
             ITemplateService templateService = new TemplateService(
                 logger.Object,
@@ -282,8 +275,8 @@ namespace Postal
                 serviceProvider.Object,
                 tempDataProvider.Object,
                 hostingEnvironment.Object,
-                htmlEncoder.Object,
-                diagnosticListener.Object
+                new HtmlTestEncoder(),
+                diagnosticListener
             ); var renderer = new EmailViewRender(templateService);
 
             var actualEmailString = await renderer.RenderAsync(new Email("Test"));

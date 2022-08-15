@@ -4,11 +4,13 @@ using System.Net.Mail;
 using System.IO;
 using System.Net.Mime;
 using System.Net;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace Postal
 {
     /// <summary>
-    /// Used by the <see cref="HtmlExtensions.EmbedImage"/> helper method.
+    /// Used by the <see cref="HtmlExtensions.EmbedImageAsync"/> helper method.
     /// It generates the <see cref="LinkedResource"/> objects need to embed images into an email.
     /// </summary>
     public class ImageEmbedder
@@ -20,19 +22,19 @@ namespace Postal
         /// </summary>
         public ImageEmbedder()
         {
-            createLinkedResource = CreateLinkedResource;
+            createLinkedResourceAsync = CreateLinkedResourceAsync;
         }
 
         /// <summary>
         /// Creates a new <see cref="ImageEmbedder"/>.
         /// </summary>
-        /// <param name="createLinkedResource">A delegate that creates a <see cref="LinkedResource"/> from an image path or URL.</param>
-        public ImageEmbedder(Func<string, LinkedResource> createLinkedResource)
+        /// <param name="createLinkedResourceAsync">A delegate that creates a <see cref="LinkedResource"/> from an image path or URL.</param>
+        public ImageEmbedder(Func<string, Task<LinkedResource>> createLinkedResourceAsync)
         {
-            this.createLinkedResource = createLinkedResource;
+            this.createLinkedResourceAsync = createLinkedResourceAsync;
         }
 
-        readonly Func<string, LinkedResource> createLinkedResource;
+        readonly Func<string, Task<LinkedResource>> createLinkedResourceAsync;
         readonly Dictionary<string, LinkedResource> images = new Dictionary<string, LinkedResource>();
 
         /// <summary>
@@ -48,12 +50,17 @@ namespace Postal
         /// </summary>
         /// <param name="imagePathOrUrl">The image path or URL.</param>
         /// <returns>A new <see cref="LinkedResource"/></returns>
-        public static LinkedResource CreateLinkedResource(string imagePathOrUrl)
+        public static async Task<LinkedResource> CreateLinkedResourceAsync(string imagePathOrUrl)
         {
             if (Uri.IsWellFormedUriString(imagePathOrUrl, UriKind.Absolute))
             {
-                var client = new WebClient();
-                var bytes = client.DownloadData(imagePathOrUrl);
+                byte[] bytes = Array.Empty<byte>();
+                using (HttpClient client = new HttpClient())
+                {
+                    using HttpResponseMessage response = await client.GetAsync(imagePathOrUrl);
+                    using HttpContent content = response.Content;
+                    bytes = await content.ReadAsByteArrayAsync();
+                }
                 return new LinkedResource(new MemoryStream(bytes));
             }
             else
@@ -68,12 +75,12 @@ namespace Postal
         /// <param name="imagePathOrUrl">The image path or URL.</param>
         /// <param name="contentType">The content type of the image e.g. "image/png". If null, then content type is determined from the file name extension.</param>
         /// <returns>A <see cref="LinkedResource"/> representing the embedded image.</returns>
-        public LinkedResource ReferenceImage(string imagePathOrUrl, string contentType = null)
+        public async Task<LinkedResource> ReferenceImageAsync(string imagePathOrUrl, string contentType = null)
         {
-            LinkedResource resource;
+            LinkedResource resource = null;
             if (images.TryGetValue(imagePathOrUrl, out resource)) return resource;
 
-            resource = createLinkedResource(imagePathOrUrl);
+            resource = await createLinkedResourceAsync(imagePathOrUrl);
 
             contentType = contentType ?? DetermineContentType(imagePathOrUrl);
             if (contentType != null)
