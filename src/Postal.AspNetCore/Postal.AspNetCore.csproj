@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>
+      Create emails from ASP.NET MVC views
+      Fork from https://github.com/andrewdavey/postal
+      NetCore support https://github.com/hermanho/postal.aspnetcore
+    </Description>
+    <Copyright>Copyright © Andrew Davey 2014</Copyright>
+    <AssemblyTitle>Postal for ASP.NET Core</AssemblyTitle>
+    <Authors>Andrew Davey</Authors>
+    <TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
+    <AssemblyName>Postal.AspNetCore</AssemblyName>
+    <PackageId>Postal.AspNetCore</PackageId>
+    <PackageTags>Email;Postal;aspnetcore</PackageTags>
+    <PackageIcon>favicon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/hermanho/postal.aspnetcore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hermanho/postal.aspnetcore</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="favicon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

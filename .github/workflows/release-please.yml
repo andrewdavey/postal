@@ -1,0 +1,101 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release-please
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{steps.release.outputs.release_created}}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: simple
+          package-name: Postal.AspNetCore
+
+  build:
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    strategy:
+      matrix:
+        dotnet-version: ["3.1.x", "6.0.x"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Display dotnet version
+        run: dotnet --version
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release Postal.sln
+      - name: Test
+        run: dotnet test -c Release
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-results-${{ matrix.dotnet-version }}
+          path: TestResults-${{ matrix.dotnet-version }}
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, release-please]
+    if: ${{ needs.release-please.outputs.release_created }}
+    strategy:
+      matrix:
+        source-url:
+          [
+            "https://www.myget.org/F/herman-github/api/v2/package",
+            "https://nuget.pkg.github.com/hermanho/index.json",
+          ]
+        nuget-auth-token:
+          ["${{secrets.GITHUB_TOKEN}}", "${{secrets.NUGET_API_KEY}}"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
+          source-url: ${{ matrix.source-url }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ nuget-auth-token }}
+      - name: Display dotnet version
+        run: dotnet --version
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release Postal.sln
+      - name: Create the package
+        run: dotnet pack src/Postal.AspNetCore/Postal.AspNetCore.csproj -c Release
+      - name: Publish the package to GPR
+        run: dotnet nuget push src/Postal.AspNetCore/bin/Release/*.nupkg

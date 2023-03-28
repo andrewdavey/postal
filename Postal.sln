@@ -1,33 +1,10 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal", "src\Postal\Postal.csproj", "{779257EF-F8DD-495B-8B54-1F2E6AC5FA9B}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postal.Tests", "src\Postal.Tests\Postal.Tests.csproj", "{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Tests", "src\Postal.Tests\Postal.Tests.csproj", "{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{DDA63F90-0BB7-4438-ACE7-03E71A69950B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSample", "src\Samples\ConsoleSample\ConsoleSample.csproj", "{2C24E942-E0E1-4116-838B-ACD25653D5B2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceSample", "src\Samples\ResourceSample\ResourceSample.csproj", "{AB26BB59-F976-4361-A041-21C7EF1F2AE5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F70EF96E-BECF-4500-BF12-6D982CE1C39B}"
-	ProjectSection(SolutionItems) = preProject
-		build\_ViewStart.cshtml = build\_ViewStart.cshtml
-		build\build.xml = build\build.xml
-		build\Postal.Mvc3.nuspec = build\Postal.Mvc3.nuspec
-		build\Postal.Mvc4.nuspec = build\Postal.Mvc4.nuspec
-		build\Postal.Mvc5.nuspec = build\Postal.Mvc5.nuspec
-		build\Web.config.transform = build\Web.config.transform
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSample", "src\Samples\WebSample\WebSample.csproj", "{20E5601B-354D-4393-951C-C3BCC970EAAC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc3", "src\Postal.Mvc3\Postal.Mvc3.csproj", "{FC488BE2-1C99-468A-85F3-12FBB539CFE9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc4", "src\Postal.Mvc4\Postal.Mvc4.csproj", "{4EF69363-FA1E-4850-8028-44A419ADA249}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postal.Mvc5", "src\Postal.Mvc5\Postal.Mvc5.csproj", "{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postal.AspNetCore", "src\Postal.AspNetCore\Postal.AspNetCore.csproj", "{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,45 +12,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{779257EF-F8DD-495B-8B54-1F2E6AC5FA9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{779257EF-F8DD-495B-8B54-1F2E6AC5FA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{779257EF-F8DD-495B-8B54-1F2E6AC5FA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{779257EF-F8DD-495B-8B54-1F2E6AC5FA9B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F7B0DA6-277A-40A8-9C2A-6100112D35F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C24E942-E0E1-4116-838B-ACD25653D5B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C24E942-E0E1-4116-838B-ACD25653D5B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C24E942-E0E1-4116-838B-ACD25653D5B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C24E942-E0E1-4116-838B-ACD25653D5B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB26BB59-F976-4361-A041-21C7EF1F2AE5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20E5601B-354D-4393-951C-C3BCC970EAAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC488BE2-1C99-468A-85F3-12FBB539CFE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EF69363-FA1E-4850-8028-44A419ADA249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EF69363-FA1E-4850-8028-44A419ADA249}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EF69363-FA1E-4850-8028-44A419ADA249}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EF69363-FA1E-4850-8028-44A419ADA249}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88F76823-BD53-4195-8FFF-43F0FFCE7A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95EE9CE4-5C7E-4D69-99C2-CB131C8CE83E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2C24E942-E0E1-4116-838B-ACD25653D5B2} = {DDA63F90-0BB7-4438-ACE7-03E71A69950B}
-		{AB26BB59-F976-4361-A041-21C7EF1F2AE5} = {DDA63F90-0BB7-4438-ACE7-03E71A69950B}
-		{20E5601B-354D-4393-951C-C3BCC970EAAC} = {DDA63F90-0BB7-4438-ACE7-03E71A69950B}
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB608C82-5210-4481-93B1-F138ECA425EC}
 	EndGlobalSection
 EndGlobal

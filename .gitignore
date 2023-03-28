@@ -13,3 +13,7 @@ _ReSharper.*
 *.Cache
 *.user
 build/*.nupkg
+*.orig
+.vs/
+bower_components/
+node_modules/

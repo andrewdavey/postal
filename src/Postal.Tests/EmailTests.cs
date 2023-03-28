@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using Moq;
-using Should;
+using Shouldly;
 using Xunit;
 using System.Net.Mail;
 using System.IO;
@@ -13,7 +13,7 @@ namespace Postal
         public void ViewName_is_set_by_constructor()
         {
             var email = new Email("Test");
-            email.ViewName.ShouldEqual("Test");
+            email.ViewName.ShouldBe("Test");
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Postal
             email.Subject = "SubjectValue";
 
             var email2 = (Email)email;
-            email2.ViewData["Subject"].ShouldEqual("SubjectValue");
+            email2.ViewData["Subject"].ShouldBe("SubjectValue");
         }
 
         [Fact]
@@ -58,12 +58,11 @@ namespace Postal
         public void Send_creates_EmailService_and_calls_Send()
         {
             var emailService = new Mock<IEmailService>();
-            Email.CreateEmailService = () => emailService.Object;
             var email = new Email("Test");
 
-            email.Send();
+            email.SendAsync(emailService.Object);
 
-            emailService.Verify(s => s.Send(email));
+            emailService.Verify(s => s.SendAsync(email));
         }
 
         [Fact]
@@ -77,7 +76,7 @@ namespace Postal
         public void Derived_Email_sets_ViewName_from_class_name()
         {
             var email = new TestEmail();
-            email.ViewName.ShouldEqual("Test");
+            email.ViewName.ShouldBe("Test");
         }
 
         class TestEmail : Email
@@ -88,7 +87,7 @@ namespace Postal
         public void Derived_Email_can_manually_set_ViewName()
         {
             var email = new NonDefaultViewNameEmail();
-            email.ViewName.ShouldEqual("Test");
+            email.ViewName.ShouldBe("Test");
         }
 
         class NonDefaultViewNameEmail : Email
